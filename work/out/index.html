@@ -1,0 +1,742 @@
+<style>
+.gl { display: grid; gap: var(--cds-gap-lg); font-family: var(--font-anthropic-sans); color: var(--color-fg); }
+.gl-head { display: grid; gap: var(--cds-gap-xs); }
+.gl-h1 { margin: 0; font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); line-height: 1.15; text-wrap: balance; }
+.gl-takeaway { margin: 0; font-size: var(--cds-font-size-body); color: var(--color-fg-muted); max-width: 72ch; }
+.gl-takeaway span { color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+.gl-controls { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm) var(--cds-gap-md); align-items: center; }
+.gl-seg { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: var(--color-panel); }
+.gl-btn { font: inherit; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); background: transparent; border: 0; border-radius: var(--cds-radius); padding: var(--cds-pad-xs) var(--cds-pad-sm); cursor: pointer; }
+.gl-btn:hover { color: var(--color-fg); }
+.gl-btn[aria-pressed="true"] { color: var(--color-fg); background: color-mix(in srgb, var(--color-fg) 9%, transparent); font-weight: var(--cds-font-weight-medium); }
+.gl :focus-visible { outline: 2px solid var(--color-fg-muted); outline-offset: 2px; }
+.gl-card { display: grid; gap: var(--cds-gap-md); min-width: 0; background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); }
+.gl-cardtop { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: var(--cds-gap-sm); }
+.gl-ttl { display: grid; gap: 2px; min-width: 0; }
+.gl-h2 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); text-wrap: balance; }
+.gl-h2 .gl-co { color: var(--color-fg-muted); font-weight: 400; }
+.gl-sub { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); max-width: 80ch; }
+.gl-nav { display: flex; gap: var(--cds-gap-xs); }
+.gl-nav .gl-btn { border: 1px solid var(--color-border-line); }
+.gl-stats { margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 9.5rem), 1fr)); gap: var(--cds-gap-md) var(--cds-gap-lg); }
+.gl-stats > div { display: grid; gap: 2px; align-content: start; min-width: 0; }
+.gl-stats dt { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.gl-stats dd { margin: 0; display: grid; gap: 1px; }
+.gl-v { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+.gl-s { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.gl-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs) var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.gl-k { display: inline-flex; align-items: center; gap: 6px; }
+.gl-key-line { display: inline-block; flex: none; width: 14px; height: 2px; border-radius: 1px; }
+.gl-key-dot { display: inline-block; flex: none; width: 9px; height: 9px; border-radius: 50%; box-sizing: border-box; border: 2px solid; }
+.gl-key-band { display: inline-block; flex: none; width: 12px; height: 10px; border-radius: 2px; background: var(--cds-chart-grid); }
+.gl-key-bar { display: inline-block; flex: none; width: 4px; height: 12px; border-radius: 1px; }
+.gl-key-ref { display: inline-block; flex: none; width: 0; height: 12px; border-left: 1px dashed var(--cds-chart-reference); }
+.gl-chart { position: relative; min-height: 484px; outline-offset: 4px; }
+.gl-chart svg { display: block; overflow: visible; }
+.gl-chart text { font-family: var(--font-anthropic-sans); font-size: var(--cds-font-size-caption); fill: var(--color-fg-muted); }
+.gl-chart .gl-tick { font-variant-numeric: tabular-nums; }
+.gl-chart .gl-lbl { fill: var(--color-fg); font-weight: var(--cds-font-weight-medium); paint-order: stroke; stroke: var(--color-panel); stroke-width: 3px; stroke-linejoin: round; }
+.gl-chart .gl-end-main { fill: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+.gl-tip { position: absolute; z-index: 2; display: grid; gap: 3px; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); }
+.gl-tip-d { color: var(--cds-text-secondary); }
+.gl-tip-r { display: flex; align-items: center; gap: 6px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.gl-tip-v { color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+.gl-tip-n { color: var(--cds-text-secondary); }
+.gl-note { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); max-width: 80ch; }
+.gl-fail { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: inherit; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+.gl-fail::before { content: ""; width: .375rem; height: .375rem; border-radius: 50%; background: var(--color-bad); }
+.gl-tablewrap { overflow-x: auto; container-type: inline-size; }
+.gl-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+.gl-table th { padding: 0; text-align: left; white-space: nowrap; font-weight: var(--cds-font-weight-medium); color: var(--color-fg-muted); border-bottom: 1px solid var(--color-border-line); }
+.gl-table th button { font: inherit; color: inherit; background: none; border: 0; width: 100%; text-align: inherit; padding: var(--cds-pad-xs) var(--cds-pad-sm); cursor: pointer; }
+.gl-table th[aria-sort="ascending"] button::after { content: " ↑"; }
+.gl-table th[aria-sort="descending"] button::after { content: " ↓"; }
+.gl-table td { padding: var(--cds-pad-xs) var(--cds-pad-sm); white-space: nowrap; border-bottom: 1px solid var(--cds-chart-grid); }
+.gl-table .num { text-align: right; }
+.gl-table tbody tr { cursor: pointer; }
+.gl-table tbody tr:hover { background: color-mix(in srgb, var(--color-fg) 4%, transparent); }
+.gl-table tbody tr.is-sel { background: color-mix(in srgb, var(--color-fg) 9%, transparent); }
+.gl-table td.gl-c-theme { white-space: normal; min-width: 10rem; color: var(--color-fg-muted); }
+.gl-tkbtn { font: inherit; font-weight: var(--cds-font-weight-medium); color: var(--color-fg); background: none; border: 0; padding: 0; cursor: pointer; }
+@container (max-width: 760px) { .gl-table .gl-c-opt { display: none; } }
+@container (max-width: 520px) { .gl-table .gl-c-theme, .gl-table .gl-c-rs { display: none; } }
+.gl [hidden] { display: none !important; }
+.gl [data-dash-source-state=empty] { color: transparent; }
+.gl [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+</style>
+
+<div class="gl">
+  <header class="gl-head" id="overview">
+    <h1 class="gl-h1">Growth leaders 2023–24</h1>
+    <p class="gl-takeaway dash-skeleton" id="takeaway">—</p>
+  </header>
+
+  <div class="gl-controls" id="controls">
+    <div class="gl-seg" role="group" aria-label="Leader list">
+      <button type="button" class="gl-btn" id="list-2023" data-list="2023">2023 leaders</button>
+      <button type="button" class="gl-btn" id="list-2024" data-list="2024">2024 leaders</button>
+    </div>
+    <div class="gl-seg" role="group" aria-label="Chart range">
+      <button type="button" class="gl-btn" id="range-2021" data-range="2021">From 2021</button>
+      <button type="button" class="gl-btn" id="range-2022" data-range="2022">From 2022</button>
+      <button type="button" class="gl-btn" id="range-2023" data-range="2023">From 2023</button>
+    </div>
+  </div>
+
+  <section class="gl-card" id="chart-card" aria-labelledby="chart-title">
+    <div class="gl-cardtop">
+      <div class="gl-ttl">
+        <h2 class="gl-h2" id="chart-title"><span class="dash-skeleton" data-source="leaders" data-field="ticker">—</span> <span class="gl-co" data-source="leaders" data-field="company"></span></h2>
+        <p class="gl-sub"><span data-source="leaders" data-field="theme"></span> · <span data-source="leaders" data-field="category"></span></p>
+      </div>
+      <div class="gl-nav">
+        <button type="button" class="gl-btn" id="prev">‹ Previous</button>
+        <button type="button" class="gl-btn" id="next">Next ›</button>
+      </div>
+    </div>
+
+    <dl class="gl-stats" id="stats">
+      <div><dt>2023 return</dt><dd><span class="gl-v" data-source="leaders" data-field="ret_2023_pct">—</span><span class="gl-s">vs SPY <span data-source="leaders" data-field="vs_spy_2023_pts" data-opt="1"></span> pts</span></dd></div>
+      <div><dt>2024 return</dt><dd><span class="gl-v" data-source="leaders" data-field="ret_2024_pct">—</span><span class="gl-s">vs SPY <span data-source="leaders" data-field="vs_spy_2024_pts" data-opt="1"></span> pts</span></dd></div>
+      <div><dt>Bear-market drop</dt><dd><span class="gl-v" data-source="leaders" data-field="bear_drawdown_pct">—</span><span class="gl-s">from the <span data-source="leaders" data-field="prior_high_date"></span> high</span></dd></div>
+      <div><dt>Low</dt><dd><span class="gl-v" data-source="leaders" data-field="low_date">—</span><span class="gl-s">SPY's low: <span data-source="events" data-field="start" data-where="id=spy_low"></span></span><span class="gl-s">Volume <span data-source="leaders" data-field="low_vol_vs_50d" data-opt="1"></span> its 50-day average</span></dd></div>
+      <div><dt>First new 52-week high</dt><dd><span class="gl-v" data-source="leaders" data-field="first_52w_high_date">—</span><span class="gl-s"><span data-source="leaders" data-field="pct_off_low_at_52w_high" data-opt="1"></span> off the low</span><span class="gl-s">Volume <span data-source="leaders" data-field="high_vol_vs_50d" data-opt="1"></span> its 50-day average</span></dd></div>
+      <div><dt>RS line new high</dt><dd><span class="gl-v" data-source="leaders" data-field="rs_new_high_date">—</span><span class="gl-s">Ahead of price: <span data-source="leaders" data-field="rs_led_price"></span></span></dd></div>
+      <div><dt>In the 2023 correction</dt><dd><span class="gl-v" data-source="leaders" data-field="corr_2023_pct">—</span><span class="gl-s">SPY <span data-source="events" data-field="spy_pct" data-where="id=corr_2023"></span>, <span data-source="events" data-field="start" data-where="id=corr_2023" data-fmt="mon"></span>–<span data-source="events" data-field="end" data-where="id=corr_2023"></span></span></dd></div>
+      <div><dt>In the 2024 pullback</dt><dd><span class="gl-v" data-source="leaders" data-field="corr_2024_pct">—</span><span class="gl-s">SPY <span data-source="events" data-field="spy_pct" data-where="id=corr_2024"></span>, <span data-source="events" data-field="start" data-where="id=corr_2024" data-fmt="mon"></span>–<span data-source="events" data-field="end" data-where="id=corr_2024"></span></span></dd></div>
+    </dl>
+
+    <div class="gl-legend" id="legend" data-source="leaders"></div>
+    <div class="gl-chart dash-skeleton" id="price-chart" data-source="prices volumes leaders events" tabindex="0" role="group" aria-label="Price chart with SPY, QQQ, daily volume and the RS line. Use the left and right arrow keys to read values."></div>
+    <p class="gl-note">Daily closes and volume, split-adjusted, from Massive. SPY and QQQ are rebased to the stock's close on its low, so the gap between the lines is performance since that day. Volume bars are shares traded each day, the line through them is the average of the prior 50 sessions, and the callouts give volume on the low and first-new-high days as a multiple of that average. The RS line is the stock divided by SPY, set to 100 on the low. A new 52-week high is a close above every close of the prior 251 trading days; the RS line's new high uses the same rule. Shaded bands are SPY's two pullbacks inside the uptrend.</p>
+  </section>
+
+  <section class="gl-card" id="table-card" aria-labelledby="table-title">
+    <div class="gl-ttl">
+      <h2 class="gl-h2" id="table-title">Leaders, ranked by return</h2>
+      <p class="gl-sub">Select a row to chart it. SPY's first new 52-week high came on <span data-source="events" data-field="start" data-where="id=spy_52w"></span>, and QQQ's on <span data-source="events" data-field="start" data-where="id=qqq_52w"></span>.</p>
+    </div>
+    <div class="gl-tablewrap">
+      <table class="gl-table" id="leaders-table" data-source="leaders" data-row-key="ticker">
+        <thead><tr></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<script>
+dash.calc('takeaway', {
+  inputs: ['leaders', 'events'],
+  title: 'Leaders ahead of the index',
+  description: '2023 list: leaders whose first new 52-week high came before SPY’s. 2024 list: leaders whose low came in 2023 or later.',
+  fn: (leaders, events) => {
+    const spyHigh = events.find((e) => e.id === 'spy_52w').start;
+    const has = (v) => v !== null && v !== undefined && v !== '';
+    const l23 = leaders.filter((r) => has(r.rank_2023));
+    const l24 = leaders.filter((r) => has(r.rank_2024));
+    return [
+      { list: '2023', count: l23.filter((r) => has(r.first_52w_high_date) && r.first_52w_high_date < spyHigh).length, total: l23.length },
+      { list: '2024', count: l24.filter((r) => has(r.low_date) && r.low_date >= '2023-01-01').length, total: l24.length },
+    ];
+  },
+});
+
+(() => {
+  const root = document.querySelector('.gl');
+  const q = (s) => root.querySelector(s);
+  const parseDay = d3.utcParse('%Y-%m-%d');
+  const dLong = d3.utcFormat('%b %-d, %Y');
+  const dMon = d3.utcFormat('%b %-d');
+  const dShort = d3.utcFormat('%-m/%-d/%y');
+  const has = (v) => v !== null && v !== undefined && v !== '';
+  const n = (v) => (has(v) ? +v : null);
+  const ok = (v) => v !== null && v !== undefined && Number.isFinite(v) && v > 0;
+  const day = (s, f) => (has(s) ? (f || dLong)(parseDay(String(s).slice(0, 10))) : '—');
+  const fSigned = d3.format('+,.0f');
+  const fSigned1 = d3.format('+,.1f');
+  const pct = (v) => (has(v) ? fSigned(+v) + '%' : '—');
+  const pct1 = (v) => (has(v) ? fSigned1(+v) + '%' : '—');
+  const pts = (v) => (has(v) ? fSigned(+v) : '—');
+  const money = (v) => (v >= 10 ? d3.format('$,.2f')(v) : d3.format('$,.3~f')(v));
+  const tickMoney = (v) => (v >= 10 ? d3.format('$,.0f')(v) : d3.format('$,.2~f')(v));
+  const tickRs = d3.format(',.3~r');
+  const tickVol = d3.format('.3~s');
+  const fX = (v) => (has(v) ? d3.format('.1f')(+v) + '×' : '—');
+
+  const FMT = {
+    low_vol_vs_50d: fX, high_vol_vs_50d: fX,
+    ret_2023_pct: pct, ret_2024_pct: pct, bear_drawdown_pct: pct, pct_off_low_at_52w_high: pct,
+    vs_spy_2023_pts: pts, vs_spy_2024_pts: pts, corr_2023_pct: pct1, corr_2024_pct: pct1,
+    prior_high_date: day, low_date: day, first_52w_high_date: day, rs_new_high_date: day,
+  };
+  const COLS = [
+    { id: 'rank', label: () => '#', field: (l) => `rank_${l}`, num: true, first: 1 },
+    { id: 'ticker', label: () => 'Ticker', field: () => 'ticker', key: true, first: 1 },
+    { id: 'theme', label: () => 'What it is', field: () => 'theme', cls: 'gl-c-theme', first: 1 },
+    { id: 'ret', label: (l) => `${l} return`, field: (l) => `ret_${l}_pct`, num: true, fmt: pct, first: -1 },
+    { id: 'vs', label: () => 'vs SPY, pts', field: (l) => `vs_spy_${l}_pts`, num: true, fmt: pts, cls: 'gl-c-opt', first: -1 },
+    { id: 'drop', label: () => 'Bear drop', field: () => 'bear_drawdown_pct', num: true, fmt: pct, cls: 'gl-c-opt', first: 1 },
+    { id: 'low', label: () => 'Low', field: () => 'low_date', fmt: (v) => day(v, dShort), first: 1 },
+    { id: 'hi', label: () => 'First 52-wk high', field: () => 'first_52w_high_date', fmt: (v) => day(v, dShort), first: 1 },
+    { id: 'bvol', label: () => 'Vol at 1st high', field: () => 'high_vol_vs_50d', num: true, fmt: fX, cls: 'gl-c-opt', first: -1 },
+    { id: 'rs', label: () => 'RS new high', field: () => 'rs_new_high_date', fmt: (v) => day(v, dShort), cls: 'gl-c-rs', first: 1 },
+    { id: 'led', label: () => 'RS ahead', field: () => 'rs_led_price', cls: 'gl-c-opt', first: -1 },
+  ];
+
+  const state = { sort: { id: 'rank', dir: 1 }, order: [], sel: null, kIdx: null };
+
+  const params = () => {
+    const p = dash.params() || {};
+    return {
+      list: String(p.list) === '2024' ? '2024' : '2023',
+      range: ['2021', '2022', '2023'].includes(String(p.range)) ? String(p.range) : '2022',
+      ticker: has(p.ticker) ? String(p.ticker) : '',
+    };
+  };
+
+  const failLine = () => {
+    const d = document.createElement('div');
+    d.className = 'gl-fail';
+    d.textContent = 'Failed to load';
+    return d;
+  };
+  const settle = (el, status) => {
+    if (status === 'ok' || status === 'error') el.classList.remove('dash-skeleton');
+  };
+  const step = (d) => {
+    const o = state.order;
+    if (!o.length) return;
+    const i = Math.max(0, o.indexOf(state.sel));
+    dash.setParams({ ticker: o[(i + d + o.length) % o.length] });
+  };
+
+  root.querySelectorAll('[data-list]').forEach((b) => b.addEventListener('click', () => dash.setParams({ list: b.dataset.list })));
+  root.querySelectorAll('[data-range]').forEach((b) => b.addEventListener('click', () => dash.setParams({ range: b.dataset.range })));
+  q('#prev').addEventListener('click', () => step(-1));
+  q('#next').addEventListener('click', () => step(1));
+  q('#leaders-table tbody').addEventListener('click', (e) => {
+    const tr = e.target.closest('tr[data-key]');
+    if (tr) dash.setParams({ ticker: tr.dataset.key });
+  });
+  q('#leaders-table thead').addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-col]');
+    if (!b) return;
+    const c = COLS.find((x) => x.id === b.dataset.col);
+    state.sort = state.sort.id === c.id ? { id: c.id, dir: -state.sort.dir } : { id: c.id, dir: c.first };
+    render();
+  });
+
+  const caches = new Map();
+  function prep(name, rows) {
+    const prev = caches.get(name);
+    if (prev && prev.src === rows) return prev;
+    const keys = rows.map((r) => String(r.date).slice(0, 10));
+    const pos = new Map(keys.map((k, i) => [k, i]));
+    const cols = new Map();
+    const cache = {
+      src: rows,
+      keys,
+      dates: keys.map(parseDay),
+      index: (k) => (has(k) && pos.has(String(k).slice(0, 10)) ? pos.get(String(k).slice(0, 10)) : null),
+      get: (t) => {
+        if (!cols.has(t)) cols.set(t, rows.map((r) => (has(r[t]) ? +r[t] : null)));
+        return cols.get(t);
+      },
+    };
+    caches.set(name, cache);
+    return cache;
+  }
+
+  function logTicks(scale, count) {
+    const lead = (v) => Math.round(v / Math.pow(10, Math.floor(Math.log10(v))));
+    let t = scale.ticks(count);
+    if (t.length > count + 2) t = t.filter((v) => [1, 2, 5].includes(lead(v)));
+    if (t.length > count + 2) t = t.filter((v) => lead(v) === 1);
+    return t;
+  }
+
+  function padLog(vals, h, padBot, padTop) {
+    let a = Math.log(d3.min(vals));
+    let b = Math.log(d3.max(vals));
+    if (!(b > a)) { a -= 0.05; b += 0.05; }
+    const span = (b - a) / (1 - (padBot + padTop) / h);
+    return [Math.exp(a - (span * padBot) / h), Math.exp(b + (span * padTop) / h)];
+  }
+
+  function renderEvents(E) {
+    const evs = E.status === 'ok' ? E.data : [];
+    root.querySelectorAll('[data-source="events"][data-field]').forEach((el) => {
+      settle(el, E.status);
+      const id = new URLSearchParams(el.dataset.where || '').get('id');
+      const row = evs.find((e) => e.id === id);
+      if (!row) { el.textContent = '—'; return; }
+      const f = el.dataset.field;
+      el.textContent = f === 'spy_pct' ? pct1(row[f]) : day(row[f], el.dataset.fmt === 'mon' ? dMon : dLong);
+    });
+  }
+
+  function renderTakeaway(p, T, E) {
+    const el = q('#takeaway');
+    if (T.status !== 'ok' || E.status !== 'ok') {
+      if (T.status === 'error' || E.status === 'error') { el.classList.remove('dash-skeleton'); el.textContent = ''; }
+      return;
+    }
+    const row = (T.data || []).find((r) => String(r.list) === p.list);
+    const ev = E.data.find((e) => e.id === (p.list === '2023' ? 'spy_52w' : 'spy_low'));
+    if (!row || !ev) return;
+    el.classList.remove('dash-skeleton');
+    const mk = (src, field, where, text) => {
+      const s = document.createElement('span');
+      s.dataset.source = src;
+      s.dataset.field = field;
+      s.dataset.where = where;
+      s.textContent = text;
+      return s;
+    };
+    const w = `list=${p.list}`;
+    el.replaceChildren();
+    if (p.list === '2023') {
+      el.append(mk('takeaway', 'count', w, String(row.count)), ' of these ', mk('takeaway', 'total', w, String(row.total)),
+        ' made a new 52-week high before SPY did on ', mk('events', 'start', 'id=spy_52w', day(ev.start)), '.');
+    } else {
+      el.append(mk('takeaway', 'count', w, String(row.count)), ' of these ', mk('takeaway', 'total', w, String(row.total)),
+        ' bottomed in 2023 or later, well after SPY’s ', mk('events', 'start', 'id=spy_low', day(ev.start)), ' low.');
+    }
+  }
+
+  function renderStats(sel, L) {
+    q('#chart-card').querySelectorAll('[data-source="leaders"][data-field]').forEach((el) => {
+      settle(el, L.status);
+      if (!sel) { el.removeAttribute('data-where'); el.textContent = '—'; return; }
+      el.dataset.where = 'ticker=' + encodeURIComponent(String(sel.ticker));
+      const f = el.dataset.field;
+      const v = sel[f];
+      el.textContent = FMT[f] ? FMT[f](v) : has(v) ? String(v) : '—';
+      if (el.dataset.opt) el.closest('.gl-s').hidden = !has(v);
+    });
+  }
+
+  function renderLegend(sel) {
+    const box = q('#legend');
+    box.replaceChildren();
+    if (!sel) return;
+    const c = dash.colors;
+    const item = (keyEl, text) => {
+      const s = document.createElement('span');
+      s.className = 'gl-k';
+      s.append(keyEl, document.createTextNode(text));
+      box.append(s);
+    };
+    const key = (cls, style) => {
+      const k = document.createElement('span');
+      k.className = cls;
+      Object.assign(k.style, style || {});
+      return k;
+    };
+    item(key('gl-key-line', { background: c[0] }), String(sel.ticker));
+    item(key('gl-key-line', { background: c[1] }), 'SPY, rebased to the low');
+    item(key('gl-key-line', { background: c[2] }), 'QQQ, rebased to the low');
+    item(key('gl-key-dot', { borderColor: c[0], background: 'var(--color-panel)' }), 'Low');
+    item(key('gl-key-dot', { borderColor: c[0], background: c[0] }), 'First new 52-week high');
+    item(key('gl-key-bar', { background: 'var(--cds-chart-muted)' }), 'Volume');
+    item(key('gl-key-line', { background: 'var(--cds-chart-reference)' }), '50-day average volume');
+    item(key('gl-key-bar', { background: c[0] }), 'Volume on the low and first new high');
+    item(key('gl-key-ref'), 'SPY low and first new high');
+    item(key('gl-key-band'), 'SPY pullbacks');
+  }
+
+  function renderTable(p, list, L) {
+    const table = q('#leaders-table');
+    q('#table-title').textContent = `${p.list} leaders, ranked by return`;
+    table.tHead.rows[0].replaceChildren(...COLS.map((c) => {
+      const th = document.createElement('th');
+      th.dataset.field = c.field(p.list);
+      if (c.num) th.classList.add('num');
+      if (c.cls) th.classList.add(c.cls);
+      th.setAttribute('aria-sort', state.sort.id === c.id ? (state.sort.dir > 0 ? 'ascending' : 'descending') : 'none');
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.dataset.col = c.id;
+      b.textContent = c.label(p.list);
+      th.append(b);
+      return th;
+    }));
+    const tb = table.tBodies[0];
+    if (L.status === 'error') {
+      const tr = document.createElement('tr');
+      const td = document.createElement('td');
+      td.colSpan = COLS.length;
+      td.append(failLine());
+      tr.append(td);
+      tb.replaceChildren(tr);
+      return;
+    }
+    const sc = COLS.find((c) => c.id === state.sort.id) || COLS[0];
+    const sf = sc.field(p.list);
+    const sorted = list.slice().sort((a, b) => {
+      const va = a[sf];
+      const vb = b[sf];
+      if (!has(va) && !has(vb)) return 0;
+      if (!has(va)) return 1;
+      if (!has(vb)) return -1;
+      return (sc.num ? n(va) - n(vb) : String(va).localeCompare(String(vb))) * state.sort.dir;
+    });
+    tb.replaceChildren(...sorted.map((r) => {
+      const tr = document.createElement('tr');
+      tr.dataset.key = String(r.ticker);
+      if (String(r.ticker) === state.sel) { tr.classList.add('is-sel'); tr.setAttribute('aria-current', 'true'); }
+      COLS.forEach((c) => {
+        const td = document.createElement('td');
+        if (c.num) td.classList.add('num');
+        if (c.cls) td.classList.add(c.cls);
+        const v = r[c.field(p.list)];
+        if (c.key) {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'gl-tkbtn';
+          b.textContent = String(v);
+          td.append(b);
+        } else {
+          td.textContent = c.fmt ? c.fmt(v) : has(v) ? String(v) : '—';
+        }
+        tr.append(td);
+      });
+      return tr;
+    }));
+  }
+
+  function renderChart(p, sel, L, Pr, Vo, E) {
+    const box = q('#price-chart');
+    const st = [L.status, Pr.status, Vo.status, E.status];
+    if (st.includes('error')) { box.classList.remove('dash-skeleton'); box.replaceChildren(failLine()); return; }
+    if (st.some((s) => s !== 'ok') || !sel) { box.replaceChildren(); box.classList.add('dash-skeleton'); return; }
+    box.classList.remove('dash-skeleton');
+    drawChart(box, prep('prices', Pr.data), prep('volumes', Vo.data), sel, E.data, p.range);
+  }
+
+  function drawChart(box, P, V, sel, events, range) {
+    box.replaceChildren();
+    const W = Math.floor(box.clientWidth);
+    if (!W) return;
+    const colors = dash.colors;
+    const t = String(sel.ticker);
+    const S = P.get(t);
+    const SPY = P.get('SPY');
+    const QQQ = P.get('QQQ');
+    const iEnd = P.keys.length - 1;
+    const i0 = Math.min(d3.bisectLeft(P.keys, `${range}-01-01`), iEnd);
+    const iLow = P.index(sel.low_date);
+    if (iLow === null || !ok(S[iLow])) return;
+    const sL = S[iLow];
+    const spyL = SPY[iLow];
+    const qqqL = QQQ[iLow];
+    const rsL = sL / spyL;
+
+    // daily volume on the price dates, and the average of the 50 sessions before each day
+    const vCol = V.get(t);
+    const vol = P.keys.map((k) => {
+      const j = V.index(k);
+      return j === null ? null : vCol[j];
+    });
+    const avg50 = vol.map((_, i) => {
+      const prior = vol.slice(Math.max(0, i - 50), i).filter(ok);
+      return prior.length >= 20 ? d3.mean(prior) : null;
+    });
+
+    const data = [];
+    for (let i = i0; i <= iEnd; i++) {
+      const s = ok(S[i]) ? S[i] : null;
+      data.push({ i, d: P.dates[i], s, spy: (SPY[i] * sL) / spyL, qqq: (QQQ[i] * sL) / qqqL, rs: s !== null ? (100 * (s / SPY[i])) / rsL : null });
+    }
+    const first = data[0];
+    const last = data[data.length - 1];
+
+    const priceH = Math.round(Math.max(220, Math.min(400, W * 0.42)));
+    const rsH = Math.round(Math.max(100, Math.min(150, priceH * 0.38)));
+    const volH = Math.round(Math.max(64, Math.min(100, priceH * 0.26)));
+    const mt = 34;
+    const gapH = 30;
+    const axH = 24;
+    const pTop = mt;
+    const pBot = mt + priceH;
+    const vTop = pBot + 12;
+    const vBot = vTop + volH;
+    const rTop = vBot + gapH;
+    const rBot = rTop + rsH;
+    const H = rBot + axH;
+
+    const yP = d3.scaleLog(padLog(data.flatMap((d) => [d.s, d.spy, d.qqq]).filter(ok), priceH, 26, 20), [pBot, pTop]);
+    const yR = d3.scaleLog(padLog(data.map((d) => d.rs).filter(ok).concat([100]), rsH, 8, 18), [rBot, rTop]);
+    const vMax = d3.max(data, (d) => (ok(vol[d.i]) ? vol[d.i] : 0)) || 1;
+    const yV = d3.scaleLinear([0, vMax], [vBot, vTop + 26]);
+
+    const svg = d3.select(box).append('svg')
+      .attr('width', '100%').attr('height', H).attr('viewBox', `0 0 ${W} ${H}`)
+      .attr('role', 'img').attr('aria-label', `${t} price with SPY and QQQ rebased to its low, and its RS line`);
+    const measure = (texts, cls) => {
+      const g = svg.append('g');
+      const w = d3.max(texts, (s) => g.append('text').attr('class', cls || null).text(s).node().getComputedTextLength()) || 0;
+      g.remove();
+      return w;
+    };
+    const pT = logTicks(yP, priceH > 300 ? 6 : 4);
+    const rT = logTicks(yR, 3);
+    const vT = yV.ticks(2).filter((v) => v > 0 && yV(v) >= vTop + 26);
+    const ml = Math.ceil(Math.max(measure(pT.map(tickMoney), 'gl-tick'), measure(rT.map(tickRs), 'gl-tick'), measure(vT.map(tickVol), 'gl-tick'))) + 10;
+    const ends = [{ k: t, v: last.s, c: 0 }, { k: 'SPY', v: last.spy, c: 1 }, { k: 'QQQ', v: last.qqq, c: 2 }].filter((e) => ok(e.v));
+    const mr = Math.ceil(measure(ends.map((e) => e.k), 'gl-end-main')) + 14;
+    const x = d3.scaleUtc([first.d, last.d], [ml, W - mr]);
+    const inX = (d) => d >= first.d && d <= last.d;
+    const panes = [[pTop, pBot], [vTop, vBot], [rTop, rBot]];
+
+    // pullback bands, drawn under everything
+    const bands = events.filter((e) => has(e.end))
+      .map((e) => ({ e, a: parseDay(e.start), b: parseDay(e.end) }))
+      .filter((o) => o.b >= first.d && o.a <= last.d);
+    const gB = svg.append('g');
+    bands.forEach((o) => {
+      const xa = x(o.a < first.d ? first.d : o.a);
+      const xb = x(o.b > last.d ? last.d : o.b);
+      panes.forEach(([a, b]) => gB.append('rect').attr('x', xa).attr('y', a).attr('width', Math.max(1, xb - xa)).attr('height', b - a)
+        .style('fill', 'var(--cds-chart-grid)').style('fill-opacity', 0.7));
+    });
+
+    // grid and y ticks
+    const gG = svg.append('g');
+    const yGrid = (ticks, ys, fmt) => ticks.forEach((v) => {
+      gG.append('line').attr('x1', ml).attr('x2', W - mr).attr('y1', ys(v)).attr('y2', ys(v)).style('stroke', 'var(--cds-chart-grid)');
+      gG.append('text').attr('class', 'gl-tick').attr('x', ml - 8).attr('y', ys(v)).attr('dy', '0.32em').attr('text-anchor', 'end').text(fmt(v));
+    });
+    yGrid(pT, yP, tickMoney);
+    yGrid(rT, yR, tickRs);
+    yGrid(vT, yV, tickVol);
+    [pBot, vBot, rBot].forEach((y) => gG.append('line').attr('x1', ml).attr('x2', W - mr).attr('y1', y).attr('y2', y).style('stroke', 'var(--cds-chart-axis)'));
+
+    // index reference dates and the RS = 100 line
+    const refs = ['spy_low', 'spy_52w'].map((id) => events.find((e) => e.id === id)).filter(Boolean)
+      .map((e) => ({ e, d: parseDay(e.start) })).filter((o) => inX(o.d));
+    const gR = svg.append('g');
+    refs.forEach((o) => panes.forEach(([a, b]) => gR.append('line').attr('x1', x(o.d)).attr('x2', x(o.d)).attr('y1', a).attr('y2', b)
+      .style('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '3 3')));
+    gR.append('line').attr('x1', ml).attr('x2', W - mr).attr('y1', yR(100)).attr('y2', yR(100))
+      .style('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '3 3');
+
+    // series
+    const path = (acc, ys, c, w) => svg.append('path').datum(data)
+      .attr('d', d3.line().defined((d) => ok(acc(d))).x((d) => x(d.d)).y((d) => ys(acc(d))))
+      .style('fill', 'none').style('stroke', colors[c]).style('stroke-width', w)
+      .style('stroke-linejoin', 'round').style('stroke-linecap', 'round');
+    path((d) => d.qqq, yP, 2, 1.5);
+    path((d) => d.spy, yP, 1, 1.5);
+    path((d) => d.s, yP, 0, 2);
+    path((d) => d.rs, yR, 0, 2);
+
+    // volume bars, the 50-session average, and the two run-start days called out
+    const slot = (W - mr - ml) / Math.max(1, data.length);
+    const bw = Math.max(1, slot * 0.7);
+    let bars = '';
+    data.forEach((d) => {
+      const v = vol[d.i];
+      if (!ok(v)) return;
+      bars += `M${(x(d.d) - bw / 2).toFixed(1)},${vBot}V${yV(v).toFixed(1)}h${bw.toFixed(2)}V${vBot}Z`;
+    });
+    svg.append('path').attr('d', bars).style('fill', 'var(--cds-chart-muted)');
+    svg.append('path').datum(data)
+      .attr('d', d3.line().defined((d) => ok(avg50[d.i])).x((d) => x(d.d)).y((d) => yV(avg50[d.i])))
+      .style('fill', 'none').style('stroke', 'var(--cds-chart-reference)').style('stroke-width', 1.25)
+      .style('stroke-linejoin', 'round');
+    const gV = svg.append('g');
+    const rowEndV = [-Infinity, -Infinity];
+    [[sel.low_date, sel.low_vol_vs_50d], [sel.first_52w_high_date, sel.high_vol_vs_50d]]
+      .map(([date, ratio]) => ({ j: P.index(date), ratio: n(ratio) }))
+      .filter((o) => o.j !== null && o.j >= i0 && ok(vol[o.j]))
+      .sort((a, b) => a.j - b.j)
+      .forEach((o) => {
+        const cx = x(P.dates[o.j]);
+        const hw = Math.max(3, bw + 1);
+        gV.append('rect').attr('x', cx - hw / 2).attr('width', hw).attr('y', yV(vol[o.j])).attr('height', vBot - yV(vol[o.j]))
+          .style('fill', colors[0]);
+        if (o.ratio === null) return;
+        const tx = gV.append('text').attr('class', 'gl-lbl').attr('text-anchor', 'middle').text(`${fX(o.ratio)} avg`);
+        const w = tx.node().getComputedTextLength();
+        const lx = Math.max(ml + w / 2 + 2, Math.min(W - mr - w / 2 - 2, cx));
+        const r = rowEndV.findIndex((e) => lx - w / 2 > e + 6);
+        if (r < 0) { tx.remove(); return; }
+        rowEndV[r] = lx + w / 2;
+        tx.attr('x', lx).attr('y', vTop + 9 + r * 12);
+      });
+
+    // RS pane title
+    svg.append('text').attr('x', ml).attr('y', rTop - 10).text('RS line vs SPY (100 = the low)');
+
+    // run-start markers
+    const gM = svg.append('g');
+    const marker = (date, ys, acc, filled, text, above, pane) => {
+      const j = P.index(date);
+      if (j === null || j < i0) return;
+      const d = data[j - i0];
+      if (!d || !ok(acc(d))) return;
+      const v = acc(d);
+      const cx = x(d.d);
+      const cy = ys(v);
+      gM.append('circle').attr('cx', cx).attr('cy', cy).attr('r', 4.5)
+        .style('fill', filled ? colors[0] : 'var(--color-panel)')
+        .style('stroke', filled ? 'var(--color-panel)' : colors[0]).style('stroke-width', 2);
+      let ty = above ? cy - 10 : cy + 18;
+      if (above && ty - 12 < pane[0]) ty = cy + 18;
+      if (!above && ty > pane[1] - 2) ty = cy - 10;
+      const tx = gM.append('text').attr('class', 'gl-lbl').attr('text-anchor', 'middle').attr('y', ty).text(text);
+      const w = tx.node().getComputedTextLength();
+      tx.attr('x', Math.max(ml + w / 2 + 2, Math.min(W - mr - w / 2 - 2, cx)));
+    };
+    marker(sel.low_date, yP, (d) => d.s, false, `Low · ${day(sel.low_date)}`, false, panes[0]);
+    marker(sel.first_52w_high_date, yP, (d) => d.s, true, `First 52-wk high · ${day(sel.first_52w_high_date)}`, true, panes[0]);
+    marker(sel.rs_new_high_date, yR, (d) => d.rs, true, `RS new high · ${day(sel.rs_new_high_date)}`, true, panes[1]);
+
+    // labels for the reference lines and bands, stacked in two rows above the plot
+    const tops = refs.map((o) => ({ d: o.d, text: o.e.label }))
+      .concat(bands.filter((o) => inX(o.a)).map((o) => ({ d: o.a, text: `SPY ${pct1(o.e.spy_pct)}` })))
+      .sort((a, b) => a.d - b.d);
+    const rowEnd = [-Infinity, -Infinity];
+    tops.forEach((o) => {
+      const tx = svg.append('text').text(o.text);
+      const w = tx.node().getComputedTextLength();
+      let anchor = 'start';
+      let x0 = x(o.d) + 3;
+      if (x0 + w > W - mr) { anchor = 'end'; x0 = x(o.d) - 3; }
+      const left = anchor === 'start' ? x0 : x0 - w;
+      const right = anchor === 'start' ? x0 + w : x0;
+      const r = rowEnd.findIndex((e) => left > e + 6);
+      if (r < 0) { tx.remove(); return; }
+      rowEnd[r] = right;
+      tx.attr('x', x0).attr('y', 12 + r * 14).attr('text-anchor', anchor);
+    });
+
+    // line-end labels, pushed apart so they never touch
+    ends.forEach((e) => { e.y = yP(e.v); });
+    ends.sort((a, b) => a.y - b.y);
+    for (let i = 1; i < ends.length; i++) ends[i].y = Math.max(ends[i].y, ends[i - 1].y + 13);
+    const over = ends.length ? ends[ends.length - 1].y - (pBot - 4) : 0;
+    if (over > 0) ends.forEach((e) => { e.y -= over; });
+    ends.forEach((e) => svg.append('text').attr('class', e.c === 0 ? 'gl-end-main' : null)
+      .attr('x', W - mr + 6).attr('y', e.y).attr('dy', '0.32em').text(e.k));
+
+    // x axis
+    const months = (last.d - first.d) / (30.44 * 864e5);
+    const perMonth = (W - mr - ml) / Math.max(1, months);
+    const every = perMonth >= 26 ? 3 : perMonth >= 11 ? 6 : 12;
+    d3.utcMonth.every(every).range(d3.utcYear.floor(first.d), d3.utcDay.offset(last.d, 1))
+      .filter((d) => d >= d3.utcDay.offset(first.d, -7))
+      .forEach((d) => {
+        const xx = Math.max(ml, x(d));
+        gG.append('line').attr('x1', xx).attr('x2', xx).attr('y1', rBot).attr('y2', rBot + 4).style('stroke', 'var(--cds-chart-axis)');
+        gG.append('text').attr('class', 'gl-tick').attr('x', xx).attr('y', rBot + 17).attr('text-anchor', xx <= ml + 12 ? 'start' : 'middle')
+          .text(d.getUTCMonth() === 0 ? d3.utcFormat('%Y')(d) : d3.utcFormat('%b')(d));
+      });
+
+    // crosshair and tooltip
+    const tip = document.createElement('div');
+    tip.className = 'gl-tip';
+    tip.hidden = true;
+    box.append(tip);
+    const focus = svg.append('g').style('display', 'none').attr('pointer-events', 'none');
+    const vline = focus.append('line').attr('y1', pTop).attr('y2', rBot).style('stroke', 'var(--cds-chart-axis)');
+    const dots = [['s', yP, 0], ['spy', yP, 1], ['qqq', yP, 2], ['rs', yR, 0]].map(([k, ys, c]) => ({
+      k, ys, el: focus.append('circle').attr('r', 4).style('fill', colors[c]).style('stroke', 'var(--color-panel)').style('stroke-width', 2),
+    }));
+    const times = data.map((d) => +d.d);
+    const vsLow = (v, base) => `${fSigned((v / base - 1) * 100)}% vs low`;
+    const tipRow = (color, val, name) => {
+      const r = document.createElement('div');
+      r.className = 'gl-tip-r';
+      const k = document.createElement('span');
+      k.className = 'gl-key-line';
+      k.style.background = color;
+      const v = document.createElement('span');
+      v.className = 'gl-tip-v';
+      v.textContent = val;
+      const nm = document.createElement('span');
+      nm.className = 'gl-tip-n';
+      nm.textContent = name;
+      r.append(k, v, nm);
+      tip.append(r);
+    };
+    const show = (j) => {
+      const d = data[j];
+      if (!d) return;
+      state.kIdx = j;
+      const cx = x(d.d);
+      focus.style('display', null);
+      vline.attr('x1', cx).attr('x2', cx);
+      dots.forEach((o) => {
+        const v = d[o.k];
+        if (ok(v)) o.el.attr('cx', cx).attr('cy', o.ys(v)).style('display', null);
+        else o.el.style('display', 'none');
+      });
+      tip.replaceChildren();
+      const head = document.createElement('div');
+      head.className = 'gl-tip-d';
+      head.textContent = dLong(d.d);
+      tip.append(head);
+      if (ok(d.s)) tipRow(colors[0], money(d.s), `${t} · ${vsLow(d.s, sL)}`);
+      tipRow(colors[1], money(SPY[d.i]), `SPY · ${vsLow(SPY[d.i], spyL)}`);
+      tipRow(colors[2], money(QQQ[d.i]), `QQQ · ${vsLow(QQQ[d.i], qqqL)}`);
+      if (ok(vol[d.i])) {
+        tipRow('var(--cds-chart-muted)', tickVol(vol[d.i]),
+          ok(avg50[d.i]) ? `Volume · ${fX(vol[d.i] / avg50[d.i])} 50-day avg` : 'Volume');
+      }
+      if (ok(d.rs)) tipRow(colors[0], d3.format(',.0f')(d.rs), 'RS line');
+      tip.hidden = false;
+      const tw = tip.offsetWidth;
+      let left = cx + 14;
+      if (left + tw > W) left = cx - 14 - tw;
+      tip.style.left = `${Math.max(0, left)}px`;
+      tip.style.top = `${pTop}px`;
+    };
+    const hide = () => { focus.style('display', 'none'); tip.hidden = true; };
+    svg.append('rect').attr('x', ml).attr('y', pTop).attr('width', Math.max(0, W - mr - ml)).attr('height', rBot - pTop)
+      .style('fill', 'transparent').style('cursor', 'crosshair')
+      .on('pointermove', (ev) => {
+        const [mx] = d3.pointer(ev);
+        show(d3.bisector((v) => v).center(times, +x.invert(mx)));
+      })
+      .on('pointerleave', hide);
+    if (state.kIdx !== null && state.kIdx >= data.length) state.kIdx = null;
+    box.onkeydown = (e) => {
+      if (e.key === 'Escape') { hide(); return; }
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault();
+      const by = e.shiftKey ? 21 : 5;
+      const from = state.kIdx === null ? data.length - 1 : state.kIdx;
+      show(Math.max(0, Math.min(data.length - 1, from + (e.key === 'ArrowLeft' ? -by : by))));
+    };
+    box.onblur = hide;
+  }
+
+  function render() {
+    const p = params();
+    const L = dash.data('leaders');
+    const Pr = dash.data('prices');
+    const E = dash.data('events');
+    const Vo = dash.data('volumes');
+    const T = dash.data('takeaway');
+    root.querySelectorAll('[data-list]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.list === p.list)));
+    root.querySelectorAll('[data-range]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.range === p.range)));
+    const rows = L.status === 'ok' ? L.data : [];
+    const rankF = `rank_${p.list}`;
+    const list = rows.filter((r) => has(r[rankF])).sort((a, b) => n(a[rankF]) - n(b[rankF]));
+    state.order = list.map((r) => String(r.ticker));
+    const sel = list.find((r) => String(r.ticker) === p.ticker) || list[0] || null;
+    state.sel = sel ? String(sel.ticker) : null;
+    renderEvents(E);
+    renderTakeaway(p, T, E);
+    renderStats(sel, L);
+    renderLegend(sel);
+    renderTable(p, list, L);
+    renderChart(p, sel, L, Pr, Vo, E);
+  }
+
+  dash.onData(render);
+})();
+</script>

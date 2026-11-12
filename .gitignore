@@ -1,0 +1,11 @@
+# API key: never commit it
+work/key.txt
+.env
+
+# Raw API responses, re-downloadable with the key
+work/cache/
+work/g.json
+work/sec.json
+
+__pycache__/
+*.pyc
