@@ -213,6 +213,29 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
 @container (max-width: 520px) { td.theme, th.theme, .opt2 { display: none; } }
 .foot { font-size: 12px; color: var(--muted); display: grid; gap: 4px; max-width: 100ch; }
 .foot p { margin: 0; }
+
+/* what fueled the run */
+.story { display: grid; gap: 8px; padding: 12px 14px 13px; border-radius: 8px; background: var(--bg); }
+.story-h { margin: 0; font: 500 11px/1.2 var(--font-data); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.story p { margin: 0; font-size: 14px; line-height: 1.55; max-width: 82ch; text-wrap: pretty; }
+.cats { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; font-size: 12.5px; }
+.cats li { display: grid; grid-template-columns: 8.4em minmax(0, 1fr); gap: 8px; }
+.cats time { font: 12px var(--font-data); color: var(--muted); white-space: nowrap; }
+.srcs { font-size: 12px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 3px 10px; }
+
+/* earnings */
+.earn { display: grid; gap: 8px; }
+.earn-h { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 12px; }
+.earn-h h3 { margin: 0; font-family: var(--font-display); font-stretch: 108%; font-weight: 650; font-size: 15px; }
+.earn .tw { max-height: 330px; overflow: auto; }
+.earn tbody tr { cursor: default; }
+.earn tbody tr:hover { background: none; }
+.earn tr.hl td { background: color-mix(in srgb, var(--stock) 8%, transparent); }
+.tag { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 999px; font: 600 10px/1.6 var(--font-ui); background: var(--chip); color: var(--chip-ink); }
+.acc { font-size: 10px; margin-left: 3px; }
+.chart .emark { font: 600 10px var(--font-data); fill: var(--muted); }
+.tip-x { max-width: 300px; white-space: normal; color: var(--ink); font-size: 12px; }
+.tip-x b { font-weight: 600; }
 </style>
 
 <div class="app">
@@ -243,10 +266,12 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
         <h2 class="h2" id="stock-title"><span class="tk" id="tk">—</span><span class="co" id="co"></span></h2>
         <p class="sub" id="stock-sub"></p>
       </div>
+      <div class="story" id="story"></div>
       <dl class="stats" id="stats"></dl>
       <div class="legend" id="legend"></div>
       <div class="chart" id="chart" tabindex="0" role="group" aria-label="Price chart. Arrow keys read values; Enter pins a date for your questions."><div class="skel">Loading chart…</div></div>
       <p class="note" id="chart-note"></p>
+      <div class="earn" id="earn"></div>
     </section>
 
     <aside class="card ask" id="ask" aria-labelledby="ask-title">
@@ -323,6 +348,24 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
   const addDays = (s, n) => d3.utcFormat('%Y-%m-%d')(d3.utcDay.offset(parseDay(s), n));
   const signCls = (v) => (has(v) ? (v >= 0 ? 'up' : 'dn') : '');
   const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
+  const sales = (m, cur) => {
+    if (!has(m)) return '—';
+    const pre = !cur || cur === 'USD' ? '$' : cur + ' ';
+    return Math.abs(m) >= 1000 ? `${pre}${d3.format(',.2f')(m / 1000)}B` : `${pre}${d3.format(',.0f')(m)}M`;
+  };
+  const epsGrowth = (p) => {
+    if (!p) return '—';
+    if (has(p.eps_yoy)) return pct(p.eps_yoy);
+    if (has(p.eps) && has(p.eps_prev) && p.eps_prev <= 0) {
+      if (p.eps > 0) return 'Loss to profit';
+      if (p.eps > p.eps_prev) return 'Smaller loss';
+      if (p.eps < p.eps_prev) return 'Wider loss';
+    }
+    return '—';
+  };
+  const epsTxt = (v, cur) => (has(v) ? (v < 0 ? '−' : '') + (cur && cur !== 'USD' ? `${cur} ` : '$') + d3.format(',.2f')(Math.abs(v)) : '—');
+  const dateKey = (s) => (s && s.length === 7 ? s + '-15' : s);
+  const quarterOf = (D, t, end) => { const e = D.earnings && D.earnings[t]; return e ? e.periods.find((p) => p.end === end) || null : null; };
 
   // ---------- state ----------
   const RANGES = {
@@ -437,6 +480,12 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
       ['First SPY pullback', c1 ? pct1(c1.spy_pct) : '—', c1 ? [`${day(c1.start, fMon)}–${day(c1.end)}`, `Leaders' median ${pct1(L.median_in_pullback1)}`] : []],
       ['New issues that passed', String(I.n), [`Median first year ${pct(I.median_first_year)}`]],
     ];
+    const withE = D.leaders.filter((x) => x.e_hi && has(x.e_hi.rev_yoy));
+    if (withE.length) {
+      const fast = withE.filter((x) => x.e_hi.rev_yoy >= 25).length;
+      const accel = withE.filter((x) => has(x.e_hi.rev_accel) && x.e_hi.rev_accel > 0).length;
+      items.splice(6, 0, ['Leaders: sales up 25%+ before the new high', `${fast} of ${withE.length}`, [`Growth speeding up at ${accel}`, 'Last report before it, from SEC data']]);
+    }
     items.forEach(([dt, v, subs]) => {
       const d = el('div');
       const dd = el('dd');
@@ -464,7 +513,7 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
       const b = el('button', 'sb', r.label(D));
       b.type = 'button';
       b.setAttribute('aria-pressed', String(state.range[state.list] === r.id));
-      b.addEventListener('click', () => { state.range[state.list] = r.id; renderChart(); });
+      b.addEventListener('click', () => { state.range[state.list] = r.id; renderChart(); renderEarnings(cur(), sel()); });
       rb.append(b);
     });
   }
@@ -503,6 +552,7 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
         { dt: 'Low', v: day(r.low_date), subs: [`SPY's low: ${day(D.index.spy.low_date)}`, has(r.low_vol) && `Volume ${fX(r.low_vol)} its 50-day average`] },
         { dt: 'First new 52-week high', v: day(r.hi_date), subs: [has(r.hi_pct) && `${pct(r.hi_pct)} off the low`, has(r.hi_vol) && `Volume ${fX(r.hi_vol)} its 50-day average`, vsSpy(r.hi_date)] },
         { dt: 'RS line new high', v: day(r.rs_date), subs: [`Ahead of price: ${r.rs_led}`] },
+        earnStat(D, r, 'Earnings before the new high'),
         pull(1), pull(2),
         { dt: 'Size at the low', v: cap(r.cap_b), subs: [has(r.years_listed) && `Public ${r.years_listed} years`] },
       ].filter(Boolean);
@@ -514,9 +564,132 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
       { dt: 'Base low', v: day(r.low_date), subs: [`${pct(r.low_vs_first)} vs first close`, has(r.low_vol) && `Volume ${fX(r.low_vol)} its average`] },
       { dt: 'Breakout to a new high', v: day(r.hi_date), subs: [has(r.hi_pct) && `${pct(r.hi_pct)} off the base low`, has(r.hi_vol) && `Volume ${fX(r.hi_vol)} its average`, vsSpy(r.hi_date)] },
       { dt: 'RS line new high', v: day(r.rs_date), subs: [`Ahead of price: ${r.rs_led}`] },
+      earnStat(D, r, 'Earnings before the breakout'),
       pull(1), pull(2),
       { dt: 'Market cap', v: cap(r.cap_b), subs: ['12 months after the index low'] },
     ].filter(Boolean);
+  }
+
+  function earnStat(D, r, label) {
+    const E = D.earnings && D.earnings[r.ticker];
+    const eh = r.e_hi;
+    if (!E || E.mode === 'none') return { dt: label, v: 'No SEC data', subs: [] };
+    if (!eh) return { dt: label, v: 'Not reported yet', subs: [E.mode === 'annual' ? 'Files annual reports only' : 'No report before that date'] };
+    const p = quarterOf(D, r.ticker, eh.end);
+    return {
+      dt: label + (E.mode === 'annual' ? ' (annual)' : ''),
+      v: `Sales ${pct(eh.rev_yoy)}`,
+      cls: signCls(eh.rev_yoy),
+      subs: [`EPS ${epsGrowth(p)} y/y`, `Reported ${day(eh.reported)}${has(eh.rev_accel) ? (eh.rev_accel > 0 ? '; sales growth speeding up' : '; sales growth slowing') : ''}`],
+    };
+  }
+
+  function renderStory(D, r) {
+    const box = $('#story');
+    box.replaceChildren();
+    if (!D || !r) { box.hidden = true; return; }
+    box.hidden = false;
+    box.append(el('p', 'story-h', state.list === 'leaders' ? 'What fueled the run' : 'What fueled the run after the IPO'));
+    const s = r.story;
+    if (!s) {
+      box.append(el('p', null, 'No write-up for this stock yet. Ask Claude in the panel for the catalysts behind the run.'));
+      return;
+    }
+    box.append(el('p', null, s.text));
+    if (s.catalysts && s.catalysts.length) {
+      const ul = el('ul', 'cats');
+      s.catalysts.forEach((c) => {
+        const li = el('li');
+        const t = el('time', null, c.date.length === 7 ? d3.utcFormat('%b %Y')(parseDay(c.date + '-01')) : day(c.date));
+        t.dateTime = c.date;
+        li.append(t, el('span', null, c.text));
+        ul.append(li);
+      });
+      box.append(ul);
+    }
+    {
+      const src = el('div', 'srcs');
+      src.append(el('span', null, 'Summarized by Claude from news and company sources; check specifics before relying on them.'));
+      if (s.sources && s.sources.length) src.append(el('span', null, 'Sources:'));
+      s.sources.forEach((x) => {
+        if (!/^https?:\/\//i.test(x.url || '')) return;
+        const a = el('a', null, x.title || x.url);
+        a.href = x.url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        src.append(a);
+      });
+      box.append(src);
+    }
+  }
+
+  function renderEarnings(D, r) {
+    const box = $('#earn');
+    box.replaceChildren();
+    if (!D || !r) return;
+    const E = D.earnings && D.earnings[r.ticker];
+    const head = el('div', 'earn-h');
+    const annual = E && E.mode === 'annual';
+    head.append(el('h3', null, annual ? 'Annual results from SEC filings' : 'Quarterly results from SEC filings'));
+    box.append(head);
+    if (!E || E.mode === 'none' || !E.periods.length) {
+      box.append(el('p', 'note', 'No financial statements for this company in SEC data for this period.'));
+      return;
+    }
+    const start = addMonths(rangeStart(D, r), -3);
+    const list = E.periods.filter((p) => p.end >= start && p.end <= r.end);
+    head.append(el('span', 'ss', annual
+      ? 'Foreign filer: quarterly figures are not in SEC data. Ask Claude for quarterly results.'
+      : 'GAAP, as first reported. EPS adjusted for later stock splits. * Q4 is the fiscal year minus three quarters.'));
+    const L = state.list === 'leaders';
+    const tagFor = (p) => {
+      const t = [];
+      if (r.e_low && r.e_low.end === p.end) t.push(L ? 'Last before the low' : 'Last before the base low');
+      if (r.e_hi && r.e_hi.end === p.end) t.push(L ? 'Last before the new high' : 'Last before the breakout');
+      return t;
+    };
+    const tw = el('div', 'tw');
+    const table = el('table');
+    const thr = el('tr');
+    [['Period ended', ''], ['Reported', ''], ['Sales', 'num'], ['Sales y/y', 'num'], ['EPS', 'num'], ['EPS y/y', 'num']].forEach(([h, c]) => {
+      const th = el('th', c, h);
+      th.style.padding = '6px 8px';
+      thr.append(th);
+    });
+    const thead = el('thead');
+    thead.append(thr);
+    const tb = el('tbody');
+    const arrow = (v) => {
+      if (!has(v) || Math.abs(v) < 0.5) return null;
+      const s = el('span', 'acc ' + (v > 0 ? 'up' : 'dn'), v > 0 ? '▲' : '▼');
+      s.title = `${v > 0 ? 'Up' : 'Down'} ${Math.abs(v).toFixed(0)} points from the prior period's growth`;
+      return s;
+    };
+    let hlRow = null;
+    list.forEach((p) => {
+      const tr = el('tr');
+      const tags = tagFor(p);
+      if (tags.length) { tr.classList.add('hl'); hlRow = hlRow || tr; }
+      const c1 = el('td', 'mono', day(p.end, fShort) + (p.derived ? '*' : ''));
+      tags.forEach((t) => c1.append(el('span', 'tag', t)));
+      const c2 = el('td', 'mono', p.reported ? day(p.reported, fShort) : '—');
+      const c3 = el('td', 'num', sales(p.rev_m, E.currency));
+      const c4 = el('td', 'num ' + signCls(p.rev_yoy), pct(p.rev_yoy));
+      const a4 = arrow(p.rev_accel);
+      if (a4) c4.append(a4);
+      const c5 = el('td', 'num', epsTxt(p.eps, E.currency));
+      const eg = epsGrowth(p);
+      const c6 = el('td', 'num ' + (has(p.eps_yoy) ? signCls(p.eps_yoy) : eg === 'Loss to profit' || eg === 'Smaller loss' ? 'up' : eg === 'Wider loss' ? 'dn' : ''), eg);
+      const a6 = arrow(p.eps_accel);
+      if (a6) c6.append(a6);
+      tr.append(c1, c2, c3, c4, c5, c6);
+      tb.append(tr);
+    });
+    table.append(thead, tb);
+    tw.append(table);
+    box.append(tw);
+    if (!list.length) box.append(el('p', 'note', 'No periods inside this chart range.'));
+    if (hlRow) requestAnimationFrame(() => { tw.scrollTop = Math.max(0, hlRow.offsetTop - 60); });
   }
 
   function renderStats(D, r) {
@@ -548,6 +721,8 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
     item(key('kl', { background: 'var(--ref)' }), '50-day average volume');
     item(key('kr'), 'SPY peak, low, first new high');
     item(key('kb'), 'SPY pullbacks');
+    item(Object.assign(el('span', null, 'E'), { style: 'font:600 10px var(--font-data);color:var(--muted)' }), 'Earnings report');
+    if (r.story && r.story.catalysts && r.story.catalysts.length) item(Object.assign(el('span', null, '◆'), { style: 'font-size:10px;color:var(--ink)' }), 'Catalyst (hover the chart)');
     item(key('kl', { background: 'var(--pin)' }), 'Pinned date');
   }
 
@@ -569,6 +744,7 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
       { id: 'low', label: 'Low', f: 'low_date', fmt: (v) => day(v, fShort), mono: true, first: 1 },
       { id: 'hi', label: 'First 52-wk high', f: 'hi_date', fmt: (v) => day(v, fShort), mono: true, first: 1 },
       { id: 'hv', label: 'Vol at high', f: 'hi_vol', num: true, fmt: fX, cls: 'opt', first: -1 },
+      { id: 'eg', label: 'Sales growth then', f: (x) => (x.e_hi ? x.e_hi.rev_yoy : null), num: true, fmt: pct, cls: 'opt', first: -1 },
       { id: 'rs', label: 'RS new high', f: 'rs_date', fmt: (v) => day(v, fShort), mono: true, cls: 'opt2', first: 1 },
       { id: 'led', label: 'RS first', f: 'rs_led', cls: 'opt', first: -1 },
     ],
@@ -583,9 +759,12 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
       { id: 'weeks', label: 'Weeks in base', f: 'base_weeks', num: true, fmt: (v) => (has(v) ? String(v) : '—'), cls: 'opt', first: 1 },
       { id: 'bo', label: 'Breakout', f: 'hi_date', fmt: (v) => day(v, fShort), mono: true, cls: 'opt2', first: 1 },
       { id: 'hv', label: 'Vol at breakout', f: 'hi_vol', num: true, fmt: fX, cls: 'opt', first: -1 },
+      { id: 'eg', label: 'Sales growth then', f: (x) => (x.e_hi ? x.e_hi.rev_yoy : null), num: true, fmt: pct, cls: 'opt', first: -1 },
       { id: 'led', label: 'RS first', f: 'rs_led', cls: 'opt', first: -1 },
     ],
   };
+
+  const fieldOf = (x, c) => (typeof c.f === 'function' ? c.f(x) : x[c.f]);
 
   function renderTable(D, r) {
     const cols = COLS[state.list];
@@ -608,8 +787,8 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
     }));
     const sc = cols.find((c) => c.id === state.sort.id);
     const list = rows().slice().sort((a, b) => {
-      const va = a[sc.f];
-      const vb = b[sc.f];
+      const va = fieldOf(a, sc);
+      const vb = fieldOf(b, sc);
       if (!has(va) && !has(vb)) return 0;
       if (!has(va)) return 1;
       if (!has(vb)) return -1;
@@ -624,7 +803,7 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
         if (c.num) td.classList.add('num');
         if (c.mono) td.classList.add('mono');
         if (c.cls) c.cls.split(' ').forEach((y) => td.classList.add(y));
-        const v = x[c.f];
+        const v = fieldOf(x, c);
         if (c.key) {
           const b = el('button', 'tkb', v);
           b.type = 'button';
@@ -875,6 +1054,38 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
     ends.forEach((e) => svg.append('text').attr('class', e.main ? 'endm' : 'endo').style('fill', e.main ? null : e.c)
       .attr('x', W - mr + 6).attr('y', e.y).attr('dy', '0.32em').text(e.k));
 
+    // earnings reports (E at the foot of the price pane) and catalysts (diamonds along its top)
+    const near = new Map();
+    const mark = (date, kind, payload) => {
+      const k = dateKey(date);
+      if (!k) return null;
+      const j = d3.bisectLeft(D.dates, k);
+      if (j < i0 || j > iEnd || j >= D.dates.length) return null;
+      for (let q = j - 2; q <= j + 2; q++) {
+        if (!near.has(q)) near.set(q, []);
+        near.get(q).push({ kind, payload, j });
+      }
+      return x(parseDay(D.dates[j]));
+    };
+    const E = D.earnings && D.earnings[t];
+    const gE = svg.append('g');
+    if (E && E.mode !== 'none') {
+      E.periods.forEach((p) => {
+        if (!p.reported) return;
+        const ex = mark(p.reported, 'E', p);
+        if (ex === null) return;
+        gE.append('line').attr('x1', ex).attr('x2', ex).attr('y1', pBot - 4).attr('y2', pBot).style('stroke', 'var(--muted)');
+        gE.append('text').attr('class', 'emark').attr('x', ex).attr('y', pBot - 7).attr('text-anchor', 'middle').text('E');
+      });
+    }
+    const cats = (r.story && r.story.catalysts) || [];
+    cats.forEach((c) => {
+      const cx = mark(c.date, 'C', c);
+      if (cx === null) return;
+      gE.append('path').attr('d', d3.symbol(d3.symbolDiamond, 42)()).attr('transform', `translate(${cx},${pTop + 7})`)
+        .style('fill', 'var(--ink)').style('fill-opacity', 0.8).style('stroke', 'var(--panel)').style('stroke-width', 1);
+    });
+
     // x axis
     const months = (last.d - first.d) / (30.44 * 864e5);
     const perMonth = (W - mr - ml) / Math.max(1, months);
@@ -924,6 +1135,20 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
       tipRow('var(--qqq)', money(QQQ[d.i]), `QQQ · ${vsLow(QQQ[d.i], qqqL)}`);
       if (d.v) tipRow('var(--vol)', tickVol(d.v), ok(d.a) ? `Volume · ${fX(d.v / d.a)} average` : 'Volume');
       if (ok(d.rs)) tipRow('var(--stock)', d3.format(',.0f')(d.rs), 'RS line');
+      const seen = new Set();
+      (near.get(d.i) || []).sort((a, b) => Math.abs(a.j - d.i) - Math.abs(b.j - d.i)).forEach((h) => {
+        const key = h.kind + (h.payload.end || h.payload.date);
+        if (seen.has(key)) return;
+        seen.add(key);
+        const row = el('div', 'tip-x');
+        if (h.kind === 'E') {
+          const p = h.payload;
+          row.append(el('b', null, `Earnings ${day(p.reported, fMon)}: `), `sales ${pct(p.rev_yoy)}, EPS ${epsGrowth(p)} y/y`);
+        } else {
+          row.append(el('b', null, `${h.payload.date.length === 7 ? d3.utcFormat('%b %Y')(parseDay(h.payload.date + '-01')) : day(h.payload.date, fMon)}: `), h.payload.text);
+        }
+        tip.append(row);
+      });
       tip.hidden = false;
       const tw = tip.offsetWidth;
       let left = cx + 14;
@@ -968,7 +1193,9 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
     const r = sel();
     if (r && state.ticker !== r.ticker) state.ticker = r.ticker;
     renderTitle(r);
+    renderStory(D, r);
     renderStats(D, r);
+    renderEarnings(D, r);
     renderLegend(r);
     renderNote();
     renderTable(D, r);
@@ -1070,7 +1297,7 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
         ? '- For news, earnings results, guidance, product launches, analyst days, IPO terms or market events, use web_search, then read_page on the best one or two results. Prefer company press releases, SEC filings and earnings-call transcripts, then reputable financial news. Search with the company name, the event and the month and year.'
         : '- You cannot search the web in this view. Answer from your own knowledge, say clearly which facts you are unsure of, and suggest what the reader should verify.',
       '- Use get_price_history to show how the stock and SPY reacted around a date (for example the day of and the days after an earnings report).',
-      '- For earnings, say whether figures are GAAP or adjusted, and give year-over-year growth and any acceleration.',
+      '- For earnings, say whether figures are GAAP or adjusted, and give year-over-year growth and any acceleration. The page data includes GAAP results from SEC filings; companies often headline adjusted figures, which can differ.',
       web ? '- Cite sources inline as Markdown links, [publisher](url), using only URLs you actually read or saw in results. Never invent a URL.' : '- Do not give URLs you have not seen.',
       '- Separate what the record shows from your own interpretation. If you could not verify something, say so.',
       '- Keep it under about 250 words unless the reader asks for more. Use plain paragraphs, "- " bullets and **bold** for key numbers. No tables.',
@@ -1110,6 +1337,19 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
         if (prior.length >= 10) bits.push(`Volume was ${fX(V[i] / d3.mean(prior))} its prior 50-session average.`);
       }
       L.push(bits.join(' '));
+    }
+    if (r.story) {
+      L.push(`Research notes already on the page about what fueled the run (from news and company sources; verify before repeating specifics): ${r.story.text}`);
+      if (r.story.catalysts && r.story.catalysts.length) L.push(`Catalysts listed: ${r.story.catalysts.map((c) => `${c.date} ${c.text}`).join('; ')}.`);
+    }
+    const E = D.earnings && D.earnings[r.ticker];
+    if (E && E.mode !== 'none' && E.periods.length) {
+      const from = addMonths(rangeStart(D, r), -6);
+      const ps = E.periods.filter((p) => p.end >= from && p.end <= r.end);
+      L.push(`${E.mode === 'annual' ? 'Annual' : 'Quarterly'} results from SEC filings (GAAP, as first reported; EPS adjusted for later splits; currency ${E.currency || 'USD'}). Growth is year over year:`);
+      ps.forEach((p) => L.push(`- period ended ${p.end}, reported ${p.reported || 'n/a'}: sales ${sales(p.rev_m, E.currency)} (${pct1(p.rev_yoy)}), EPS ${epsTxt(p.eps, E.currency)} (${epsGrowth(p)})${p.derived ? ' [Q4 derived from the annual figure]' : ''}`));
+    } else {
+      L.push('No financial statements for this company in SEC data (foreign filer or none in this period).');
     }
     L.push(`Other stocks on this list: ${list.filter((x) => x.ticker !== r.ticker).map((x) => `${x.ticker} (${x.theme})`).join(', ')}.`);
     L.push(`The page has daily closes and volume for every stock on this cycle's two lists plus SPY and QQQ, from ${day(D.dates[0])} to ${day(D.dates[D.dates.length - 1])}.`);

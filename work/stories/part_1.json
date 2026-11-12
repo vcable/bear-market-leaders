@@ -1,0 +1,564 @@
+[
+ {
+  "cycle": "2018",
+  "ticker": "ROKU",
+  "blurb": "The run took off with first-quarter results on May 8, 2019, when Roku reported revenue up 51% year over year to $206.7 million, with platform revenue up 79%, and raised its full-year outlook. The stock made its first new 52-week high the next day. It had bottomed on December 24, 2018, after the prior quarter's sales growth slowed to 39%. Active accounts reached 29.1 million and streaming hours rose 74%. The stock peaked on December 23, 2020.",
+  "catalysts": [
+   {
+    "date": "2019-05-08",
+    "text": "Q1 revenue +51% to $206.7M; full-year outlook raised"
+   },
+   {
+    "date": "2019-05-09",
+    "text": "Stock hits first new 52-week high after report"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Why Roku stock skyrocketed Thursday (Motley Fool)",
+    "url": "https://www.fool.com/investing/2019/05/09/why-roku-stock-skyrocketed-thursday.aspx"
+   },
+   {
+    "title": "Roku's platform revenue soars (Motley Fool)",
+    "url": "https://www.fool.com/investing/2019/05/08/rokus-platform-revenue-soars-sending-the-stock-hig.aspx"
+   },
+   {
+    "title": "Roku Q1 2019 8-K exhibit (SEC)",
+    "url": "https://www.sec.gov/Archives/edgar/data/1428439/000156459019017249/roku-ex991_6.htm"
+   }
+  ]
+ },
+ {
+  "cycle": "2018",
+  "ticker": "NVCR",
+  "blurb": "I found no single news trigger for NovoCure's run. The stock bottomed on November 20, 2018 and made a new 52-week high on February 15, 2019, after sales growth had slowed to 29% in the September quarter. Company results show steady growth: fourth-quarter 2018 revenue was $69.7 million, up 30% year over year, full-year revenue was $248.1 million, up 40%, and active Optune patients rose 30% to 2,383. The record shows steady growth rather than one event.",
+  "catalysts": [
+   {
+    "date": "2018-10-25",
+    "text": "Q3 2018 results: sales up 29% year over year"
+   },
+   {
+    "date": "2019-02-28",
+    "text": "Q4 2018 revenue $69.7M, up 30%; 2,383 active patients"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Novocure Q4 and full-year 2018 results (BioSpace)",
+    "url": "https://www.biospace.com/novocure-reports-fourth-quarter-and-full-year-2018-financial-results-and-provides-company-update"
+   },
+   {
+    "title": "Novocure Q4 2018 earnings release (SEC)",
+    "url": "https://sec.gov/Archives/edgar/data/1645113/000156459019005141/nvcr-ex991_6.htm"
+   }
+  ]
+ },
+ {
+  "cycle": "2018",
+  "ticker": "COUP",
+  "blurb": "Coupa reported fiscal third-quarter results on December 3, 2018, with revenue up 42% to $67.5 million, and raised its fiscal 2019 revenue outlook to $253 million to $253.5 million. Shares fell that day, and the stock hit its low on December 21, 2018. It made a new 52-week high on January 31, 2019, as the broad market rebounded. I found no separate catalyst for the breakout date itself. The peak came on December 18, 2020.",
+  "catalysts": [
+   {
+    "date": "2018-12-03",
+    "text": "FQ3 revenue +42% to $67.5M; full-year outlook raised"
+   },
+   {
+    "date": "2019-01-31",
+    "text": "Stock makes first new 52-week high"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Coupa Q3 fiscal 2019 results (SEC 8-K)",
+    "url": "https://www.sec.gov/Archives/edgar/data/0001385867/000119312518341105/d666689dex991.htm"
+   },
+   {
+    "title": "Sell-side bullish on Coupa after Q3 beat-and-raise (Benzinga)",
+    "url": "https://www.benzinga.com/article/12795382"
+   }
+  ]
+ },
+ {
+  "cycle": "2018",
+  "ticker": "EDU",
+  "blurb": "New Oriental's run was a gradual recovery backed by steady growth in after-school tutoring. It bottomed on December 24, 2018 and made a new 52-week high on July 1, 2019. Reported results showed revenue up 27.8% in the quarter ended November 2018 and 28.9% in the quarter ended February 2019, with enrollments up 82.3% in the latter. Fourth-quarter fiscal 2019 revenue growth slowed to 20.2%. I did not find a single trigger for the breakout.",
+  "catalysts": [
+   {
+    "date": "2019-01",
+    "text": "Quarter to Nov. 2018: revenue growth 27.8%"
+   },
+   {
+    "date": "2019-04",
+    "text": "Quarter to Feb. 2019: revenue +28.9%, enrollments +82.3%"
+   },
+   {
+    "date": "2019-07",
+    "text": "Quarter to May 2019: revenue growth 20.2%"
+   }
+  ],
+  "sources": [
+   {
+    "title": "New Oriental Q3 FY2019 results (SEC 6-K)",
+    "url": "https://www.sec.gov/Archives/edgar/data/1372920/000119312519115712/d736732dex991.htm"
+   },
+   {
+    "title": "New Oriental Q2 FY2020 results (PR Newswire)",
+    "url": "https://prnewswire.com/news-releases/new-oriental-announces-results-for-the-second-fiscal-quarter-ended-november-30-2019-300989564.html"
+   }
+  ]
+ },
+ {
+  "cycle": "2018",
+  "ticker": "MELI",
+  "blurb": "The breakout followed fourth-quarter 2018 results on February 26, 2019. Revenue was $428.0 million, up 19.5% in dollars (61.8% on a constant-currency basis), and the net loss of $0.05 per share beat expectations. Payment transactions rose 71.7% to 125.6 million, and off-platform payment volume topped $2 billion for the first time. The stock rose about 26% in February and made a new 52-week high on February 27. It had bottomed on December 24, 2018.",
+  "catalysts": [
+   {
+    "date": "2019-02-26",
+    "text": "Q4 revenue $428M; payments +71.7%; loss narrower than expected"
+   },
+   {
+    "date": "2019-02-27",
+    "text": "Stock makes new 52-week high; up about 26% in February"
+   }
+  ],
+  "sources": [
+   {
+    "title": "MercadoLibre Q4 2018 results (company IR)",
+    "url": "https://investor.mercadolibre.com/news-and-events/mercadolibre-inc-reports-fourth-quarter-financial-results"
+   },
+   {
+    "title": "Why MercadoLibre soared 26% in February (Motley Fool)",
+    "url": "https://www.fool.com/investing/2019/03/04/heres-why-mercadolibre-soared-26-in-february.aspx"
+   }
+  ]
+ },
+ {
+  "cycle": "2018",
+  "ticker": "INMD",
+  "blurb": "InMode listed on Nasdaq on August 8, 2019, pricing 5 million shares at $14. After a base low on September 30, it broke out to a new high on October 22, 2019. Its November 5 report showed third-quarter revenue of $40.0 million, up 57% year over year, net income of $16.2 million and an 87% gross margin. International revenue rose about 88%. Coverage later noted the stock was up roughly 188% since the IPO. The peak came on August 6, 2021.",
+  "catalysts": [
+   {
+    "date": "2019-08-08",
+    "text": "IPO on Nasdaq at $14 per share"
+   },
+   {
+    "date": "2019-11-05",
+    "text": "Q3 revenue $40.0M, up 57%; net income $16.2M"
+   }
+  ],
+  "sources": [
+   {
+    "title": "InMode Q3 2019 results (BioSpace)",
+    "url": "https://www.biospace.com/inmode-reports-third-quarter-2019-record-revenue-of-40-million-reflects-growth-of-57-percent-year-over-year-net-income-increased-87-percent-to-16-2-million"
+   },
+   {
+    "title": "InMode up 188% since IPO (Globes)",
+    "url": "https://en.globes.co.il/en/article-inmode-up-188-since-ipo-1001306821"
+   }
+  ]
+ },
+ {
+  "cycle": "2018",
+  "ticker": "DT",
+  "blurb": "Dynatrace listed on the NYSE on August 1, 2019, pricing at $16 and closing its first day at $23.85. After a base low on October 16, the stock broke out on November 26. On October 30 it reported its first quarter as a public company: revenue up 27% to $129.4 million, annual recurring revenue up 44% to $470.9 million, and subscription revenue up 37%. The quarter's GAAP loss of $1.58 per share reflected IPO-related costs. The peak came on July 30, 2021.",
+  "catalysts": [
+   {
+    "date": "2019-08-01",
+    "text": "IPO at $16; first-day close $23.85"
+   },
+   {
+    "date": "2019-10-30",
+    "text": "First public quarter: revenue +27%, ARR +44%"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Dynatrace Q2 fiscal 2020 results (company IR)",
+    "url": "https://ir.dynatrace.com/news-events/press-releases/detail/153/dynatrace-reports-second-quarter-of-fiscal-year-2020-financial-results"
+   },
+   {
+    "title": "Dynatrace IPO closing release (company IR)",
+    "url": "https://ir.dynatrace.com/news-events/press-releases/detail/157/dynatrace-announces-closing-of-initial-public-offering-and-full-exercise-of-the-underwriters-option-to-purchase-additional-shares"
+   }
+  ]
+ },
+ {
+  "cycle": "2018",
+  "ticker": "BYND",
+  "blurb": "Beyond Meat went public on May 2, 2019 at $25 and closed its first day at $65.75, up 163%, in a $240 million IPO. After a base low on June 24, the stock rebounded when Tim Hortons said in June it would offer Beyond Meat breakfast sandwiches at nearly 4,000 Canadian locations. It made a new high on July 11 and peaked on July 26. First-quarter sales were up 215% year over year, but the run lasted only about three months.",
+  "catalysts": [
+   {
+    "date": "2019-05-02",
+    "text": "IPO at $25; closes first day at $65.75"
+   },
+   {
+    "date": "2019-06",
+    "text": "Tim Hortons plans Beyond Meat breakfast items in Canada"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Beyond Meat shares close 163% higher (KSL/AP)",
+    "url": "https://www.ksl.com/article/46543844/the-latest-beyond-meat-shares-close-163-higher"
+   },
+   {
+    "title": "Beyond Meat stock and Tim Hortons (Fortune)",
+    "url": "https://fortune.com/2019/06/12/beyond-meat-stock-tim-hortons/"
+   }
+  ]
+ },
+ {
+  "cycle": "2020",
+  "ticker": "FVRR",
+  "blurb": "Fiverr's run began in spring 2020 as remote work boosted demand. It hit its low on March 20 and a new 52-week high on April 29. On April 8 it said first-quarter adjusted EBITDA would beat its guidance. On May 7 it reported revenue up 44% to $34.2 million and raised its full-year outlook; the stock rose 66% in May. Management said businesses were moving from offline to online. The peak came on February 12, 2021.",
+  "catalysts": [
+   {
+    "date": "2020-04-08",
+    "text": "Says Q1 adjusted EBITDA will beat guidance; cites remote work"
+   },
+   {
+    "date": "2020-05-07",
+    "text": "Q1 revenue +44% to $34.2M; full-year outlook raised"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Fiverr first quarter 2020 results (company IR)",
+    "url": "https://fiverrinternationalltd.gcs-web.com/news-releases/news-release-details/fiverr-announces-first-quarter-2020-results"
+   },
+   {
+    "title": "How Fiverr shares gained 66% last month (Motley Fool)",
+    "url": "https://www.fool.com/investing/2020/06/03/how-fiverr-shares-gained-66-last-month.aspx"
+   }
+  ]
+ },
+ {
+  "cycle": "2020",
+  "ticker": "UPWK",
+  "blurb": "Upwork's breakout came with second-quarter results on August 4, 2020, the day it made a new 52-week high. Revenue rose 19% to $87.5 million, beating guidance, and third-quarter revenue guidance of $89 million to $91 million was above the consensus of about $85 million. Management credited the shift to remote work. The stock had bottomed on April 3 and peaked on July 13, 2021.",
+  "catalysts": [
+   {
+    "date": "2020-02-26",
+    "text": "Q4 2019 results: sales up 17% year over year"
+   },
+   {
+    "date": "2020-08-04",
+    "text": "Q2 revenue +19%; Q3 guidance above consensus"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Upwork second quarter 2020 results (company IR)",
+    "url": "https://investors.upwork.com/news-releases/news-release-details/upwork-reports-second-quarter-2020-financial-results"
+   },
+   {
+    "title": "Upwork Q2 beat, Q3 guidance above consensus (StreetInsider)",
+    "url": "https://www.streetinsider.com/Earnings/Upwork+Inc.+%28UPWK%29+Tops+Q2+EPS+by+6c%2C+Revenues+Beat%3B+Offers+3Q+Revenue+Guidance+Above+Consensus/17195510.html"
+   }
+  ]
+ },
+ {
+  "cycle": "2020",
+  "ticker": "PINS",
+  "blurb": "Pinterest's breakout followed second-quarter results on July 31, 2020. Revenue grew 4% to $272 million, but monthly active users rose 39% to 416 million, and the company said July revenue was up about 50% year over year and guided third-quarter growth to the mid-30% range. The stock rose about 31% that day and made a new 52-week high on August 31. It had bottomed on March 18 and peaked on February 16, 2021.",
+  "catalysts": [
+   {
+    "date": "2020-07-31",
+    "text": "Q2 users +39% to 416M; July revenue ~+50%; stock jumps"
+   },
+   {
+    "date": "2020-08-31",
+    "text": "Stock makes first new 52-week high"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Pinterest Q2 2020 results (Business Wire)",
+    "url": "https://www.businesswire.com/news/home/20200731005115/en/Pinterest-Announces-Quarter-2020-Results/"
+   },
+   {
+    "title": "Pinterest stock surges after impressive US results (Motley Fool)",
+    "url": "https://www.fool.com/investing/2020/07/31/pinterest-stock-surges-after-posting-impressive-us.aspx"
+   }
+  ]
+ },
+ {
+  "cycle": "2020",
+  "ticker": "BILI",
+  "blurb": "Bilibili bottomed on March 20, 2020 and made a new high on April 16, after reporting fourth-quarter 2019 revenue up 64% on March 27. Its next report, on May 18, showed first-quarter revenue up 69% to about RMB 2.3 billion, monthly active users up 70% to 172.4 million and paying users up 134% to 13.4 million. The stock hit a record that day and closed up 9% at $33.66. It peaked on February 10, 2021.",
+  "catalysts": [
+   {
+    "date": "2020-03-27",
+    "text": "Q4 2019 revenue growth of 64%"
+   },
+   {
+    "date": "2020-05-18",
+    "text": "Q1 revenue +69%; users 172.4M; stock record high"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Bilibili Q1 2020 results (SEC 6-K)",
+    "url": "https://www.sec.gov/Archives/edgar/data/1723690/000119312520145498/d932443dex991.htm"
+   },
+   {
+    "title": "Bilibili Q1 2020 analysis (Equal Ocean)",
+    "url": "https://equalocean.com/analysis/2020052214021"
+   }
+  ]
+ },
+ {
+  "cycle": "2020",
+  "ticker": "UPST",
+  "blurb": "Upstart listed in December 2020; after a base low on March 8, 2021, its first earnings report on March 17 triggered the run. Fourth-quarter revenue was $86.7 million, up 39%, versus about $73.5 million expected, and it guided 2021 revenue to roughly $500 million. The stock rose about 47% after hours and soared over 75% on March 18, a new high. It also agreed to buy Prodigy Software. The peak came on October 15, 2021.",
+  "catalysts": [
+   {
+    "date": "2020-12-16",
+    "text": "IPO; first day of trading"
+   },
+   {
+    "date": "2021-03-17",
+    "text": "Q4 revenue +39%; 2021 guide ~$500M; Prodigy deal"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Upstart Q4 and full-year 2020 results (Business Wire)",
+    "url": "https://www.businesswire.com/news/home/20210317005794/en/Upstart-Announces-Fourth-Quarter-2020-and-Fiscal-Year-2020-Results"
+   },
+   {
+    "title": "Why Upstart stock soared over 75% Thursday (Motley Fool)",
+    "url": "https://www.fool.com/investing/2021/03/18/why-upstart-holdings-stock-soared-over-75-thursday"
+   }
+  ]
+ },
+ {
+  "cycle": "2020",
+  "ticker": "MEG",
+  "blurb": "Montrose went public in July 2020, raising about $161.3 million after costs. After a base low on September 21, the stock broke out on November 16, four days after the November 12 third-quarter report. Revenue rose 47% to $84.7 million, adjusted EBITDA rose to $16.7 million, and the company raised the low end of its full-year adjusted EBITDA outlook to $50 million to $55 million. The peak came on November 16, 2021.",
+  "catalysts": [
+   {
+    "date": "2020-07",
+    "text": "IPO raises about $161M net"
+   },
+   {
+    "date": "2020-11-12",
+    "text": "Q3 revenue +47% to $84.7M; EBITDA outlook raised"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Montrose Q3 2020 results (company IR)",
+    "url": "https://ir.onterris.com/news-events/press-releases/detail/227/montrose-environmental-group-announces-third-quarter-2020-results"
+   },
+   {
+    "title": "Montrose Q3 2020 8-K exhibit (SEC)",
+    "url": "https://www.sec.gov/Archives/edgar/data/1643615/000119312520291704/d96140dex991.htm"
+   }
+  ]
+ },
+ {
+  "cycle": "2020",
+  "ticker": "XPEV",
+  "blurb": "XPeng priced its NYSE IPO at $15 per ADS, above the $11 to $13 range, and closed its August 27, 2020 debut up 41.5% at $21.22. After a base low on September 24, it broke out on November 4. October deliveries were 3,040 vehicles, up 229% year over year, led by the P7 sedan with 2,104 units. The third-quarter report followed on November 12. The stock peaked on November 23, 2020.",
+  "catalysts": [
+   {
+    "date": "2020-08-27",
+    "text": "NYSE debut: priced $15, closed $21.22"
+   },
+   {
+    "date": "2020-11-02",
+    "text": "October deliveries 3,040, up 229% year over year"
+   }
+  ],
+  "sources": [
+   {
+    "title": "XPeng shares soar 41% in US debut (TechNode)",
+    "url": "https://technode.com/2020/08/28/xpeng-shares-soar-41-in-us-debut-market-cap-nears-chinese-auto-giants/"
+   },
+   {
+    "title": "XPeng Q3 2020 results (Business Wire)",
+    "url": "https://www.businesswire.com/news/home/20201112005445/en/XPeng-Reports-Third-Quarter-2020-Unaudited-Financial-Results"
+   }
+  ]
+ },
+ {
+  "cycle": "2020",
+  "ticker": "DADA",
+  "blurb": "Dada listed on Nasdaq on June 5, 2020, raising about $320 million with JD.com and Walmart as cornerstone investors. After a base low on September 8 and a breakout on October 12, the biggest move came with third-quarter results on November 19: revenue rose 85.5% to RMB 1.30 billion, and one report said shares jumped about 30% the next day. Losses continued because of rider costs. The peak came on November 30, 2020.",
+  "catalysts": [
+   {
+    "date": "2020-06-05",
+    "text": "Nasdaq IPO raises about $320M"
+   },
+   {
+    "date": "2020-11-19",
+    "text": "Q3 revenue +85.5%; shares jump on results"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Dada Q3 2020 results (Caixin)",
+    "url": "https://www.caixinglobal.com/2020-11-20/investors-eat-up-dada-as-grocery-delivery-specialist-posts-strong-growth-101630684.html"
+   },
+   {
+    "title": "Dada raises USD 320 million in US IPO (Yicai)",
+    "url": "https://yicaiglobal.com/news/-jdcom-backed-dada-raises-usd320-million-in-us-ipo"
+   }
+  ]
+ },
+ {
+  "cycle": "2020",
+  "ticker": "ABNB",
+  "blurb": "Airbnb is a modest case. It listed on December 10, 2020 at $68 and closed its first day at $144.71, a value above $100 billion. The chart data put the run peak at February 11, 2021, and a later base low at July 19, 2021, after first-quarter 2021 sales growth of only 5% year over year. I did not find a catalyst for a renewed run after that low, so the record shows mainly the IPO surge.",
+  "catalysts": [
+   {
+    "date": "2020-12-10",
+    "text": "IPO at $68; closes first day at $144.71"
+   },
+   {
+    "date": "2021-05-13",
+    "text": "Q1 2021 report: sales up 5% year over year"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Airbnb shares more than double in debut (CBS News)",
+    "url": "https://www.cbsnews.com/amp/sanfrancisco/news/airbnb-ipo-abnb-shares-more-than-double-nasdaq"
+   },
+   {
+    "title": "Airbnb IPO smashes 2020 records (Al Jazeera)",
+    "url": "https://www.aljazeera.com/economy/2020/12/10/travelling-far-and-wide-airbnbs-ipo-smashes-records"
+   }
+  ]
+ },
+ {
+  "cycle": "2022",
+  "ticker": "META",
+  "blurb": "Meta's run began with fourth-quarter 2022 results on February 1, 2023. Revenue fell 4% to $32.2 billion but beat expectations, and the company added $40 billion to its buyback and called 2023 the Year of Efficiency, following about 11,000 layoffs in November 2022. Shares rose roughly 20% in the next session, the biggest one-day gain in about a decade. The stock hit a new 52-week high on April 27, 2023, after first-quarter sales growth returned to 3%. It peaked on October 4, 2024.",
+  "catalysts": [
+   {
+    "date": "2022-11",
+    "text": "About 11,000 layoffs, 13% of staff"
+   },
+   {
+    "date": "2023-02-01",
+    "text": "Q4 beat, $40B added to buyback, Year of Efficiency"
+   },
+   {
+    "date": "2023-04-26",
+    "text": "Q1 revenue up 3% after three declining quarters"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Meta shares soar most since 2013 (Daily Maverick)",
+    "url": "https://www.dailymaverick.co.za/article/2023-02-02-meta-shares-soar-most-since-2013-on-zuckerbergs-vision.md"
+   },
+   {
+    "title": "Meta stock surges as it cuts costs and launches new buyback (Forex.com)",
+    "url": "https://forex.com/ie/news-and-analysis/meta-stock-rises-as-outlook-for-2023-improves"
+   }
+  ]
+ },
+ {
+  "cycle": "2022",
+  "ticker": "PLTR",
+  "blurb": "Palantir bottomed on December 27, 2022 and broke out after first-quarter results on May 8, 2023. Revenue was $525.2 million, up 18% year over year, ahead of the roughly $505 million expected, and net income was $19.2 million. The company said it expected positive net income in every quarter of 2023, and it previewed a new AI product for select customers. Shares jumped about 20% to 30% and made a new high on May 18. The peak came on October 10, 2024.",
+  "catalysts": [
+   {
+    "date": "2023-02",
+    "text": "Fourth quarter of 2022 was the first profitable quarter"
+   },
+   {
+    "date": "2023-05-08",
+    "text": "Q1 revenue $525M, profit; positive income guided all year"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Why Palantir stock soared this week (Motley Fool)",
+    "url": "https://www.fool.com/investing/2023/05/12/why-palantir-stock-soared-this-week"
+   },
+   {
+    "title": "Palantir soars 26% as Q1 tops expectations (Seeking Alpha)",
+    "url": "https://seekingalpha.com/news/3967500-palantir-technologies-stock-soars-26-as-q1-tops-expectations"
+   }
+  ]
+ },
+ {
+  "cycle": "2022",
+  "ticker": "AVGO",
+  "blurb": "Broadcom bottomed on October 14, 2022 and made a new 52-week high on March 20, 2023, after fiscal first-quarter results on March 2. Revenue was $8.91 billion, up 16%, with semiconductor sales up 21%; management cited demand for AI networking and custom accelerators. The pending $61 billion VMware acquisition, announced on May 26, 2022, was still being reviewed. The deal closed on November 22, 2023. The stock peaked on October 9, 2024.",
+  "catalysts": [
+   {
+    "date": "2022-05-26",
+    "text": "Agrees to buy VMware in a deal valued near $61B"
+   },
+   {
+    "date": "2023-03-02",
+    "text": "FQ1 revenue +16% to $8.91B; AI networking demand cited"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Broadcom Q1 2023 revenue hits $8.91B (Futurum)",
+    "url": "https://futurumgroup.com/insights/broadcom-revenue-in-q1-2023-hits-8-91b-beating-estimates/"
+   },
+   {
+    "title": "Broadcom CEO: VMware deal to close in 2023 (Data Center Knowledge)",
+    "url": "https://www.datacenterknowledge.com/next-gen-data-centers/broadcom-ceo-vmware-deal-to-close-in-2023"
+   }
+  ]
+ },
+ {
+  "cycle": "2022",
+  "ticker": "CRS",
+  "blurb": "Carpenter's run followed an earnings recovery in aerospace alloys. The stock bottomed on July 6, 2022, after sales rose 39% in the March quarter, and made a new 52-week high on January 13, 2023. Management raised prices, including a transactional increase announced in November 2022, and aerospace and defense backlog was up 136% year over year by the second fiscal quarter. Fiscal 2023 sales rose 39% to $2.55 billion. The peak came on October 10, 2024.",
+  "catalysts": [
+   {
+    "date": "2022-11",
+    "text": "Announces another price increase on transactional business"
+   },
+   {
+    "date": "2023-01",
+    "text": "Q2 FY2023: aerospace backlog up 136% year over year"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Carpenter Technology fiscal 2023 10-K (SEC)",
+    "url": "https://www.sec.gov/Archives/edgar/data/17843/000001784323000021/crs-20230630.htm"
+   },
+   {
+    "title": "CRS Q2 2023 earnings call (AllMind)",
+    "url": "https://allmind.ai/earnings/event/bt_CRS_2023_Q2"
+   }
+  ]
+ },
+ {
+  "cycle": "2022",
+  "ticker": "SKWD",
+  "blurb": "Skyward Specialty listed on January 13, 2023, and after a base low on January 25 it broke out on February 7. I found no single catalyst for that move beyond the IPO. The first quarterly report as a public company, on May 9, 2023, showed gross written premiums up 27.5% to $360.5 million, net income of $15.6 million and a combined ratio of 90.2%. Net IPO proceeds were $62.4 million. The peak came on December 4, 2024.",
+  "catalysts": [
+   {
+    "date": "2023-01-13",
+    "text": "IPO and first day of trading"
+   },
+   {
+    "date": "2023-05-09",
+    "text": "Q1 gross written premiums +27.5%; combined ratio 90.2%"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Skyward Q1 2023 results (company IR)",
+    "url": "https://investors.skywardinsurance.com/news-releases/news-release-details/skyward-specialty-insurance-group-reports-first-quarter-2023"
+   },
+   {
+    "title": "Skyward Q1 2023 earnings release (SEC)",
+    "url": "https://www.sec.gov/Archives/edgar/data/1519449/000151944923000019/a1q23earningsrelease-991ex.htm"
+   }
+  ]
+ }
+]

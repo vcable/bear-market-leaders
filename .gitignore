@@ -9,3 +9,4 @@ work/sec.json
 
 __pycache__/
 *.pyc
+work/sec_ua.txt

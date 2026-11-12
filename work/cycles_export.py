@@ -2,10 +2,27 @@
 import csv
 import json
 import os
+import re
 import statistics as st
 from cycles import add_months
 from cycles_analyze import series, close_on
 from analyze import pct
+from earnings import build as build_earnings, last_reported
+
+CIKS = json.load(open("sec_ciks.json"))
+STORIES = {}
+for fn in sorted(os.listdir("stories")) if os.path.isdir("stories") else []:
+    if fn.endswith(".json"):
+        for s in json.load(open(os.path.join("stories", fn))):
+            STORIES[(s["cycle"], s["ticker"])] = s
+
+
+def at(e, date):
+    """Growth figures from the last report on or before a date."""
+    p = last_reported(e, date)
+    if not p:
+        return None
+    return {k: p[k] for k in ("end", "reported", "rev_yoy", "rev_accel", "eps", "eps_yoy", "eps_accel")}
 
 OUT = os.path.join("..", "site", "data")
 os.makedirs(OUT, exist_ok=True)
@@ -108,6 +125,21 @@ for k in ("2018", "2020", "2022"):
             "start": f, "end": min(add_months(f, 24), end),
         })
 
+    earn = {}
+    for row in leaders + ipos:
+        t = row["ticker"]
+        if t not in earn:
+            earn[t] = build_earnings(t, CIKS[t], dates[0], dates[-1])
+        row["e_low"] = at(earn[t], row["low_date"])
+        row["e_hi"] = at(earn[t], row["hi_date"])
+        s = STORIES.get((k, t))
+        if s:
+            # drop entries that only restate the chart's own markers (the low, the new high, the breakout)
+            chart_only = re.compile(r"(52-week high|bear-market low|stock (hit|made|bottomed|low)|^stock low|base low|"
+                                    r"cleared its prior high|breakout to (a )?new high|broke out|first new high|bottomed)", re.I)
+            cats = [c for c in s.get("catalysts", []) if not (chart_only.search(c["text"]) and len(c["text"].split()) <= 9)]
+            row["story"] = {"text": s["blurb"], "catalysts": cats, "sources": s.get("sources", [])}
+
     ser = {}
     for t, start, stop in ([("SPY", c["chart_start"], end), ("QQQ", c["chart_start"], end)]
                            + [(l["ticker"], c["chart_start"], c["m24"]) for l in leaders]
@@ -153,7 +185,7 @@ for k in ("2018", "2020", "2022"):
     doc = {
         "key": k, "cycle": {kk: c[kk] for kk in ("peak", "low", "m12", "m24", "chart_start")},
         "index": {"spy": spy_i, "qqq": qqq_i}, "summary": summary, "events": events,
-        "dates": dates, "series": ser, "leaders": leaders, "ipos": ipos,
+        "dates": dates, "series": ser, "leaders": leaders, "ipos": ipos, "earnings": earn,
     }
     p = os.path.join(OUT, f"{k}.json")
     json.dump(doc, open(p, "w"), separators=(",", ":"))

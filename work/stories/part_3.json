@@ -1,0 +1,628 @@
+[
+ {
+  "cycle": "2018",
+  "ticker": "SHOP",
+  "blurb": "Shopify's run started after its fourth-quarter 2018 report on February 12, 2019, when revenue rose 54% year over year to $343.9 million, beating the $327.7 million consensus. The stock had bottomed December 24, 2018 and made its first new 52-week high on February 8, 2019. Management guided 2019 revenue to $1.46 to $1.48 billion, about 37% growth, and shares gained 12.3% in February.",
+  "catalysts": [
+   {
+    "date": "2018-12-24",
+    "text": "Stock hit its low with the market."
+   },
+   {
+    "date": "2019-02-12",
+    "text": "Q4 revenue up 54% to $343.9M, above estimates."
+   },
+   {
+    "date": "2019-02-12",
+    "text": "2019 revenue guided to $1.46-1.48B, about 37% growth."
+   }
+  ],
+  "sources": [
+   {
+    "title": "Shopify's Revenue Rises 54%",
+    "url": "https://www.fool.com/investing/2019/02/12/shopifys-revenue-rises-54.aspx"
+   },
+   {
+    "title": "8 Metrics Behind Shopify's Soaring Stock Price",
+    "url": "https://www.fool.com/investing/2019/02/15/8-metrics-behind-shopifys-soaring-stock-price.aspx"
+   },
+   {
+    "title": "Why Shopify stock rose 12% in February",
+    "url": "https://www.fool.com/investing/2019/03/06/why-shopify-stock-rose-12-in-february.aspx"
+   }
+  ]
+ },
+ {
+  "cycle": "2018",
+  "ticker": "NTRA",
+  "blurb": "Natera bottomed January 9, 2019 and broke out to a new 52-week high on August 8, 2019, the day after its second-quarter report. On August 7, 2019 it reported revenue up 18% to $74.4 million, above the $66.8 million Wall Street average, with volume of about 195,000 tests up 20% and a higher average selling price per test. Panorama prenatal and other tests drove growth.",
+  "catalysts": [
+   {
+    "date": "2019-01-09",
+    "text": "Stock set its post-selloff low."
+   },
+   {
+    "date": "2019-08-07",
+    "text": "Q2 revenue up 18% to $74.4M, beating estimates."
+   },
+   {
+    "date": "2019-08-08",
+    "text": "Shares made first new 52-week high."
+   }
+  ],
+  "sources": [
+   {
+    "title": "Natera Reports Second Quarter 2019 Financial Results",
+    "url": "https://www.biospace.com/natera-reports-second-quarter-2019-financial-results"
+   },
+   {
+    "title": "Natera Q2 2019 earnings call transcript",
+    "url": "https://www.roic.ai/quote/NTRA/transcripts/2019-year/2-quarter"
+   }
+  ]
+ },
+ {
+  "cycle": "2018",
+  "ticker": "EHTH",
+  "blurb": "eHealth's run began with its third-quarter report on October 25, 2018, when revenue jumped 30% to $40.8 million after a 5% decline the prior quarter. Medicare revenue rose 42% on faster Medicare enrollment growth and higher lifetime values, and 10% of Medicare Advantage applications were submitted online, up 41%. The stock made a new 52-week high the next day, October 26, and ran to a March 2020 peak.",
+  "catalysts": [
+   {
+    "date": "2018-09-20",
+    "text": "Stock hit its low before the Q3 report."
+   },
+   {
+    "date": "2018-10-25",
+    "text": "Q3 revenue up 30%; Medicare revenue up 42%."
+   },
+   {
+    "date": "2018-10-26",
+    "text": "Shares set first new 52-week high."
+   }
+  ],
+  "sources": [
+   {
+    "title": "eHealth Q3 2018 earnings release (8-K)",
+    "url": "https://www.sec.gov/Archives/edgar/data/0001333493/000162828018012926/exhibit991q32018earningsre.htm"
+   },
+   {
+    "title": "eHealth Q3 2018 earnings call transcript",
+    "url": "https://www.roic.ai/quote/EHTH/transcripts/2018-year/3-quarter"
+   }
+  ]
+ },
+ {
+  "cycle": "2018",
+  "ticker": "RNG",
+  "blurb": "RingCentral bottomed November 19, 2018 and reached a new 52-week high February 7, 2019, just before its fourth-quarter report. On February 11, 2019 it reported revenue up 34% to about $189 million, above the $179 to $182 million it had guided. It guided 2019 revenue to $847 to $859 million, 26% to 28% growth. Steady subscription growth in cloud phone systems carried the stock to a December 2020 peak.",
+  "catalysts": [
+   {
+    "date": "2018-11-19",
+    "text": "Stock hit its low."
+   },
+   {
+    "date": "2019-02-07",
+    "text": "Shares made first new 52-week high."
+   },
+   {
+    "date": "2019-02-11",
+    "text": "Q4 revenue up 34%, above guidance; 2019 growth guided 26-28%."
+   }
+  ],
+  "sources": [
+   {
+    "title": "RingCentral Announces Fourth Quarter 2018 Results",
+    "url": "https://ir.ringcentral.com/news/press-release-details/2019/RingCentral-Announces-Fourth-Quarter-2018-Results/default.aspx"
+   },
+   {
+    "title": "RingCentral Q4 2018 earnings call transcript",
+    "url": "https://www.fool.com/earnings/call-transcripts/2019/02/11/ringcentral-inc-rng-q4-2018-earnings-conference-ca.aspx"
+   }
+  ]
+ },
+ {
+  "cycle": "2018",
+  "ticker": "PTON",
+  "blurb": "Peloton went public September 26, 2019 and bottomed October 23, 2019, then broke out after its first earnings report as a public company in early November 2019. Yahoo Finance reported revenue of $228 million, up 103% year over year, well above the roughly $197 million forecast, though the adjusted EBITDA loss was wider than expected. The stock hit a new high on November 13 and kept climbing into January 2021.",
+  "catalysts": [
+   {
+    "date": "2019-09-26",
+    "text": "IPO; first day of trading."
+   },
+   {
+    "date": "2019-11-05",
+    "text": "First report as public company: revenue up 103%."
+   },
+   {
+    "date": "2019-11-13",
+    "text": "Shares broke out to a new high."
+   }
+  ],
+  "sources": [
+   {
+    "title": "Peloton reports first earnings results since IPO: 10 top takeaways",
+    "url": "https://news.yahoo.com/peloton-earnings-1q-2019-120006141.html"
+   }
+  ]
+ },
+ {
+  "cycle": "2018",
+  "ticker": "DAO",
+  "blurb": "Youdao, the NetEase online-education unit, listed on the NYSE on October 25, 2019 and bottomed November 14, 2019. The record shows no single earnings catalyst for its January 7, 2020 breakout. A February 11, 2020 report described an 80% two-day gain as school closures hit China, with the move driven largely by momentum trading, and the stock rose again in June 2020 after parent NetEase listed in Hong Kong.",
+  "catalysts": [
+   {
+    "date": "2019-10-25",
+    "text": "IPO on the NYSE."
+   },
+   {
+    "date": "2020-02-11",
+    "text": "Shares rose about 80% in two days on school closures."
+   },
+   {
+    "date": "2020-06",
+    "text": "Shares gained 66.9% after NetEase Hong Kong listing."
+   }
+  ],
+  "sources": [
+   {
+    "title": "Why Youdao shares were falling today (Motley Fool)",
+    "url": "https://www.fool.com/investing/2020/02/11/why-youdao-shares-were-falling-today.aspx"
+   },
+   {
+    "title": "Why Youdao stock skyrocketed in June (Motley Fool)",
+    "url": "https://www.fool.com/investing/2020/07/05/why-youdao-stock-skyrocketed-669-in-june.aspx"
+   }
+  ]
+ },
+ {
+  "cycle": "2018",
+  "ticker": "FSLY",
+  "blurb": "Fastly listed May 17, 2019 at $16 a share, bottomed June 25 and reached a new high July 26, 2019, before its first earnings report. When it reported on August 8, 2019, second-quarter revenue was up 34% to $46 million, dollar-based net expansion was 132%, and enterprise customers reached 262, up from 190. Management cited live event streaming, security and edge computing demand. The stock peaked in October 2020.",
+  "catalysts": [
+   {
+    "date": "2019-05-17",
+    "text": "IPO priced at $16 per share."
+   },
+   {
+    "date": "2019-07-26",
+    "text": "Stock moved to a new high."
+   },
+   {
+    "date": "2019-08-08",
+    "text": "Q2 revenue up 34%; net expansion rate 132%."
+   }
+  ],
+  "sources": [
+   {
+    "title": "Fastly Q2 2019 press release (8-K)",
+    "url": "https://www.sec.gov/Archives/edgar/data/1517413/000151741319000008/ex992-fslypressrelease63019.htm"
+   },
+   {
+    "title": "Fastly: Not So Fast (Seeking Alpha)",
+    "url": "https://seekingalpha.com/article/4284941-fastly-not-fast"
+   }
+  ]
+ },
+ {
+  "cycle": "2018",
+  "ticker": "SWAV",
+  "blurb": "ShockWave Medical's IPO closed March 11, 2019 at $17 a share, and the stock bottomed April 10. The run took off with its first report, May 8, 2019: first-quarter revenue was $7.3 million, up 450%, and 2019 revenue guidance of $33 to $36 million (169% to 194% growth) beat the roughly $31 million analysts expected. Sales of its M5 intravascular lithotripsy catheter drove growth, and shares were up 243% from the IPO price by June 3.",
+  "catalysts": [
+   {
+    "date": "2019-03-11",
+    "text": "IPO completed at $17 per share."
+   },
+   {
+    "date": "2019-05-08",
+    "text": "Q1 revenue up 450%; 2019 guidance above estimates."
+   },
+   {
+    "date": "2019-06-03",
+    "text": "Shares up 243% from IPO price."
+   }
+  ],
+  "sources": [
+   {
+    "title": "ShockWave Medical Q1 2019 results",
+    "url": "https://ir.shockwavemedical.com/news-releases/news-release-details/shockwave-medical-reports-first-quarter-2019-financial-results"
+   },
+   {
+    "title": "ShockWave Medical nails its first earnings (Motley Fool)",
+    "url": "https://www.fool.com/investing/2019/05/10/shockwave-medical-nails-its-first-earnings.aspx"
+   }
+  ]
+ },
+ {
+  "cycle": "2020",
+  "ticker": "GTLS",
+  "blurb": "Chart Industries bottomed March 19, 2020 and made its first new 52-week high August 7, 2020, two weeks after its second-quarter report. On July 23, 2020 it reported orders of $267.6 million, with June at $125.1 million the strongest month of the year, a record 22 LNG fueling station orders, and eight hydrogen pilot projects, up from four. Sales were flat year over year, so the move rested on orders and the hydrogen and LNG theme.",
+  "catalysts": [
+   {
+    "date": "2020-03-19",
+    "text": "Stock hit its COVID low."
+   },
+   {
+    "date": "2020-07-23",
+    "text": "Q2 orders $267.6M; hydrogen pilots doubled to eight."
+   },
+   {
+    "date": "2020-08-07",
+    "text": "Shares made first new 52-week high."
+   }
+  ],
+  "sources": [
+   {
+    "title": "Chart Industries Q2 2020 results (8-K)",
+    "url": "https://www.sec.gov/Archives/edgar/data/892553/000089255320000080/exhibit991gtls-2020072.htm"
+   },
+   {
+    "title": "Chart reports record month for HLNG tanks (gasworld)",
+    "url": "https://www.gasworld.com/story/chart-reports-record-month-for-hlng-tanks-in-q2-2020-results/2090184.article.article/"
+   }
+  ]
+ },
+ {
+  "cycle": "2020",
+  "ticker": "ETSY",
+  "blurb": "Etsy bottomed March 20, 2020 and set a new 52-week high May 5, 2020 as stay-at-home shopping and face-mask demand surged. In its May 6 report, first-quarter revenue rose 34.7% and gross merchandise sales 32.2%. Etsy sold over 12 million face masks in April, and non-mask core sales rose 79%. It guided second-quarter sales up 80% to 100% and revenue up 70% to 90%.",
+  "catalysts": [
+   {
+    "date": "2020-03-20",
+    "text": "Stock hit its COVID low."
+   },
+   {
+    "date": "2020-05-05",
+    "text": "Shares made first new 52-week high."
+   },
+   {
+    "date": "2020-05-06",
+    "text": "Q1 revenue +34.7%; Q2 GMS guided up 80-100%."
+   }
+  ],
+  "sources": [
+   {
+    "title": "Etsy earnings miss Q1 estimates but face masks drive sales (Motley Fool)",
+    "url": "https://www.fool.com/investing/2020/05/07/etsy-earnings-miss-q1-estimates-but-face-masks-dri.aspx"
+   },
+   {
+    "title": "Etsy Q1 2020 results (8-K)",
+    "url": "https://www.sec.gov/Archives/edgar/data/1370637/000137063720000136/exhibit991q12020.htm"
+   }
+  ]
+ },
+ {
+  "cycle": "2020",
+  "ticker": "SE",
+  "blurb": "Sea Limited bottomed March 20, 2020 and hit a new 52-week high April 16, after an April 14 filing showing full-year 2019 sales up 163%. Pandemic lockdowns then lifted its businesses: first-quarter 2020 adjusted revenue rose 57.9% to $913.9 million, Shopee gross merchandise value grew 74.3% to $6.2 billion, and Garena's Free Fire was the top-grossing mobile game in Southeast Asia and Latin America. Shares gained 43.6% in May.",
+  "catalysts": [
+   {
+    "date": "2020-03-20",
+    "text": "Stock hit its COVID low."
+   },
+   {
+    "date": "2020-04-16",
+    "text": "Shares made first new 52-week high."
+   },
+   {
+    "date": "2020-05-18",
+    "text": "Q1 adjusted revenue +57.9%; Shopee GMV +74.3%."
+   }
+  ],
+  "sources": [
+   {
+    "title": "Sea Limited Reports First Quarter 2020 Results",
+    "url": "https://www.businesswire.com/news/home/20200518005302/en/Sea-Limited-Reports-First-Quarter-2020-Results"
+   },
+   {
+    "title": "Why Sea Limited surged 43.6% in May (Motley Fool)",
+    "url": "https://www.fool.com/investing/2020/06/03/why-sea-limited-surged-436-in-may.aspx"
+   }
+  ]
+ },
+ {
+  "cycle": "2020",
+  "ticker": "SNAP",
+  "blurb": "Snap bottomed March 18, 2020 and rallied after its April 21, 2020 first-quarter report, when daily active users rose 20% to 229 million, above the 223.8 million estimate, and revenue grew 44% to $462 million. Snap gave no outlook because of COVID-19 uncertainty, yet the stock rose roughly 18% to 20%. Lockdown-driven usage helped, and it made its first new 52-week high on June 1, 2020.",
+  "catalysts": [
+   {
+    "date": "2020-03-18",
+    "text": "Stock hit its COVID low."
+   },
+   {
+    "date": "2020-04-21",
+    "text": "Q1 DAUs +20% to 229M; revenue +44%; shares jumped."
+   },
+   {
+    "date": "2020-06-01",
+    "text": "Shares made first new 52-week high."
+   }
+  ],
+  "sources": [
+   {
+    "title": "Snap Announces First Quarter 2020 Financial Results",
+    "url": "https://www.businesswire.com/news/home/20200421005795/en/"
+   },
+   {
+    "title": "Snap's ad business defied coronavirus fears in Q1 (Business Insider)",
+    "url": "https://www.businessinsider.in/tech/news/snaps-ad-business-defied-coronavirus-fears-in-q1-and-its-stock-is-popping/articleshow/75283017.cms"
+   }
+  ]
+ },
+ {
+  "cycle": "2020",
+  "ticker": "DKNG",
+  "blurb": "DraftKings began trading April 24, 2020 after its SPAC merger and bottomed July 13, 2020. Its August 14 second-quarter report showed revenue of $71 million versus $57 million a year earlier, beating estimates despite a limited sports calendar, and introduced 2020 pro forma revenue guidance of $500 to $540 million. Shares dipped on the loss that day, but the stock reached a new high September 14 as the sports calendar resumed.",
+  "catalysts": [
+   {
+    "date": "2020-04-24",
+    "text": "Began trading after SPAC merger."
+   },
+   {
+    "date": "2020-08-14",
+    "text": "Q2 revenue $71M; 2020 pro forma guidance $500-540M."
+   },
+   {
+    "date": "2020-09-14",
+    "text": "Shares broke out to a new high."
+   }
+  ],
+  "sources": [
+   {
+    "title": "DraftKings Q2 2020 results (8-K)",
+    "url": "https://www.sec.gov/Archives/edgar/data/1772757/000110465920095003/tm2027130d1_ex99-1.htm"
+   },
+   {
+    "title": "DraftKings stock dips on Q2 results (Legal Sports Report)",
+    "url": "https://www.legalsportsreport.com/43461/draftkings-q2-results/"
+   }
+  ]
+ },
+ {
+  "cycle": "2020",
+  "ticker": "U",
+  "blurb": "Unity went public September 18, 2020, then fell to a low on May 13, 2021 before a late-2021 breakout. Its November 9, 2021 third-quarter report showed revenue up 43% to $286.3 million versus $264.2 million expected, and a raised full-year growth outlook of 40%. It also announced the roughly $1.6 billion Weta Digital deal. Shares made a new high November 10 and peaked November 18, 2021.",
+  "catalysts": [
+   {
+    "date": "2020-09-18",
+    "text": "IPO; first day of trading."
+   },
+   {
+    "date": "2021-11-09",
+    "text": "Q3 revenue +43% to $286.3M; outlook raised; Weta deal announced."
+   },
+   {
+    "date": "2021-11-18",
+    "text": "Stock reached its run peak."
+   }
+  ],
+  "sources": [
+   {
+    "title": "Unity Announces Third Quarter 2021 Financial Results",
+    "url": "https://www.businesswire.com/news/home/20211109005472/en"
+   },
+   {
+    "title": "Unity to acquire Weta Digital (Shacknews)",
+    "url": "https://shacknews.com/article/127602/unity-u-to-acquire-weta-digital-for-1625-billion-in-cash-and-stock"
+   }
+  ]
+ },
+ {
+  "cycle": "2020",
+  "ticker": "ACCD",
+  "blurb": "Accolade priced its IPO at $22, above the range, in July 2020 and bottomed September 21, 2020. Its October 14, 2020 fiscal second-quarter report showed revenue up 24% to $36.8 million, and it raised full-year revenue guidance to $159 to $162 million. Shares dipped after hours that day, yet the stock made a new high October 13 and peaked December 10, 2020, so the record shows no single earnings trigger.",
+  "catalysts": [
+   {
+    "date": "2020-07-02",
+    "text": "IPO priced at $22; began trading."
+   },
+   {
+    "date": "2020-10-14",
+    "text": "Fiscal Q2 revenue +24%; guidance raised to $159-162M."
+   }
+  ],
+  "sources": [
+   {
+    "title": "Accolade prices upsized IPO above range (Renaissance Capital)",
+    "url": "https://www.renaissancecapital.com/IPO-Center/News/69229/benefits-management-platform-accolade-prices-upsized-ipo-at-22-above"
+   },
+   {
+    "title": "Accolade revenue rises 24% to $36.8M (GeekWire)",
+    "url": "https://www.geekwire.com/2020/health-benefits-tech-company-accolade-sees-revenue-rise-24-36-8m-q3-stock-dips/"
+   }
+  ]
+ },
+ {
+  "cycle": "2020",
+  "ticker": "PUBM",
+  "blurb": "PubMatic listed December 9, 2020 and bottomed January 11, 2021. The run followed its first earnings report on February 23, 2021: fourth-quarter revenue rose 64% to $56.2 million versus $47.4 million expected, net income was $18.8 million, and 2020 revenue grew 31% to $148.7 million. First-quarter guidance implied 34% to 41% growth. Shares rose 10% after the report and peaked March 1, 2021.",
+  "catalysts": [
+   {
+    "date": "2020-12-09",
+    "text": "IPO; first day of trading."
+   },
+   {
+    "date": "2021-01-19",
+    "text": "Stock broke out to a new high."
+   },
+   {
+    "date": "2021-02-23",
+    "text": "Q4 revenue +64%; Q1 guided up 34-41%."
+   }
+  ],
+  "sources": [
+   {
+    "title": "PubMatic announces record Q4 and full year 2020 results",
+    "url": "https://investors.pubmatic.com/news-releases/news-release-details/pubmatic-announces-record-fourth-quarter-and-full-year-2020"
+   },
+   {
+    "title": "PubMatic stock pops 10% in first earnings report (NBC Chicago)",
+    "url": "https://www.nbcchicago.com/news/business/money-report/ad-tech-company-pubmatic-stock-pops-10-in-first-earnings-report-after-december-ipo/2445542/"
+   }
+  ]
+ },
+ {
+  "cycle": "2022",
+  "ticker": "NVDA",
+  "blurb": "Nvidia bottomed October 14, 2022 and broke out March 31, 2023 as demand for generative AI built after ChatGPT's launch. In its February 22, 2023 report, revenue fell 21% to $6.05 billion, but data center revenue was $3.62 billion, up 11%, and fiscal-year data center revenue rose 41% to $15.01 billion. Management said H100 demand was strong and guided first-quarter revenue to $6.5 billion, and shares rose after the report.",
+  "catalysts": [
+   {
+    "date": "2022-10-14",
+    "text": "Stock hit its bear-market low."
+   },
+   {
+    "date": "2023-02-22",
+    "text": "Q4 report: H100 ramp strong; Q1 guide $6.5B; shares rose."
+   },
+   {
+    "date": "2023-03-31",
+    "text": "Shares made first new 52-week high."
+   }
+  ],
+  "sources": [
+   {
+    "title": "NVIDIA Q4 fiscal 2023 results (8-K)",
+    "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581023000014/q4fy23pr.htm"
+   },
+   {
+    "title": "NVIDIA shares surge on data center earnings (HotHardware)",
+    "url": "https://hothardware.com/news/nvidia-billions-data-center-ai-growth-offset-big-drop-gaming"
+   }
+  ]
+ },
+ {
+  "cycle": "2022",
+  "ticker": "RELY",
+  "blurb": "Remitly bottomed May 11, 2022 and made its first new 52-week high February 23, 2023, the day after its fourth-quarter report. On February 22, 2023 it reported revenue up 41% to $191 million, send volume up 35% to $8.1 billion, and active customers up 48% to 4.2 million. It guided 2023 revenue to $860 to $880 million, 32% to 35% growth, with adjusted EBITDA between breakeven and $10 million.",
+  "catalysts": [
+   {
+    "date": "2022-05-11",
+    "text": "Stock hit its low."
+   },
+   {
+    "date": "2023-02-22",
+    "text": "Q4 revenue +41%; 2023 revenue guided $860-880M."
+   },
+   {
+    "date": "2023-02-23",
+    "text": "Shares made first new 52-week high."
+   }
+  ],
+  "sources": [
+   {
+    "title": "Remitly Reports Fourth Quarter and Full Year 2022 Results",
+    "url": "https://remitly.gcs-web.com/news-releases/news-release-details/remitly-reports-fourth-quarter-and-full-year-2022-results"
+   }
+  ]
+ },
+ {
+  "cycle": "2022",
+  "ticker": "FICO",
+  "blurb": "Fair Isaac bottomed May 9, 2022 and made a new 52-week high November 10, 2022, the day after its fiscal fourth-quarter report. On November 9, 2022 it reported revenue up 4% to $349 million and GAAP EPS of $3.55 versus $3.00. Business-to-business revenue rose 6%, driven largely by unit price increases, and auto originations revenue rose 20% on pricing. FICO Score 10 T was also approved for conforming mortgages.",
+  "catalysts": [
+   {
+    "date": "2022-05-09",
+    "text": "Stock hit its low."
+   },
+   {
+    "date": "2022-11-09",
+    "text": "Fiscal Q4 B2B revenue +6% on price increases; EPS $3.55."
+   },
+   {
+    "date": "2022-11-10",
+    "text": "Shares made first new 52-week high."
+   }
+  ],
+  "sources": [
+   {
+    "title": "FICO Announces Earnings of $3.55 per Share for Q4 Fiscal 2022",
+    "url": "https://www.businesswire.com/news/home/20221109005710/en/FICO-Announces-Earnings-of-3.55-per-Share-for-Fourth-Quarter-Fiscal-2022"
+   },
+   {
+    "title": "Fair Isaac Q4 2022 earnings call transcript",
+    "url": "https://www.roic.ai/quote/FICO/transcripts/2022-year/4-quarter"
+   }
+  ]
+ },
+ {
+  "cycle": "2022",
+  "ticker": "EXAS",
+  "blurb": "Exact Sciences bottomed October 14, 2022 and broke out May 9, 2023 on its first-quarter report. Revenue was $602.5 million versus $486.6 million a year earlier, screening revenue rose 45%, and the net loss narrowed to $26.9 million from $180.9 million. It raised 2023 revenue guidance to $2.38 to $2.42 billion, above the $2.3 billion consensus, and pulled forward its cash-flow-positive target to 2023. Shares jumped over 17%.",
+  "catalysts": [
+   {
+    "date": "2022-10-14",
+    "text": "Stock hit its bear-market low."
+   },
+   {
+    "date": "2023-05-09",
+    "text": "Q1 revenue $602.5M; 2023 guidance raised to $2.38-2.42B."
+   },
+   {
+    "date": "2023-05-09",
+    "text": "Shares jumped over 17% to new 52-week high."
+   }
+  ],
+  "sources": [
+   {
+    "title": "Exact Sciences serves investors exactly what they wished for (MarketBeat)",
+    "url": "https://www.marketbeat.com/articles/exact-sciences-serves-investors-exactly-what-they-wished-for/"
+   },
+   {
+    "title": "Here's why you should buy Exact Sciences stock (Zacks)",
+    "url": "https://www.zacks.com/stock/news/2116561/heres-why-you-should-buy-exact-sciences-exas-stock-now"
+   }
+  ]
+ },
+ {
+  "cycle": "2022",
+  "ticker": "ARM",
+  "blurb": "Arm listed September 14, 2023 and bottomed October 20. Its first report as a public company, November 8, 2023, showed revenue up 28% to $806 million versus about $747 million expected and adjusted EPS of 36 cents, but a revenue forecast of $720 to $800 million sent shares down about 8% that day. The stock made a new high November 24 and peaked July 10, 2024; the record shows no single catalyst.",
+  "catalysts": [
+   {
+    "date": "2023-09-14",
+    "text": "IPO; first day of trading."
+   },
+   {
+    "date": "2023-11-08",
+    "text": "First earnings: revenue +28% to $806M; guidance disappointed."
+   },
+   {
+    "date": "2023-11-24",
+    "text": "Shares made new high above IPO-period peak."
+   }
+  ],
+  "sources": [
+   {
+    "title": "Arm slides after tepid forecast in inaugural report (BNN Bloomberg)",
+    "url": "https://www.bnnbloomberg.ca/arm-slides-after-giving-tepid-forecast-in-inaugural-report-1.1995921"
+   },
+   {
+    "title": "Arm's stock sinks on lower guidance (SiliconANGLE)",
+    "url": "https://siliconangle.com/2023/11/08/arms-stock-sinks-lower-guidance-following-first-post-ipo-earnings-call/"
+   }
+  ]
+ },
+ {
+  "cycle": "2022",
+  "ticker": "MBLY",
+  "blurb": "Mobileye listed October 26, 2022, bottomed January 5, 2023 and ran to a peak on February 15. Its January 26, 2023 fourth-quarter report showed revenue up 59% to $565 million, average system price up to $56.2 from $48.3 on advanced products like SuperVision, and 2023 revenue guidance of $2.19 to $2.28 billion. Management said SuperVision demand exceeded supply and cited $6.7 billion of projected future ADAS revenue from 2022 design wins.",
+  "catalysts": [
+   {
+    "date": "2022-10-26",
+    "text": "IPO; first day of trading."
+   },
+   {
+    "date": "2023-01-26",
+    "text": "Q4 revenue +59% to $565M; 2023 revenue guided $2.19-2.28B."
+   }
+  ],
+  "sources": [
+   {
+    "title": "Mobileye Discloses Fourth Quarter and Full Year 2022 Results",
+    "url": "https://www.businesswire.com/news/home/20230126005218/en/Mobileye-Discloses-Fourth-Quarter-and-Full-Year-2022-Results-and-Business-Update"
+   },
+   {
+    "title": "Mobileye share price doubles in just over 3 months (Globes)",
+    "url": "https://en.globes.co.il/en/article-mobileye-share-price-doubles-in-just-over-3-months-1001437358"
+   }
+  ]
+ }
+]
