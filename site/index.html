@@ -1,0 +1,1546 @@
+<title>Bear Market Leaders</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: cycle switch and market strip on top; chart beside the Ask panel; the ranked list underneath. Chart-paper neutrals, one ink blue for the stock. */
+:root {
+  --bg: #f2f3f0;
+  --panel: #ffffff;
+  --ink: #14181d;
+  --muted: #59626e;
+  --faint: #879099;
+  --line: #d9dcd8;
+  --grid: #eaece9;
+  --axis: #b3b9b7;
+  --ref: #8b939c;
+  --vol: #c6cbce;
+  --band: #ecefea;
+  --stock: #1f4bd8;
+  --spy: #6d7887;
+  --qqq: #bd700b;
+  --pin: #b0245a;
+  --good: #1b7a46;
+  --bad: #b8322a;
+  --chip: #edf1fc;
+  --chip-ink: #1d3ea8;
+  --pop: #ffffff;
+  --shadow: 0 6px 24px rgba(20, 24, 29, 0.12);
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1013; --panel: #14181d; --ink: #e6e9ed; --muted: #9ba4ae; --faint: #6e7781; --line: #262c33;
+    --grid: #1c2228; --axis: #3a424b; --ref: #707a85; --vol: #3b444d; --band: #1f272f; --stock: #7fa3ff;
+    --spy: #a3acb8; --qqq: #e6a23b; --pin: #ff7eab; --good: #4fc58c; --bad: #ff7d70; --chip: #1a2335;
+    --chip-ink: #a9c1ff; --pop: #1b2026; --shadow: 0 8px 28px rgba(0, 0, 0, 0.5); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1013; --panel: #14181d; --ink: #e6e9ed; --muted: #9ba4ae; --faint: #6e7781; --line: #262c33;
+  --grid: #1c2228; --axis: #3a424b; --ref: #707a85; --vol: #3b444d; --band: #1f272f; --stock: #7fa3ff;
+  --spy: #a3acb8; --qqq: #e6a23b; --pin: #ff7eab; --good: #4fc58c; --bad: #ff7d70; --chip: #1a2335;
+  --chip-ink: #a9c1ff; --pop: #1b2026; --shadow: 0 8px 28px rgba(0, 0, 0, 0.5); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 14px/1.5 var(--font-ui); -webkit-font-smoothing: antialiased; }
+button, input, textarea { font: inherit; color: inherit; }
+a { color: var(--chip-ink); }
+:focus-visible { outline: 2px solid var(--stock); outline-offset: 2px; }
+
+.app { max-width: 1480px; margin: 0 auto; display: grid; gap: 18px; padding-block: 22px 44px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* header */
+.top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 14px 28px; }
+.brand { display: grid; gap: 6px; min-width: 0; max-width: 760px; }
+.eyebrow { margin: 0; font: 500 11px/1.2 var(--font-data); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 { margin: 0; font-family: var(--font-display); font-stretch: 116%; font-weight: 750; font-size: clamp(1.7rem, 1.1rem + 2vw, 2.6rem); line-height: 1.02; letter-spacing: -0.015em; text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); font-size: 15px; max-width: 68ch; text-wrap: pretty; }
+.lede b { color: var(--ink); font-weight: 600; }
+.cycles { display: grid; grid-auto-flow: column; gap: 6px; }
+.cyc { display: grid; gap: 1px; text-align: left; min-width: 104px; padding: 9px 14px 10px; border: 1px solid var(--line); border-radius: var(--r); background: var(--panel); cursor: pointer; }
+.cyc:hover { border-color: var(--axis); }
+.cyc-y { font-family: var(--font-display); font-stretch: 112%; font-weight: 700; font-size: 22px; line-height: 1.1; }
+.cyc-d { font: 400 11px/1.3 var(--font-data); color: var(--muted); }
+.cyc[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.cyc[aria-pressed="true"] .cyc-d { color: var(--bg); opacity: 0.75; }
+
+/* market strip */
+.mkt { margin: 0; display: flex; flex-wrap: wrap; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.mkt > div { flex: 1 1 160px; background: var(--panel); padding: 10px 14px 11px; display: grid; gap: 2px; align-content: start; min-width: 0; }
+.mkt dt { font-size: 12px; color: var(--muted); }
+.mkt dd { margin: 0; display: grid; gap: 1px; }
+.mv { font: 500 17px/1.25 var(--font-data); font-variant-numeric: tabular-nums; }
+.ms { font-size: 12px; color: var(--muted); }
+
+/* workspace */
+.work { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+@media (min-width: 1140px) {
+  .work { grid-template-columns: minmax(0, 1fr) minmax(340px, 410px); }
+  .ask { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); max-height: calc(100vh - 24px); }
+}
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; display: grid; gap: 14px; min-width: 0; }
+.bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.bar-l { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.seg { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); }
+.sb { border: 0; background: transparent; color: var(--muted); padding: 5px 10px; border-radius: 6px; font-size: 13px; cursor: pointer; white-space: nowrap; }
+.sb:hover { color: var(--ink); }
+.sb[aria-pressed="true"] { background: var(--panel); color: var(--ink); font-weight: 600; box-shadow: 0 0 0 1px var(--line); }
+.sb .n { font-family: var(--font-data); font-size: 11px; color: var(--faint); margin-left: 4px; }
+.nav { display: flex; gap: 6px; }
+.btn { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 5px 11px; font-size: 13px; cursor: pointer; }
+.btn:hover { border-color: var(--axis); }
+.btn:disabled { opacity: 0.5; cursor: default; }
+.btn-primary { background: var(--ink); border-color: var(--ink); color: var(--bg); font-weight: 600; }
+.btn-primary:hover { border-color: var(--ink); opacity: 0.9; }
+
+.ttl { display: grid; gap: 3px; min-width: 0; }
+.h2 { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.tk { font: 500 26px/1.1 var(--font-data); letter-spacing: -0.01em; }
+.co { font-family: var(--font-display); font-stretch: 105%; font-weight: 600; font-size: 19px; color: var(--muted); }
+.sub { margin: 0; font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.pill { display: inline-flex; align-items: center; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; letter-spacing: 0.02em; background: var(--chip); color: var(--chip-ink); }
+
+.stats { margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap: 14px 20px; }
+.stats > div { display: grid; gap: 2px; align-content: start; min-width: 0; }
+.stats dt { font-size: 12px; color: var(--muted); }
+.stats dd { margin: 0; display: grid; gap: 1px; }
+.sv { font: 500 18px/1.25 var(--font-data); font-variant-numeric: tabular-nums; }
+.ss { font-size: 12px; color: var(--muted); }
+.up { color: var(--good); }
+.dn { color: var(--bad); }
+
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--muted); }
+.k { display: inline-flex; align-items: center; gap: 6px; }
+.kl { display: inline-block; width: 14px; height: 2px; border-radius: 1px; flex: none; }
+.kd { display: inline-block; width: 9px; height: 9px; border-radius: 50%; border: 2px solid; flex: none; }
+.kb { display: inline-block; width: 12px; height: 10px; border-radius: 2px; background: var(--band); box-shadow: inset 0 0 0 1px var(--grid); flex: none; }
+.kv { display: inline-block; width: 4px; height: 12px; border-radius: 1px; flex: none; }
+.kr { display: inline-block; width: 0; height: 12px; border-left: 1px dashed var(--ref); flex: none; }
+
+.chart { position: relative; min-height: 470px; outline-offset: 4px; }
+.chart svg { display: block; overflow: visible; }
+.chart text { font: 12px var(--font-ui); fill: var(--muted); }
+.chart .tick { font: 11px var(--font-data); }
+.chart .lbl { fill: var(--ink); font-weight: 600; paint-order: stroke; stroke: var(--panel); stroke-width: 3px; stroke-linejoin: round; }
+.chart .endm { fill: var(--ink); font: 500 12px var(--font-data); }
+.chart .endo { font: 12px var(--font-data); }
+.chart .pinl { fill: var(--pin); font-weight: 600; paint-order: stroke; stroke: var(--panel); stroke-width: 3px; }
+.tip { position: absolute; z-index: 3; display: grid; gap: 3px; pointer-events: none; background: var(--pop); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); padding: 7px 10px; font-size: 12px; }
+.tip-d { color: var(--muted); font-family: var(--font-data); font-size: 11px; }
+.tip-r { display: flex; align-items: center; gap: 6px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.tip-v { font-family: var(--font-data); font-weight: 500; }
+.tip-n { color: var(--muted); }
+.note { margin: 0; font-size: 12px; color: var(--muted); max-width: 92ch; }
+.skel { display: grid; place-items: center; min-height: inherit; color: var(--faint); font-size: 13px; }
+.fail { display: flex; gap: 8px; align-items: center; justify-content: center; min-height: inherit; color: var(--muted); font-size: 13px; }
+.fail::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--bad); }
+
+/* ask panel */
+.ask { display: flex; flex-direction: column; gap: 10px; padding: 16px; overflow: hidden; }
+.ask-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.ask h2 { margin: 0; font-family: var(--font-display); font-stretch: 112%; font-weight: 700; font-size: 18px; }
+.mode { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); text-align: right; }
+.mode::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--faint); flex: none; }
+.mode[data-state="on"]::before { background: var(--good); }
+.mode[data-state="off"]::before { background: var(--qqq); }
+.ctx { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12px; color: var(--muted); }
+.chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; background: var(--chip); color: var(--chip-ink); font-size: 12px; font-weight: 500; border: 0; }
+.chip-x { border: 0; background: transparent; color: inherit; cursor: pointer; padding: 0 0 0 2px; font-size: 13px; line-height: 1; }
+.chip.pin { background: color-mix(in srgb, var(--pin) 14%, var(--panel)); color: var(--pin); }
+.log { flex: 1 1 auto; min-height: 160px; overflow-y: auto; display: grid; align-content: start; gap: 14px; padding-right: 2px; overscroll-behavior: contain; }
+.empty { color: var(--muted); font-size: 13px; display: grid; gap: 8px; }
+.qa { display: grid; gap: 6px; }
+.q { justify-self: end; max-width: 92%; background: var(--chip); color: var(--ink); padding: 7px 11px; border-radius: 12px 12px 3px 12px; font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.q-meta { justify-self: end; font: 11px var(--font-data); color: var(--faint); }
+.a { font-size: 13.5px; line-height: 1.55; overflow-wrap: anywhere; display: grid; gap: 8px; }
+.a p, .a ul, .a ol, .a h4 { margin: 0; }
+.a ul, .a ol { padding-left: 18px; display: grid; gap: 3px; }
+.a h4 { font-size: 13.5px; font-weight: 600; }
+.a code { font-family: var(--font-data); font-size: 12px; background: var(--bg); padding: 0 4px; border-radius: 4px; }
+.steps { display: grid; gap: 2px; font-size: 12px; color: var(--muted); }
+.step { display: flex; gap: 6px; align-items: baseline; overflow-wrap: anywhere; }
+.step::before { content: "›"; color: var(--faint); }
+.step[data-state="running"]::before { content: "•"; color: var(--stock); animation: blink 1s infinite; }
+.step[data-state="failed"] { color: var(--faint); text-decoration: line-through; }
+.thinking { font-size: 13px; color: var(--muted); }
+.thinking::after { content: "…"; animation: blink 1.2s infinite; }
+@keyframes blink { 50% { opacity: 0.3; } }
+@media (prefers-reduced-motion: reduce) { .step[data-state="running"]::before, .thinking::after { animation: none; } }
+.a-foot { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 12px; color: var(--muted); }
+.a-note { color: var(--bad); }
+.linkbtn { border: 0; background: none; padding: 0; color: var(--chip-ink); font-size: 12px; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.linkbtn:disabled { color: var(--faint); text-decoration: none; cursor: default; }
+.sugg { display: flex; flex-wrap: wrap; gap: 6px; }
+.sg { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 4px 10px; font-size: 12px; cursor: pointer; text-align: left; }
+.sg:hover { border-color: var(--stock); color: var(--chip-ink); }
+.form { display: grid; gap: 8px; }
+.form textarea { width: 100%; min-height: 64px; max-height: 180px; resize: vertical; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: var(--bg); font-size: 13.5px; }
+.form textarea:focus { outline: 2px solid var(--stock); outline-offset: 0; border-color: transparent; }
+.form-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.form-hint { font-size: 11px; color: var(--faint); }
+.off { font-size: 13px; color: var(--muted); padding: 10px 12px; border: 1px dashed var(--line); border-radius: 8px; }
+.notes { border-top: 1px solid var(--line); padding-top: 10px; display: grid; gap: 8px; }
+.notes summary { cursor: pointer; font-size: 13px; font-weight: 600; }
+.notes-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; max-height: 260px; overflow-y: auto; }
+.nt { display: grid; gap: 4px; padding: 8px 10px; border-radius: 8px; background: var(--bg); font-size: 12.5px; }
+.nt-q { font-weight: 600; }
+.nt-m { display: flex; justify-content: space-between; gap: 8px; font: 11px var(--font-data); color: var(--faint); }
+.nt-add { display: flex; gap: 6px; }
+.nt-add input { flex: 1; min-width: 0; border: 1px solid var(--line); border-radius: 8px; padding: 5px 9px; background: var(--bg); font-size: 13px; }
+
+/* table */
+.tw { overflow-x: auto; container-type: inline-size; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+th { text-align: left; white-space: nowrap; font-weight: 500; font-size: 12px; color: var(--muted); border-bottom: 1px solid var(--line); padding: 0; }
+th button { border: 0; background: none; width: 100%; text-align: inherit; padding: 6px 8px; cursor: pointer; color: inherit; font-size: 12px; }
+th[aria-sort="ascending"] button::after { content: " ↑"; }
+th[aria-sort="descending"] button::after { content: " ↓"; }
+td { padding: 6px 8px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+td.num, th.num { text-align: right; }
+td.mono { font-family: var(--font-data); font-size: 12.5px; }
+td.theme { white-space: normal; min-width: 11rem; color: var(--muted); }
+tbody tr { cursor: pointer; }
+tbody tr:hover { background: color-mix(in srgb, var(--ink) 4%, transparent); }
+tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
+.tkb { border: 0; background: none; padding: 0; font: 500 13px var(--font-data); cursor: pointer; }
+@container (max-width: 780px) { .opt { display: none; } }
+@container (max-width: 520px) { td.theme, th.theme, .opt2 { display: none; } }
+.foot { font-size: 12px; color: var(--muted); display: grid; gap: 4px; max-width: 100ch; }
+.foot p { margin: 0; }
+</style>
+
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <p class="eyebrow">Model book · S&amp;P 500 bear-market lows</p>
+      <h1>Bear Market Leaders</h1>
+      <p class="lede" id="lede">Loading the cycle…</p>
+    </div>
+    <div class="cycles" role="group" aria-label="Bear-market cycle" id="cycles"></div>
+  </header>
+
+  <dl class="mkt" id="mkt" aria-label="What the market did"></dl>
+
+  <div class="work">
+    <section class="card" id="chart-card" aria-labelledby="stock-title">
+      <div class="bar">
+        <div class="bar-l">
+          <div class="seg" role="group" aria-label="List" id="lists"></div>
+          <div class="seg" role="group" aria-label="Chart range" id="ranges"></div>
+        </div>
+        <div class="nav">
+          <button type="button" class="btn" id="prev" aria-label="Previous stock">‹ Prev</button>
+          <button type="button" class="btn" id="next" aria-label="Next stock">Next ›</button>
+        </div>
+      </div>
+      <div class="ttl">
+        <h2 class="h2" id="stock-title"><span class="tk" id="tk">—</span><span class="co" id="co"></span></h2>
+        <p class="sub" id="stock-sub"></p>
+      </div>
+      <dl class="stats" id="stats"></dl>
+      <div class="legend" id="legend"></div>
+      <div class="chart" id="chart" tabindex="0" role="group" aria-label="Price chart. Arrow keys read values; Enter pins a date for your questions."><div class="skel">Loading chart…</div></div>
+      <p class="note" id="chart-note"></p>
+    </section>
+
+    <aside class="card ask" id="ask" aria-labelledby="ask-title">
+      <div class="ask-top">
+        <h2 id="ask-title">Ask Claude</h2>
+        <span class="mode" id="ask-mode" data-state="checking">Checking…</span>
+      </div>
+      <div class="ctx" id="ask-ctx"></div>
+      <div class="log" id="ask-log" aria-live="polite"></div>
+      <div class="sugg" id="ask-sugg"></div>
+      <form class="form" id="ask-form">
+        <label for="ask-input" class="form-hint" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Your question</label>
+        <textarea id="ask-input" rows="3" placeholder="Ask about this stock, its run, or the market"></textarea>
+        <div class="form-row">
+          <button type="button" class="linkbtn" id="ask-clear">New thread</button>
+          <div class="nav">
+            <button type="button" class="btn" id="ask-stop" hidden>Stop</button>
+            <button type="submit" class="btn btn-primary" id="ask-send">Ask</button>
+          </div>
+        </div>
+      </form>
+      <p class="off" id="ask-off" hidden></p>
+      <details class="notes" id="notes" hidden>
+        <summary id="notes-sum">Your notes</summary>
+        <ul class="notes-list" id="notes-list"></ul>
+        <form class="nt-add" id="note-form">
+          <label for="note-input" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Add a note</label>
+          <input id="note-input" type="text" placeholder="Add your own note">
+          <button type="submit" class="btn">Save</button>
+        </form>
+      </details>
+    </aside>
+  </div>
+
+  <section class="card" aria-labelledby="table-title">
+    <div class="ttl">
+      <h2 class="co" id="table-title" style="color:var(--ink)">Leaders</h2>
+      <p class="sub" id="table-sub"></p>
+    </div>
+    <div class="tw"><table id="table"><thead><tr></tr></thead><tbody></tbody></table></div>
+  </section>
+
+  <footer class="foot">
+    <p><b>Leaders:</b> US common stocks and ADRs priced at $5 or more, worth $500M or more, and trading $5M or more a day on the index-low date, ranked by gain over the next 12 months; the top 25 growth stocks, turnarounds and crypto proxies. <b>New issues:</b> growth companies that started trading in the 12 months after the low (IPOs, direct listings, SPAC mergers, spin-offs) worth $1B or more a year after the low, ranked by gain from their first close over their first year.</p>
+    <p>Daily split-adjusted bars from Massive. GAAP earnings are not on this page yet. For study, not investment advice. Code and data: github.com/vcable/bear-market-leaders.</p>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+(() => {
+  // ---------- formatting ----------
+  const CYCLES = ['2018', '2020', '2022'];
+  const LOWS = { 2018: 'Dec 24, 2018', 2020: 'Mar 23, 2020', 2022: 'Oct 12, 2022' };
+  const $ = (s) => document.querySelector(s);
+  const has = (v) => v !== null && v !== undefined && v !== '' && !(typeof v === 'number' && !Number.isFinite(v));
+  const ok = (v) => v !== null && v !== undefined && Number.isFinite(v) && v > 0;
+  const parseDay = d3.utcParse('%Y-%m-%d');
+  const fLong = d3.utcFormat('%b %-d, %Y');
+  const fMon = d3.utcFormat('%b %-d');
+  const fShort = d3.utcFormat('%-m/%-d/%y');
+  const day = (s, f) => (has(s) ? (f || fLong)(parseDay(String(s).slice(0, 10))) : '—');
+  const pct = (v) => (has(v) ? d3.format('+,.0f')(+v) + '%' : '—');
+  const pct1 = (v) => (has(v) ? d3.format('+,.1f')(+v) + '%' : '—');
+  const pts = (v) => (has(v) ? d3.format('+,.0f')(+v) : '—');
+  const fX = (v) => (has(v) ? d3.format('.1f')(+v) + '×' : '—');
+  const money = (v) => (v >= 10 ? d3.format('$,.2f')(v) : d3.format('$,.3~f')(v));
+  const tickMoney = (v) => (v >= 10 ? d3.format('$,.0f')(v) : d3.format('$,.2~f')(v));
+  const tickRs = d3.format(',.3~r');
+  const tickVol = d3.format('.3~s');
+  const cap = (v) => (has(v) ? (v >= 100 ? '$' + d3.format(',.0f')(v) + 'B' : '$' + d3.format(',.1f')(v) + 'B') : '—');
+  const weeksBetween = (a, b) => Math.round((parseDay(b) - parseDay(a)) / (7 * 864e5));
+  const addMonths = (s, m) => { const d = parseDay(s); return d3.utcFormat('%Y-%m-%d')(d3.utcMonth.offset(d, m)); };
+  const addDays = (s, n) => d3.utcFormat('%Y-%m-%d')(d3.utcDay.offset(parseDay(s), n));
+  const signCls = (v) => (has(v) ? (v >= 0 ? 'up' : 'dn') : '');
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
+
+  // ---------- state ----------
+  const RANGES = {
+    leaders: [{ id: 'wide', label: (D) => 'From ' + D.cycle.chart_start.slice(0, 4) }, { id: 'peak', label: () => 'From the peak' }, { id: 'low', label: () => 'From the low' }],
+    ipos: [{ id: 'low', label: () => 'From the index low' }, { id: 'ipo', label: () => 'From first trade' }],
+  };
+  const state = { cycle: '2022', list: 'leaders', ticker: null, range: { leaders: 'peak', ipos: 'ipo' }, sort: { id: 'rank', dir: 1 }, pin: null, kIdx: null };
+  const store = {};
+  const loading = {};
+
+  const readHash = () => {
+    const m = /^#?(2018|2020|2022)(?:-(leaders|ipos))?(?:-([A-Za-z]{1,6}))?$/.exec(location.hash || '');
+    if (!m) return false;
+    state.cycle = m[1];
+    if (m[2]) state.list = m[2];
+    state.ticker = m[3] ? m[3].toUpperCase() : null;
+    return true;
+  };
+  const writeHash = () => {
+    const name = `${state.cycle}-${state.list}${state.ticker ? '-' + state.ticker : ''}`;
+    if (location.hash.slice(1) !== name) { try { location.replace('#' + name); } catch (e) { /* hash not available */ } }
+  };
+
+  // ---------- data ----------
+  function prep(D) {
+    D.idx = new Map(D.dates.map((d, i) => [d, i]));
+    D.cols = new Map();
+    D.vcols = new Map();
+    D.col = (t) => {
+      if (!D.cols.has(t)) {
+        const a = new Array(D.dates.length).fill(null);
+        const s = D.series[t];
+        if (s) s.c.forEach((v, j) => { a[s.o + j] = v; });
+        D.cols.set(t, a);
+      }
+      return D.cols.get(t);
+    };
+    D.vcol = (t) => {
+      if (!D.vcols.has(t)) {
+        const a = new Array(D.dates.length).fill(null);
+        const s = D.series[t];
+        if (s && s.v) s.v.forEach((v, j) => { a[s.o + j] = v; });
+        D.vcols.set(t, a);
+      }
+      return D.vcols.get(t);
+    };
+    D.ev = (id) => D.events.find((e) => e.id === id) || null;
+    return D;
+  }
+  function load(k) {
+    if (store[k]) return Promise.resolve(store[k]);
+    if (!loading[k]) {
+      loading[k] = fetch(`data/${k}.json`).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then((D) => { store[k] = prep(D); return store[k]; })
+        .catch((e) => { delete loading[k]; throw e; });
+    }
+    return loading[k];
+  }
+  const cur = () => store[state.cycle] || null;
+  const rows = () => { const D = cur(); return D ? D[state.list] : []; };
+  const sel = () => { const r = rows(); return r.find((x) => x.ticker === state.ticker) || r[0] || null; };
+
+  // ---------- header, strip, controls ----------
+  function renderCycles() {
+    const box = $('#cycles');
+    if (!box.children.length) {
+      CYCLES.forEach((k) => {
+        const b = el('button', 'cyc');
+        b.type = 'button';
+        b.dataset.cycle = k;
+        b.append(el('span', 'cyc-y', k), el('span', 'cyc-d', 'Low ' + LOWS[k]));
+        b.addEventListener('click', () => go({ cycle: k, ticker: null, pin: null }));
+        box.append(b);
+      });
+    }
+    box.querySelectorAll('.cyc').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cycle === state.cycle)));
+  }
+
+  function renderLede(D) {
+    const p = $('#lede');
+    p.replaceChildren();
+    if (!D) return;
+    const s = D.summary;
+    const b = (t) => el('b', null, t);
+    if (state.list === 'leaders') {
+      const L = s.leaders;
+      p.append(b(`${L.new_high_before_spy} of the top ${L.n}`), ' growth leaders of the ', b(D.key), ' cycle made a new 52-week high before SPY did on ',
+        b(day(L.spy_first_new_high)), `. On ${L.rs_led_price} of them the RS line got there first.`);
+    } else {
+      const I = s.ipos;
+      p.append(b(`${I.n} growth companies`), ' that started trading in the 12 months after the ', b(day(D.cycle.low)), ' low passed the screen. Their median first-year gain was ',
+        b(pct(I.median_first_year)), `; ${I.broke_out} broke out of a first base, which typically lasted ${I.median_base_weeks} weeks.`);
+    }
+  }
+
+  function renderStrip(D) {
+    const box = $('#mkt');
+    box.replaceChildren();
+    if (!D) return;
+    const spy = D.index.spy;
+    const qqq = D.index.qqq;
+    const L = D.summary.leaders;
+    const I = D.summary.ipos;
+    const c1 = D.ev('corr1');
+    const items = [
+      ['S&P 500 bear market', pct1(spy.bear_drawdown_pct), [`${day(D.cycle.peak, fMon)} peak → ${day(spy.low_date)} low`]],
+      ['SPY first new 52-week high', day(spy.first_52w_high_date), [`${weeksBetween(spy.low_date, spy.first_52w_high_date)} weeks after the low`]],
+      ['QQQ first new 52-week high', day(qqq.first_52w_high_date), [`QQQ low ${day(qqq.low_date)}`]],
+      ['12 months after the low', `${pct(spy.ret_12m)} / ${pct(qqq.ret_12m)}`, ['SPY / QQQ']],
+      ['Leaders: new high before SPY', `${L.new_high_before_spy} of ${L.n}`, [`RS line led price on ${L.rs_led_price}`]],
+      ['Leaders: median bear drop', pct(L.median_bear_drawdown), [`Median ${pct(L.median_pct_off_low_at_new_high)} off the low at the new high`]],
+      ['First SPY pullback', c1 ? pct1(c1.spy_pct) : '—', c1 ? [`${day(c1.start, fMon)}–${day(c1.end)}`, `Leaders' median ${pct1(L.median_in_pullback1)}`] : []],
+      ['New issues that passed', String(I.n), [`Median first year ${pct(I.median_first_year)}`]],
+    ];
+    items.forEach(([dt, v, subs]) => {
+      const d = el('div');
+      const dd = el('dd');
+      dd.append(el('span', 'mv', v), ...subs.map((s) => el('span', 'ms', s)));
+      d.append(el('dt', null, dt), dd);
+      box.append(d);
+    });
+  }
+
+  function renderControls(D) {
+    const lists = $('#lists');
+    lists.replaceChildren();
+    [['leaders', 'Leaders'], ['ipos', 'New issues']].forEach(([id, label]) => {
+      const b = el('button', 'sb', label);
+      b.type = 'button';
+      b.setAttribute('aria-pressed', String(state.list === id));
+      if (D) b.append(el('span', 'n', String(D[id].length)));
+      b.addEventListener('click', () => go({ list: id, ticker: null, pin: null }));
+      lists.append(b);
+    });
+    const rb = $('#ranges');
+    rb.replaceChildren();
+    if (!D) return;
+    RANGES[state.list].forEach((r) => {
+      const b = el('button', 'sb', r.label(D));
+      b.type = 'button';
+      b.setAttribute('aria-pressed', String(state.range[state.list] === r.id));
+      b.addEventListener('click', () => { state.range[state.list] = r.id; renderChart(); });
+      rb.append(b);
+    });
+  }
+
+  // ---------- stock header and stats ----------
+  function renderTitle(r) {
+    $('#tk').textContent = r ? r.ticker : '—';
+    $('#co').textContent = r ? r.company : '';
+    const sub = $('#stock-sub');
+    sub.replaceChildren();
+    if (!r) return;
+    const tag = state.list === 'leaders' ? r.category : r.how;
+    sub.append(el('span', 'pill', tag), el('span', null, r.theme), el('span', null, `· #${r.rank} of ${rows().length} by ${state.list === 'leaders' ? '12-month gain from the index low' : 'first-year gain'}`));
+  }
+
+  function statsSpec(D, r) {
+    const spy52 = D.index.spy.first_52w_high_date;
+    const vsSpy = (d) => {
+      if (!has(d)) return null;
+      const w = weeksBetween(d, spy52);
+      if (w > 0) return `${w} weeks before SPY's new high`;
+      if (w < 0) return `${-w} weeks after SPY's new high`;
+      return "Same week as SPY's new high";
+    };
+    const pull = (n) => {
+      const e = D.ev('corr' + n);
+      if (!e) return null;
+      const v = r['corr' + n];
+      return { dt: n === 1 ? 'First SPY pullback' : 'Second SPY pullback', v: has(v) ? pct1(v) : 'Not trading yet', cls: signCls(v),
+        subs: [`SPY ${pct1(e.spy_pct)}, ${day(e.start, fMon)}–${day(e.end)}`] };
+    };
+    if (state.list === 'leaders') {
+      return [
+        { dt: '12 months from the index low', v: pct(r.ret), cls: signCls(r.ret), subs: [`vs SPY ${pts(r.vs_spy)} pts`, `24 months: ${pct(r.ret24)}`] },
+        { dt: 'Bear-market drop', v: pct(r.drop), cls: signCls(r.drop), subs: [`from the ${day(r.prior_high_date)} high`] },
+        { dt: 'Low', v: day(r.low_date), subs: [`SPY's low: ${day(D.index.spy.low_date)}`, has(r.low_vol) && `Volume ${fX(r.low_vol)} its 50-day average`] },
+        { dt: 'First new 52-week high', v: day(r.hi_date), subs: [has(r.hi_pct) && `${pct(r.hi_pct)} off the low`, has(r.hi_vol) && `Volume ${fX(r.hi_vol)} its 50-day average`, vsSpy(r.hi_date)] },
+        { dt: 'RS line new high', v: day(r.rs_date), subs: [`Ahead of price: ${r.rs_led}`] },
+        pull(1), pull(2),
+        { dt: 'Size at the low', v: cap(r.cap_b), subs: [has(r.years_listed) && `Public ${r.years_listed} years`] },
+      ].filter(Boolean);
+    }
+    return [
+      { dt: 'First year from first close', v: pct(r.ret), cls: signCls(r.ret), subs: [`vs SPY ${pts(r.vs_spy)} pts`, `24 months: ${pct(r.ret24)}`] },
+      { dt: `First trade · ${r.how}`, v: day(r.first_day), subs: [`Day one ${pct(r.first_day_chg)}, open to close`, `SPY ${pct(r.spy_at_ipo)} off its low then`] },
+      { dt: 'First base', v: has(r.base_weeks) ? `${r.base_weeks} weeks` : 'No breakout', subs: [`${pct(r.drop)} deep`, `High ${day(r.base_high_date, fShort)}, ${pct(r.high_vs_first)} vs first close`] },
+      { dt: 'Base low', v: day(r.low_date), subs: [`${pct(r.low_vs_first)} vs first close`, has(r.low_vol) && `Volume ${fX(r.low_vol)} its average`] },
+      { dt: 'Breakout to a new high', v: day(r.hi_date), subs: [has(r.hi_pct) && `${pct(r.hi_pct)} off the base low`, has(r.hi_vol) && `Volume ${fX(r.hi_vol)} its average`, vsSpy(r.hi_date)] },
+      { dt: 'RS line new high', v: day(r.rs_date), subs: [`Ahead of price: ${r.rs_led}`] },
+      pull(1), pull(2),
+      { dt: 'Market cap', v: cap(r.cap_b), subs: ['12 months after the index low'] },
+    ].filter(Boolean);
+  }
+
+  function renderStats(D, r) {
+    const box = $('#stats');
+    box.replaceChildren();
+    if (!D || !r) return;
+    statsSpec(D, r).forEach((s) => {
+      const d = el('div');
+      const dd = el('dd');
+      dd.append(el('span', 'sv ' + (s.cls || ''), s.v), ...s.subs.filter(Boolean).map((t) => el('span', 'ss', t)));
+      d.append(el('dt', null, s.dt), dd);
+      box.append(d);
+    });
+  }
+
+  function renderLegend(r) {
+    const box = $('#legend');
+    box.replaceChildren();
+    if (!r) return;
+    const item = (k, text) => { const s = el('span', 'k'); s.append(k, document.createTextNode(text)); box.append(s); };
+    const key = (cls, style) => { const k = el('span', cls); Object.assign(k.style, style || {}); return k; };
+    const L = state.list === 'leaders';
+    item(key('kl', { background: 'var(--stock)' }), r.ticker);
+    item(key('kl', { background: 'var(--spy)' }), L ? 'SPY, rebased to the low' : 'SPY, rebased to the base low');
+    item(key('kl', { background: 'var(--qqq)' }), 'QQQ, same');
+    item(key('kd', { borderColor: 'var(--stock)', background: 'var(--panel)' }), L ? 'Low' : 'Base low');
+    item(key('kd', { borderColor: 'var(--stock)', background: 'var(--stock)' }), L ? 'First new 52-week high' : 'Breakout to a new high');
+    item(key('kv', { background: 'var(--vol)' }), 'Volume');
+    item(key('kl', { background: 'var(--ref)' }), '50-day average volume');
+    item(key('kr'), 'SPY peak, low, first new high');
+    item(key('kb'), 'SPY pullbacks');
+    item(key('kl', { background: 'var(--pin)' }), 'Pinned date');
+  }
+
+  function renderNote() {
+    $('#chart-note').textContent = state.list === 'leaders'
+      ? 'Daily closes and volume, split-adjusted. SPY and QQQ are rebased to the stock\'s close on its low, so the gap between the lines is performance since that day. A new 52-week high is a close above every close of the prior 251 sessions; the RS line (stock ÷ SPY, 100 = the low) uses the same rule. Volume callouts compare that day with the prior 50 sessions. Click the chart to pin a date for the Ask panel.'
+      : 'Daily closes and volume, split-adjusted. A breakout is the first close above every earlier close that comes at least three weeks after the previous closing high; the base runs from that high to the breakout. SPY and QQQ are rebased to the stock\'s base low. Volume callouts compare that day with up to 50 prior sessions, leaving out the two IPO days. Click the chart to pin a date for the Ask panel.';
+  }
+
+  // ---------- table ----------
+  const COLS = {
+    leaders: [
+      { id: 'rank', label: '#', f: 'rank', num: true, first: 1 },
+      { id: 'ticker', label: 'Ticker', f: 'ticker', key: true, first: 1 },
+      { id: 'theme', label: 'What it is', f: 'theme', cls: 'theme', first: 1 },
+      { id: 'ret', label: '12-mo gain', f: 'ret', num: true, fmt: pct, first: -1 },
+      { id: 'vs', label: 'vs SPY, pts', f: 'vs_spy', num: true, fmt: pts, cls: 'opt', first: -1 },
+      { id: 'drop', label: 'Bear drop', f: 'drop', num: true, fmt: pct, cls: 'opt', first: 1 },
+      { id: 'low', label: 'Low', f: 'low_date', fmt: (v) => day(v, fShort), mono: true, first: 1 },
+      { id: 'hi', label: 'First 52-wk high', f: 'hi_date', fmt: (v) => day(v, fShort), mono: true, first: 1 },
+      { id: 'hv', label: 'Vol at high', f: 'hi_vol', num: true, fmt: fX, cls: 'opt', first: -1 },
+      { id: 'rs', label: 'RS new high', f: 'rs_date', fmt: (v) => day(v, fShort), mono: true, cls: 'opt2', first: 1 },
+      { id: 'led', label: 'RS first', f: 'rs_led', cls: 'opt', first: -1 },
+    ],
+    ipos: [
+      { id: 'rank', label: '#', f: 'rank', num: true, first: 1 },
+      { id: 'ticker', label: 'Ticker', f: 'ticker', key: true, first: 1 },
+      { id: 'theme', label: 'What it is', f: 'theme', cls: 'theme', first: 1 },
+      { id: 'how', label: 'How it listed', f: 'how', cls: 'opt', first: 1 },
+      { id: 'first', label: 'First trade', f: 'first_day', fmt: (v) => day(v, fShort), mono: true, first: 1 },
+      { id: 'ret', label: 'First year', f: 'ret', num: true, fmt: pct, first: -1 },
+      { id: 'depth', label: 'Base depth', f: 'drop', num: true, fmt: pct, cls: 'opt', first: 1 },
+      { id: 'weeks', label: 'Weeks in base', f: 'base_weeks', num: true, fmt: (v) => (has(v) ? String(v) : '—'), cls: 'opt', first: 1 },
+      { id: 'bo', label: 'Breakout', f: 'hi_date', fmt: (v) => day(v, fShort), mono: true, cls: 'opt2', first: 1 },
+      { id: 'hv', label: 'Vol at breakout', f: 'hi_vol', num: true, fmt: fX, cls: 'opt', first: -1 },
+      { id: 'led', label: 'RS first', f: 'rs_led', cls: 'opt', first: -1 },
+    ],
+  };
+
+  function renderTable(D, r) {
+    const cols = COLS[state.list];
+    if (!cols.find((c) => c.id === state.sort.id)) state.sort = { id: 'rank', dir: 1 };
+    $('#table-title').textContent = state.list === 'leaders' ? `${D ? D.key : ''} leaders, ranked by 12-month gain from the index low` : `${D ? D.key : ''} new issues, ranked by first-year gain`;
+    $('#table-sub').textContent = D ? (state.list === 'leaders'
+      ? `Select a row to chart it. SPY's first new 52-week high came on ${day(D.index.spy.first_52w_high_date)}, and QQQ's on ${day(D.index.qqq.first_52w_high_date)}.`
+      : `Select a row to chart it. Companies that started trading between ${day(D.cycle.low)} and ${day(D.cycle.m12)}. ${D.summary.ipos.breakout_before_spy_high} broke out before SPY's first new high on ${day(D.index.spy.first_52w_high_date)}.`) : '';
+    const table = $('#table');
+    table.tHead.rows[0].replaceChildren(...cols.map((c) => {
+      const th = el('th');
+      if (c.num) th.classList.add('num');
+      if (c.cls) c.cls.split(' ').forEach((x) => th.classList.add(x));
+      th.setAttribute('aria-sort', state.sort.id === c.id ? (state.sort.dir > 0 ? 'ascending' : 'descending') : 'none');
+      const b = el('button', null, c.label);
+      b.type = 'button';
+      b.dataset.col = c.id;
+      th.append(b);
+      return th;
+    }));
+    const sc = cols.find((c) => c.id === state.sort.id);
+    const list = rows().slice().sort((a, b) => {
+      const va = a[sc.f];
+      const vb = b[sc.f];
+      if (!has(va) && !has(vb)) return 0;
+      if (!has(va)) return 1;
+      if (!has(vb)) return -1;
+      return (sc.num ? va - vb : String(va).localeCompare(String(vb))) * state.sort.dir;
+    });
+    table.tBodies[0].replaceChildren(...list.map((x) => {
+      const tr = el('tr');
+      tr.dataset.key = x.ticker;
+      if (r && x.ticker === r.ticker) { tr.classList.add('sel'); tr.setAttribute('aria-current', 'true'); }
+      cols.forEach((c) => {
+        const td = el('td');
+        if (c.num) td.classList.add('num');
+        if (c.mono) td.classList.add('mono');
+        if (c.cls) c.cls.split(' ').forEach((y) => td.classList.add(y));
+        const v = x[c.f];
+        if (c.key) {
+          const b = el('button', 'tkb', v);
+          b.type = 'button';
+          td.append(b);
+        } else {
+          td.textContent = c.fmt ? c.fmt(v) : has(v) ? String(v) : '—';
+          if (c.id === 'ret' || c.id === 'vs') td.classList.add(signCls(v));
+        }
+        tr.append(td);
+      });
+      return tr;
+    }));
+  }
+
+  // ---------- chart ----------
+  function logTicks(scale, count) {
+    const lead = (v) => Math.round(v / Math.pow(10, Math.floor(Math.log10(v))));
+    let t = scale.ticks(count);
+    if (t.length > count + 2) t = t.filter((v) => [1, 2, 5].includes(lead(v)));
+    if (t.length > count + 2) t = t.filter((v) => lead(v) === 1);
+    return t;
+  }
+  function padLog(vals, h, padBot, padTop) {
+    let a = Math.log(d3.min(vals));
+    let b = Math.log(d3.max(vals));
+    if (!(b > a)) { a -= 0.05; b += 0.05; }
+    const span = (b - a) / (1 - (padBot + padTop) / h);
+    return [Math.exp(a - (span * padBot) / h), Math.exp(b + (span * padTop) / h)];
+  }
+  function rangeStart(D, r) {
+    const id = state.range[state.list];
+    if (state.list === 'leaders') {
+      if (id === 'wide') return D.cycle.chart_start;
+      if (id === 'peak') return addMonths(D.cycle.peak, -1);
+      return addMonths(D.cycle.low, -1);
+    }
+    return id === 'low' ? addMonths(D.cycle.low, -1) : addDays(r.first_day, -7);
+  }
+
+  function renderChart() {
+    const box = $('#chart');
+    const D = cur();
+    const r = sel();
+    renderControls(D);
+    if (!D || !r) return;
+    drawChart(box, D, r, rangeStart(D, r), r.end);
+  }
+
+  function drawChart(box, D, r, start, end) {
+    box.replaceChildren();
+    const W = Math.floor(box.clientWidth);
+    if (!W) return;
+    const t = r.ticker;
+    const isL = state.list === 'leaders';
+    const S = D.col(t);
+    const SPY = D.col('SPY');
+    const QQQ = D.col('QQQ');
+    const V = D.vcol(t);
+    const last0 = D.dates.length - 1;
+    const i0 = Math.min(d3.bisectLeft(D.dates, start), last0);
+    const iEnd = Math.max(i0 + 1, Math.min(d3.bisectRight(D.dates, end) - 1, last0));
+    const iLow = D.idx.get(r.low_date);
+    if (iLow === undefined || !ok(S[iLow])) {
+      const f = el('div', 'fail', 'No price data for this stock on its low date.');
+      box.append(f);
+      return;
+    }
+    const sL = S[iLow];
+    const spyL = SPY[iLow];
+    const qqqL = QQQ[iLow];
+    const rsL = sL / spyL;
+    const avg50 = (i) => {
+      const lo = isL ? Math.max(0, i - 50) : Math.max(D.series[t].o + 2, i - 50);
+      const prior = [];
+      for (let j = lo; j < i; j++) if (ok(V[j])) prior.push(V[j]);
+      return prior.length >= (isL ? 20 : 10) ? d3.mean(prior) : null;
+    };
+    const data = [];
+    for (let i = i0; i <= iEnd; i++) {
+      const s = ok(S[i]) ? S[i] : null;
+      data.push({ i, d: parseDay(D.dates[i]), s, spy: (SPY[i] * sL) / spyL, qqq: (QQQ[i] * sL) / qqqL,
+        rs: s !== null ? (100 * (s / SPY[i])) / rsL : null, v: ok(V[i]) ? V[i] : null, a: avg50(i) });
+    }
+    const first = data[0];
+    const last = data[data.length - 1];
+
+    const priceH = Math.round(Math.max(220, Math.min(390, W * 0.42)));
+    const rsH = Math.round(Math.max(96, Math.min(140, priceH * 0.36)));
+    const volH = Math.round(Math.max(62, Math.min(96, priceH * 0.25)));
+    const mt = 34;
+    const pTop = mt;
+    const pBot = mt + priceH;
+    const vTop = pBot + 12;
+    const vBot = vTop + volH;
+    const rTop = vBot + 30;
+    const rBot = rTop + rsH;
+    const H = rBot + 24;
+
+    const yP = d3.scaleLog(padLog(data.flatMap((d) => [d.s, d.spy, d.qqq]).filter(ok), priceH, 26, 20), [pBot, pTop]);
+    const yR = d3.scaleLog(padLog(data.map((d) => d.rs).filter(ok).concat([100]), rsH, 8, 18), [rBot, rTop]);
+    const vMax = d3.max(data, (d) => d.v || 0) || 1;
+    const yV = d3.scaleLinear([0, vMax], [vBot, vTop + 26]);
+
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('height', H).attr('viewBox', `0 0 ${W} ${H}`)
+      .attr('role', 'img').attr('aria-label', `${t} price with SPY and QQQ rebased to its ${isL ? 'low' : 'base low'}, daily volume, and its RS line`);
+    const measure = (texts, cls) => {
+      const g = svg.append('g');
+      const w = d3.max(texts, (s) => g.append('text').attr('class', cls || null).text(s).node().getComputedTextLength()) || 0;
+      g.remove();
+      return w;
+    };
+    const pT = logTicks(yP, priceH > 300 ? 6 : 4);
+    const rT = logTicks(yR, 3);
+    const vT = yV.ticks(2).filter((v) => v > 0 && yV(v) >= vTop + 26);
+    const ml = Math.ceil(Math.max(measure(pT.map(tickMoney), 'tick'), measure(rT.map(tickRs), 'tick'), measure(vT.map(tickVol), 'tick'))) + 10;
+    const lastS = [...data].reverse().find((d) => ok(d.s));
+    const ends = [{ k: t, v: lastS ? lastS.s : null, c: 'var(--stock)', main: true }, { k: 'SPY', v: last.spy, c: 'var(--spy)' }, { k: 'QQQ', v: last.qqq, c: 'var(--qqq)' }].filter((e) => ok(e.v));
+    const mr = Math.ceil(measure(ends.map((e) => e.k), 'endm')) + 14;
+    const x = d3.scaleUtc([first.d, last.d], [ml, W - mr]);
+    const inX = (d) => d >= first.d && d <= last.d;
+    const panes = [[pTop, pBot], [vTop, vBot], [rTop, rBot]];
+
+    // pullback bands
+    const bands = D.events.filter((e) => has(e.end)).map((e) => ({ e, a: parseDay(e.start), b: parseDay(e.end) })).filter((o) => o.b >= first.d && o.a <= last.d);
+    const gB = svg.append('g');
+    bands.forEach((o) => {
+      const xa = x(o.a < first.d ? first.d : o.a);
+      const xb = x(o.b > last.d ? last.d : o.b);
+      panes.forEach(([a, b]) => gB.append('rect').attr('x', xa).attr('y', a).attr('width', Math.max(1, xb - xa)).attr('height', b - a).style('fill', 'var(--band)'));
+    });
+
+    // grid
+    const gG = svg.append('g');
+    const yGrid = (ticks, ys, fmt) => ticks.forEach((v) => {
+      gG.append('line').attr('x1', ml).attr('x2', W - mr).attr('y1', ys(v)).attr('y2', ys(v)).style('stroke', 'var(--grid)');
+      gG.append('text').attr('class', 'tick').attr('x', ml - 8).attr('y', ys(v)).attr('dy', '0.32em').attr('text-anchor', 'end').text(fmt(v));
+    });
+    yGrid(pT, yP, tickMoney);
+    yGrid(rT, yR, tickRs);
+    yGrid(vT, yV, tickVol);
+    [pBot, vBot, rBot].forEach((y) => gG.append('line').attr('x1', ml).attr('x2', W - mr).attr('y1', y).attr('y2', y).style('stroke', 'var(--axis)'));
+
+    // reference dates
+    const refs = ['spy_peak', 'spy_low', 'spy_52w'].map((id) => D.ev(id)).filter(Boolean).map((e) => ({ label: e.label, d: parseDay(e.start) }));
+    if (!isL) refs.push({ label: 'First trade', d: parseDay(r.first_day), own: true });
+    const vis = refs.filter((o) => inX(o.d) && !(o.own && +o.d <= +first.d + 9 * 864e5));
+    const gR = svg.append('g');
+    vis.forEach((o) => panes.forEach(([a, b]) => gR.append('line').attr('x1', x(o.d)).attr('x2', x(o.d)).attr('y1', a).attr('y2', b)
+      .style('stroke', o.own ? 'var(--stock)' : 'var(--ref)').style('stroke-opacity', o.own ? 0.5 : 1).attr('stroke-dasharray', '3 3')));
+    gR.append('line').attr('x1', ml).attr('x2', W - mr).attr('y1', yR(100)).attr('y2', yR(100)).style('stroke', 'var(--ref)').attr('stroke-dasharray', '3 3');
+
+    // pinned date
+    if (state.pin && D.idx.has(state.pin)) {
+      const pd = parseDay(state.pin);
+      if (inX(pd)) panes.forEach(([a, b]) => svg.append('line').attr('x1', x(pd)).attr('x2', x(pd)).attr('y1', a).attr('y2', b).style('stroke', 'var(--pin)').style('stroke-width', 1.5));
+    }
+
+    // series
+    const path = (acc, ys, c, w) => svg.append('path').datum(data)
+      .attr('d', d3.line().defined((d) => ok(acc(d))).x((d) => x(d.d)).y((d) => ys(acc(d))))
+      .style('fill', 'none').style('stroke', c).style('stroke-width', w).style('stroke-linejoin', 'round').style('stroke-linecap', 'round');
+    path((d) => d.qqq, yP, 'var(--qqq)', 1.4);
+    path((d) => d.spy, yP, 'var(--spy)', 1.4);
+    path((d) => d.s, yP, 'var(--stock)', 2);
+    path((d) => d.rs, yR, 'var(--stock)', 1.8);
+
+    // volume
+    const slot = (W - mr - ml) / Math.max(1, data.length);
+    const bw = Math.max(1, slot * 0.7);
+    let bars = '';
+    data.forEach((d) => {
+      if (!d.v) return;
+      bars += `M${(x(d.d) - bw / 2).toFixed(1)},${vBot}V${yV(d.v).toFixed(1)}h${bw.toFixed(2)}V${vBot}Z`;
+    });
+    svg.append('path').attr('d', bars).style('fill', 'var(--vol)');
+    svg.append('path').datum(data).attr('d', d3.line().defined((d) => ok(d.a)).x((d) => x(d.d)).y((d) => yV(d.a)))
+      .style('fill', 'none').style('stroke', 'var(--ref)').style('stroke-width', 1.2).style('stroke-linejoin', 'round');
+    const gV = svg.append('g');
+    const rowEndV = [-Infinity, -Infinity];
+    [[r.low_date, r.low_vol], [r.hi_date, r.hi_vol]]
+      .map(([date, ratio]) => ({ j: D.idx.has(date) ? D.idx.get(date) : null, ratio }))
+      .filter((o) => o.j !== null && o.j >= i0 && o.j <= iEnd && ok(V[o.j]))
+      .sort((a, b) => a.j - b.j)
+      .forEach((o) => {
+        const cx = x(parseDay(D.dates[o.j]));
+        const hw = Math.max(3, bw + 1);
+        gV.append('rect').attr('x', cx - hw / 2).attr('width', hw).attr('y', yV(V[o.j])).attr('height', vBot - yV(V[o.j])).style('fill', 'var(--stock)');
+        if (!has(o.ratio)) return;
+        const tx = gV.append('text').attr('class', 'lbl').attr('text-anchor', 'middle').text(`${fX(o.ratio)} avg`);
+        const w = tx.node().getComputedTextLength();
+        const lx = Math.max(ml + w / 2 + 2, Math.min(W - mr - w / 2 - 2, cx));
+        const rr = rowEndV.findIndex((e) => lx - w / 2 > e + 6);
+        if (rr < 0) { tx.remove(); return; }
+        rowEndV[rr] = lx + w / 2;
+        tx.attr('x', lx).attr('y', vTop + 9 + rr * 12);
+      });
+
+    svg.append('text').attr('x', ml).attr('y', rTop - 10).text(`RS line vs SPY (100 = the ${isL ? 'low' : 'base low'})`);
+
+    // markers
+    const gM = svg.append('g');
+    const marker = (date, ys, acc, filled, text, above, pane) => {
+      if (!has(date) || !D.idx.has(date)) return;
+      const j = D.idx.get(date);
+      if (j < i0 || j > iEnd) return;
+      const d = data[j - i0];
+      if (!d || !ok(acc(d))) return;
+      const cx = x(d.d);
+      const cy = ys(acc(d));
+      gM.append('circle').attr('cx', cx).attr('cy', cy).attr('r', 4.5)
+        .style('fill', filled ? 'var(--stock)' : 'var(--panel)').style('stroke', filled ? 'var(--panel)' : 'var(--stock)').style('stroke-width', 2);
+      let ty = above ? cy - 10 : cy + 18;
+      if (above && ty - 12 < pane[0]) ty = cy + 18;
+      if (!above && ty > pane[1] - 2) ty = cy - 10;
+      const tx = gM.append('text').attr('class', 'lbl').attr('text-anchor', 'middle').attr('y', ty).text(text);
+      const w = tx.node().getComputedTextLength();
+      tx.attr('x', Math.max(ml + w / 2 + 2, Math.min(W - mr - w / 2 - 2, cx)));
+    };
+    marker(r.low_date, yP, (d) => d.s, false, `${isL ? 'Low' : 'Base low'} · ${day(r.low_date)}`, false, panes[0]);
+    marker(r.hi_date, yP, (d) => d.s, true, `${isL ? 'First 52-wk high' : 'Breakout'} · ${day(r.hi_date)}`, true, panes[0]);
+    marker(r.rs_date, yR, (d) => d.rs, true, `RS new high · ${day(r.rs_date)}`, true, panes[2]);
+
+    // labels for reference lines and bands, in two rows above the plot
+    const tops = vis.map((o) => ({ d: o.d, text: o.label }))
+      .concat(bands.filter((o) => inX(o.a)).map((o) => ({ d: o.a, text: `SPY ${pct1(o.e.spy_pct)}` })))
+      .sort((a, b) => a.d - b.d);
+    const rowEnd = [-Infinity, -Infinity];
+    tops.forEach((o) => {
+      const tx = svg.append('text').text(o.text);
+      const w = tx.node().getComputedTextLength();
+      let anchor = 'start';
+      let x0 = x(o.d) + 3;
+      if (x0 + w > W - mr) { anchor = 'end'; x0 = x(o.d) - 3; }
+      const left = anchor === 'start' ? x0 : x0 - w;
+      const right = anchor === 'start' ? x0 + w : x0;
+      const rr = rowEnd.findIndex((e) => left > e + 6);
+      if (rr < 0) { tx.remove(); return; }
+      rowEnd[rr] = right;
+      tx.attr('x', x0).attr('y', 12 + rr * 14).attr('text-anchor', anchor);
+    });
+
+    // line-end labels
+    ends.forEach((e) => { e.y = yP(e.v); });
+    ends.sort((a, b) => a.y - b.y);
+    for (let i = 1; i < ends.length; i++) ends[i].y = Math.max(ends[i].y, ends[i - 1].y + 13);
+    const over = ends.length ? ends[ends.length - 1].y - (pBot - 4) : 0;
+    if (over > 0) ends.forEach((e) => { e.y -= over; });
+    ends.forEach((e) => svg.append('text').attr('class', e.main ? 'endm' : 'endo').style('fill', e.main ? null : e.c)
+      .attr('x', W - mr + 6).attr('y', e.y).attr('dy', '0.32em').text(e.k));
+
+    // x axis
+    const months = (last.d - first.d) / (30.44 * 864e5);
+    const perMonth = (W - mr - ml) / Math.max(1, months);
+    const every = perMonth >= 26 ? 3 : perMonth >= 11 ? 6 : 12;
+    d3.utcMonth.every(every).range(d3.utcYear.floor(first.d), d3.utcDay.offset(last.d, 1))
+      .filter((d) => d >= d3.utcDay.offset(first.d, -7))
+      .forEach((d) => {
+        const xx = Math.max(ml, x(d));
+        gG.append('line').attr('x1', xx).attr('x2', xx).attr('y1', rBot).attr('y2', rBot + 4).style('stroke', 'var(--axis)');
+        gG.append('text').attr('class', 'tick').attr('x', xx).attr('y', rBot + 17).attr('text-anchor', xx <= ml + 12 ? 'start' : 'middle')
+          .text(d.getUTCMonth() === 0 ? d3.utcFormat('%Y')(d) : d3.utcFormat('%b')(d));
+      });
+
+    // crosshair, tooltip, pinning
+    const tip = el('div', 'tip');
+    tip.hidden = true;
+    box.append(tip);
+    const focus = svg.append('g').style('display', 'none').attr('pointer-events', 'none');
+    const vline = focus.append('line').attr('y1', pTop).attr('y2', rBot).style('stroke', 'var(--axis)');
+    const dots = [['s', yP, 'var(--stock)'], ['spy', yP, 'var(--spy)'], ['qqq', yP, 'var(--qqq)'], ['rs', yR, 'var(--stock)']].map(([k, ys, c]) => ({
+      k, ys, e: focus.append('circle').attr('r', 4).style('fill', c).style('stroke', 'var(--panel)').style('stroke-width', 2),
+    }));
+    const times = data.map((d) => +d.d);
+    const vsLow = (v, base) => `${pct((v / base - 1) * 100)} vs ${isL ? 'low' : 'base low'}`;
+    const tipRow = (color, val, name) => {
+      const rr = el('div', 'tip-r');
+      const k = el('span', 'kl');
+      k.style.background = color;
+      rr.append(k, el('span', 'tip-v', val), el('span', 'tip-n', name));
+      tip.append(rr);
+    };
+    const show = (j) => {
+      const d = data[j];
+      if (!d) return;
+      state.kIdx = j;
+      const cx = x(d.d);
+      focus.style('display', null);
+      vline.attr('x1', cx).attr('x2', cx);
+      dots.forEach((o) => {
+        const v = d[o.k];
+        if (ok(v)) o.e.attr('cx', cx).attr('cy', o.ys(v)).style('display', null);
+        else o.e.style('display', 'none');
+      });
+      tip.replaceChildren(el('div', 'tip-d', fLong(d.d) + (state.pin === D.dates[d.i] ? ' · pinned' : '')));
+      if (ok(d.s)) tipRow('var(--stock)', money(d.s), `${t} · ${vsLow(d.s, sL)}`);
+      tipRow('var(--spy)', money(SPY[d.i]), `SPY · ${vsLow(SPY[d.i], spyL)}`);
+      tipRow('var(--qqq)', money(QQQ[d.i]), `QQQ · ${vsLow(QQQ[d.i], qqqL)}`);
+      if (d.v) tipRow('var(--vol)', tickVol(d.v), ok(d.a) ? `Volume · ${fX(d.v / d.a)} average` : 'Volume');
+      if (ok(d.rs)) tipRow('var(--stock)', d3.format(',.0f')(d.rs), 'RS line');
+      tip.hidden = false;
+      const tw = tip.offsetWidth;
+      let left = cx + 14;
+      if (left + tw > W) left = cx - 14 - tw;
+      tip.style.left = `${Math.max(0, left)}px`;
+      tip.style.top = `${pTop}px`;
+    };
+    const hide = () => { focus.style('display', 'none'); tip.hidden = true; };
+    const pinAt = (j) => {
+      const d = data[j];
+      if (!d) return;
+      const date = D.dates[d.i];
+      state.pin = state.pin === date ? null : date;
+      renderChart();
+      renderAskCtx();
+    };
+    const nearest = (ev) => d3.bisector((v) => v).center(times, +x.invert(d3.pointer(ev)[0]));
+    svg.append('rect').attr('x', ml).attr('y', pTop).attr('width', Math.max(0, W - mr - ml)).attr('height', rBot - pTop)
+      .style('fill', 'transparent').style('cursor', 'crosshair')
+      .on('pointermove', (ev) => show(nearest(ev)))
+      .on('pointerleave', hide)
+      .on('click', (ev) => pinAt(nearest(ev)));
+    if (state.kIdx !== null && state.kIdx >= data.length) state.kIdx = null;
+    box.onkeydown = (e) => {
+      if (e.key === 'Escape') { hide(); return; }
+      if (e.key === 'Enter' && state.kIdx !== null) { e.preventDefault(); pinAt(state.kIdx); return; }
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault();
+      const by = e.shiftKey ? 21 : 5;
+      const from = state.kIdx === null ? data.length - 1 : state.kIdx;
+      show(Math.max(0, Math.min(data.length - 1, from + (e.key === 'ArrowLeft' ? -by : by))));
+    };
+    box.onblur = hide;
+  }
+
+  // ---------- page render ----------
+  function render() {
+    const D = cur();
+    renderCycles();
+    renderLede(D);
+    renderStrip(D);
+    const r = sel();
+    if (r && state.ticker !== r.ticker) state.ticker = r.ticker;
+    renderTitle(r);
+    renderStats(D, r);
+    renderLegend(r);
+    renderNote();
+    renderTable(D, r);
+    if (D) renderChart(); else renderControls(null);
+    renderAsk();
+    if (D) writeHash();
+  }
+
+  function go(patch) {
+    Object.assign(state, patch);
+    if (patch.cycle || patch.list) state.sort = { id: 'rank', dir: 1 };
+    state.kIdx = null;
+    if (!store[state.cycle]) {
+      const box = $('#chart');
+      box.replaceChildren(el('div', 'skel', `Loading the ${state.cycle} cycle…`));
+      renderCycles();
+      load(state.cycle).then(render).catch(() => {
+        box.replaceChildren(el('div', 'fail', `Couldn't load the ${state.cycle} data. Reload the page to try again.`));
+      });
+      return;
+    }
+    render();
+  }
+
+  $('#prev').addEventListener('click', () => step(-1));
+  $('#next').addEventListener('click', () => step(1));
+  function step(dlt) {
+    const list = rows();
+    if (!list.length) return;
+    const i = Math.max(0, list.findIndex((x) => x.ticker === state.ticker));
+    go({ ticker: list[(i + dlt + list.length) % list.length].ticker, pin: null });
+  }
+  $('#table').tBodies[0].addEventListener('click', (e) => {
+    const tr = e.target.closest('tr[data-key]');
+    if (tr) go({ ticker: tr.dataset.key, pin: null });
+  });
+  $('#table').tHead.addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-col]');
+    if (!b) return;
+    const c = COLS[state.list].find((x) => x.id === b.dataset.col);
+    state.sort = state.sort.id === c.id ? { id: c.id, dir: -state.sort.dir } : { id: c.id, dir: c.first };
+    renderTable(cur(), sel());
+  });
+  window.addEventListener('hashchange', () => {
+    const before = `${state.cycle}-${state.list}-${state.ticker}`;
+    if (readHash() && `${state.cycle}-${state.list}-${state.ticker}` !== before) go({ pin: null });
+  });
+  let lastW = 0;
+  new ResizeObserver(() => {
+    const w = Math.floor($('#chart').clientWidth);
+    if (w && w !== lastW) { lastW = w; if (cur()) requestAnimationFrame(renderChart); }
+  }).observe($('#chart'));
+
+  // ---------- Ask Claude ----------
+  const HOST = 'host:claude_browser';
+  const ask = { sample: null, mcp: null, tools: false, web: 'checking', off: null, busy: false, ctl: null, threads: new Map(), seq: 0,
+    notesCol: null, notes: [], notesOK: false, notesErr: null };
+  const threadKey = () => `${state.cycle}:${state.list}:${state.ticker}`;
+  const thread = () => { const k = threadKey(); if (!ask.threads.has(k)) ask.threads.set(k, []); return ask.threads.get(k); };
+  const use = (n) => (window.claude && typeof window.claude.use === 'function' ? window.claude.use(n).catch(() => null) : Promise.resolve(null));
+
+  function md(text) {
+    const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const inline = (s) => esc(s)
+      .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (m, tx, u) => `<a href="${u}" target="_blank" rel="noopener noreferrer">${tx}</a>`)
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/`([^`]+)`/g, '<code>$1</code>');
+    const out = [];
+    let list = null;
+    let para = [];
+    const flushP = () => { if (para.length) { out.push(`<p>${inline(para.join(' '))}</p>`); para = []; } };
+    const flushL = () => { if (list) { out.push(`<${list.tag}>${list.items.map((i) => `<li>${inline(i)}</li>`).join('')}</${list.tag}>`); list = null; } };
+    String(text).split('\n').forEach((raw) => {
+      const line = raw.trimEnd();
+      let m;
+      if (!line.trim()) { flushP(); flushL(); return; }
+      if ((m = /^\s*#{1,6}\s+(.*)$/.exec(line))) { flushP(); flushL(); out.push(`<h4>${inline(m[1])}</h4>`); return; }
+      if ((m = /^\s*[-*•]\s+(.*)$/.exec(line))) { flushP(); if (!list || list.tag !== 'ul') { flushL(); list = { tag: 'ul', items: [] }; } list.items.push(m[1]); return; }
+      if ((m = /^\s*\d+[.)]\s+(.*)$/.exec(line))) { flushP(); if (!list || list.tag !== 'ol') { flushL(); list = { tag: 'ol', items: [] }; } list.items.push(m[1]); return; }
+      if (list && /^\s{2,}\S/.test(raw)) { list.items[list.items.length - 1] += ' ' + line.trim(); return; }
+      flushL();
+      para.push(line.trim());
+    });
+    flushP();
+    flushL();
+    return out.join('');
+  }
+
+  // what Claude is told about the page
+  function rules() {
+    const today = new Date().toISOString().slice(0, 10);
+    const web = ask.tools && ask.web !== 'off';
+    return [
+      'You are a research assistant inside a dashboard for studying the growth stocks that led the US market out of bear markets (the 2018, 2020 and 2022 S&P 500 lows), in the style of a model book. The reader studies chart behaviour, earnings, catalysts and themes.',
+      `Today is ${today}.`,
+      'How to answer:',
+      '- Answer the question first, in a sentence or two. Then give the supporting detail as short bullets, each with a date (month, day, year).',
+      web
+        ? '- For news, earnings results, guidance, product launches, analyst days, IPO terms or market events, use web_search, then read_page on the best one or two results. Prefer company press releases, SEC filings and earnings-call transcripts, then reputable financial news. Search with the company name, the event and the month and year.'
+        : '- You cannot search the web in this view. Answer from your own knowledge, say clearly which facts you are unsure of, and suggest what the reader should verify.',
+      '- Use get_price_history to show how the stock and SPY reacted around a date (for example the day of and the days after an earnings report).',
+      '- For earnings, say whether figures are GAAP or adjusted, and give year-over-year growth and any acceleration.',
+      web ? '- Cite sources inline as Markdown links, [publisher](url), using only URLs you actually read or saw in results. Never invent a URL.' : '- Do not give URLs you have not seen.',
+      '- Separate what the record shows from your own interpretation. If you could not verify something, say so.',
+      '- Keep it under about 250 words unless the reader asks for more. Use plain paragraphs, "- " bullets and **bold** for key numbers. No tables.',
+    ].join('\n');
+  }
+
+  function contextText() {
+    const D = cur();
+    const r = sel();
+    if (!D || !r) return '';
+    const spy = D.index.spy;
+    const qqq = D.index.qqq;
+    const L = [];
+    L.push(`Cycle: the ${D.key} bear market. SPY peaked ${day(D.cycle.peak)} and closed at its low on ${day(spy.low_date)} (${pct1(spy.bear_drawdown_pct)} from its high); its first new 52-week high came ${day(spy.first_52w_high_date)}. QQQ bottomed ${day(qqq.low_date)} (${pct1(qqq.bear_drawdown_pct)}) and made its first new high ${day(qqq.first_52w_high_date)}. In the 12 months after the low SPY gained ${pct1(spy.ret_12m)} and QQQ ${pct1(qqq.ret_12m)}.`);
+    const pb = D.events.filter((e) => has(e.end)).map((e) => `${day(e.start)} to ${day(e.end)} (SPY ${pct1(e.spy_pct)})`);
+    if (pb.length) L.push(`SPY's largest ordinary pullbacks in the 24 months after the low: ${pb.join('; ')}.`);
+    const list = rows();
+    if (state.list === 'leaders') {
+      L.push(`Stock: ${r.ticker} (${r.company}). ${r.category}; theme: ${r.theme}. Ranked #${r.rank} of ${list.length} growth leaders by gain in the 12 months after the index low.`);
+    } else {
+      L.push(`Stock: ${r.ticker} (${r.company}), a new issue (${r.how}) that started trading ${day(r.first_day)}. Theme: ${r.theme}. Ranked #${r.rank} of ${list.length} new issues by gain over its first year from its first close.`);
+    }
+    L.push('Stats from the page (daily closes, split-adjusted):');
+    statsSpec(D, r).forEach((s) => L.push(`- ${s.dt}: ${s.v}${s.subs.filter(Boolean).length ? ' (' + s.subs.filter(Boolean).join('; ') + ')' : ''}`));
+    if (state.pin) {
+      const i = D.idx.get(state.pin);
+      const S = D.col(r.ticker);
+      const SPY = D.col('SPY');
+      const V = D.vcol(r.ticker);
+      const iLow = D.idx.get(r.low_date);
+      const bits = [`The reader pinned ${day(state.pin)} on the chart.`];
+      if (ok(S[i])) bits.push(`${r.ticker} closed at ${money(S[i])}${ok(S[iLow]) ? `, ${pct((S[i] / S[iLow] - 1) * 100)} vs its ${state.list === 'leaders' ? 'low' : 'base low'}` : ''}.`);
+      if (ok(SPY[i])) bits.push(`SPY closed at ${money(SPY[i])}, ${pct((SPY[i] / SPY[D.idx.get(spy.low_date)] - 1) * 100)} vs its low.`);
+      if (ok(V[i])) {
+        const prior = [];
+        for (let j = Math.max(0, i - 50); j < i; j++) if (ok(V[j])) prior.push(V[j]);
+        if (prior.length >= 10) bits.push(`Volume was ${fX(V[i] / d3.mean(prior))} its prior 50-session average.`);
+      }
+      L.push(bits.join(' '));
+    }
+    L.push(`Other stocks on this list: ${list.filter((x) => x.ticker !== r.ticker).map((x) => `${x.ticker} (${x.theme})`).join(', ')}.`);
+    L.push(`The page has daily closes and volume for every stock on this cycle's two lists plus SPY and QQQ, from ${day(D.dates[0])} to ${day(D.dates[D.dates.length - 1])}.`);
+    return L.join('\n');
+  }
+
+  // page tools
+  function resultText(res) {
+    if (!res) return '';
+    if (typeof res.payload === 'string') return res.payload;
+    const blocks = (res.content || []).filter((b) => b && b.type === 'text').map((b) => b.text);
+    if (blocks.length) return blocks.join('\n');
+    return res.payload ? JSON.stringify(res.payload) : '';
+  }
+  function cleanPage(txt) {
+    let s = String(txt || '');
+    const tab = s.lastIndexOf('\nTab Context:');
+    if (tab >= 0) s = s.slice(0, tab);
+    return s.replace(/^Source element:.*$/m, '').replace(/\n---\n/, '\n').trim();
+  }
+  function cleanSearch(txt) {
+    let s = cleanPage(txt);
+    const i = s.indexOf('\nPast Year\n');
+    if (i >= 0) s = s.slice(i + 11);
+    const f = s.lastIndexOf('\nFeedback');
+    if (f >= 0) s = s.slice(0, f);
+    return s.trim();
+  }
+  async function browse(url, maxChars, signal) {
+    try {
+      await ask.mcp.callTool(HOST, 'navigate', { url }, { signal });
+      return resultText(await ask.mcp.callTool(HOST, 'get_page_text', { max_chars: maxChars }, { signal }));
+    } catch (e) {
+      const code = e && e.code;
+      if (['server_not_connected', 'not_in_manifest', 'not_granted', 'capability_disabled', 'capability_removed', 'blocked_by_policy', 'approval_required', 'needs_reauth', 'server_not_found', 'selection_required'].includes(code)) {
+        ask.web = 'off';
+        renderAskMode();
+        throw new Error('Web search is not available in this view. Answer from your own knowledge and the page data, and tell the reader you could not search.');
+      }
+      if (code === 'cancelled') throw new Error(signal && signal.aborted ? 'Stopped by the reader.' : 'The reader declined to let the browser open this page.');
+      if (code === 'tool_error') throw new Error('The browser could not load that page: ' + (e.message || 'unknown error'));
+      throw new Error(`The browser did not respond (${code || 'error'}). Try once more or answer without it.`);
+    }
+  }
+  function makeTools(item) {
+    const stepStart = (kind, text) => { const s = { kind, text, state: 'running' }; item.steps.push(s); updateItem(item); return s; };
+    const stepEnd = (s, okay) => { s.state = okay ? 'done' : 'failed'; updateItem(item); };
+    const tools = [];
+    if (ask.mcp && ask.web !== 'off') {
+      tools.push({
+        name: 'web_search',
+        description: 'Search the web (DuckDuckGo) through the reader\'s browser. Returns result titles, URLs and snippets as plain text. Use specific queries with the company name, the event and the month and year, e.g. "Supermicro preliminary results August 2023".',
+        inputSchema: { type: 'object', properties: { query: { type: 'string', description: 'The search query' } }, required: ['query'] },
+        execute: async (input, ctx) => {
+          const q = String(input.query || '').trim().slice(0, 200);
+          if (!q) throw new Error('Empty query.');
+          const s = stepStart('search', `Searched “${q}”`);
+          try {
+            const txt = cleanSearch(await browse('https://html.duckduckgo.com/html/?q=' + encodeURIComponent(q), 9000, ctx.signal));
+            stepEnd(s, true);
+            return txt.slice(0, 7000) || 'No results.';
+          } catch (e) { stepEnd(s, false); throw e; }
+        },
+      });
+      tools.push({
+        name: 'read_page',
+        description: 'Open a web page in the reader\'s browser and return its visible text (up to about 10,000 characters). Use it on the most relevant one or two search results.',
+        inputSchema: { type: 'object', properties: { url: { type: 'string', description: 'Full http(s) URL, or a URL from search results' } }, required: ['url'] },
+        execute: async (input, ctx) => {
+          let u = String(input.url || '').trim();
+          if (!/^https?:\/\//i.test(u)) u = 'https://' + u.replace(/^\/+/, '');
+          let host;
+          try { const p = new URL(u); if (!/^https?:$/.test(p.protocol)) throw new Error(); host = p.hostname.replace(/^www\./, ''); } catch (e) { throw new Error('Not a web address: ' + u); }
+          const s = stepStart('read', `Read ${host}`);
+          try {
+            const txt = cleanPage(await browse(u, 12000, ctx.signal));
+            stepEnd(s, true);
+            if (!item.sources.some((x) => x.url === u)) item.sources.push({ url: u, host });
+            return txt.slice(0, 10000) || 'The page had no readable text.';
+          } catch (e) { stepEnd(s, false); throw e; }
+        },
+      });
+    }
+    tools.push({
+      name: 'get_price_history',
+      description: 'Daily closes and volume from this page\'s data for one ticker (any stock on this cycle\'s lists, SPY or QQQ) between two dates. Returns daily rows for spans up to 90 sessions, otherwise weekly rows: date, close, % change from the first row, and volume as a multiple of the prior 50-session average.',
+      inputSchema: { type: 'object', properties: { ticker: { type: 'string' }, start: { type: 'string', description: 'YYYY-MM-DD' }, end: { type: 'string', description: 'YYYY-MM-DD' } }, required: ['ticker', 'start', 'end'] },
+      execute: (input) => {
+        const D = cur();
+        const t = String(input.ticker || '').toUpperCase().trim();
+        if (!D.series[t]) throw new Error(`No data for ${t} in the ${D.key} cycle. Available: ${Object.keys(D.series).join(', ')}.`);
+        const a = String(input.start || '').slice(0, 10);
+        const b = String(input.end || '').slice(0, 10);
+        const S = D.col(t);
+        const V = D.vcol(t);
+        let i = d3.bisectLeft(D.dates, a);
+        const j = Math.min(d3.bisectRight(D.dates, b) - 1, D.dates.length - 1);
+        while (i <= j && !ok(S[i])) i++;
+        if (i > j) throw new Error(`${t} has no closes between ${a} and ${b}.`);
+        const step = j - i + 1 > 90 ? 5 : 1;
+        const base = S[i];
+        const idxs = [];
+        for (let k = i; k <= j; k += step) idxs.push(k);
+        if (idxs[idxs.length - 1] !== j) idxs.push(j);
+        const out = [];
+        idxs.forEach((k) => {
+          if (!ok(S[k])) return;
+          const prior = [];
+          for (let m = Math.max(0, k - 50); m < k; m++) if (ok(V[m])) prior.push(V[m]);
+          out.push([D.dates[k], S[k], +((S[k] / base - 1) * 100).toFixed(1), ok(V[k]) && prior.length >= 10 ? +(V[k] / d3.mean(prior)).toFixed(2) : null]);
+        });
+        stepStart('data', `Checked ${t} prices, ${day(D.dates[i], fShort)}–${day(D.dates[j], fShort)}`).state = 'done';
+        updateItem(item);
+        return { ticker: t, columns: ['date', 'close', 'pct_from_first', 'volume_x_50d_avg'], rows: out };
+      },
+    });
+    return tools;
+  }
+
+  function buildInput(items, question) {
+    const turns = [{ role: 'user', content: rules() }];
+    items.filter((it) => it.status === 'done' && it.a).slice(-3).forEach((it) => {
+      turns.push({ role: 'user', content: it.q });
+      turns.push({ role: 'assistant', content: it.a.slice(0, 4000) });
+    });
+    turns.push({ role: 'user', content: `${contextText()}\n\nQuestion: ${question}` });
+    return turns;
+  }
+
+  const ERR = {
+    not_granted: 'You did not allow this page to use Claude. Reload the page to be asked again.',
+    sampling_disabled: 'Claude is not available for this account.',
+    not_declared: 'Asking Claude is not available in this view.',
+    capability_disabled: 'Asking Claude is not available in this view.',
+    capability_removed: 'Asking Claude is not available in this view.',
+    rate_limited: 'Too many requests, or your usage limit was reached. Wait a minute, then ask again.',
+    session_expired: 'Your claude.ai session expired. Sign in again, then ask.',
+    refused: 'Claude declined that question. Try asking it a different way.',
+    empty_completion: 'No answer came back. Try a simpler question.',
+    prompt_too_large: 'This thread got too long. Start a new thread and ask again.',
+    tools_unavailable: 'This view cannot run search or price lookups. Ask again for an answer without them.',
+    cancelled: 'Stopped.',
+  };
+  const FATAL = ['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed'];
+
+  async function send(q) {
+    q = String(q || '').trim();
+    if (!q || ask.busy || !ask.sample || ask.off) return;
+    const D = cur();
+    const r = sel();
+    if (!D || !r) return;
+    const items = thread();
+    const input = buildInput(items, q);
+    const item = { id: ++ask.seq, q, a: '', status: 'thinking', steps: [], sources: [], note: '', saved: false, cycle: D.key, list: state.list, ticker: r.ticker, pin: state.pin, key: threadKey() };
+    items.push(item);
+    $('#ask-input').value = '';
+    renderLog();
+    ask.busy = true;
+    ask.ctl = new AbortController();
+    renderAskButtons();
+    const opts = { signal: ask.ctl.signal, onText: ({ text }) => { item.a = text; item.status = 'streaming'; updateItem(item); } };
+    if (ask.tools) opts.tools = makeTools(item); else opts.cache = false;
+    try {
+      const res = await ask.sample(input, opts);
+      item.a = res.text;
+      item.status = 'done';
+      if (res.truncated) item.note = 'Cut short. Ask a narrower question for the rest.';
+    } catch (e) {
+      const code = (e && e.code) || 'upstream_error';
+      item.a = code === 'refused' ? '' : (e && typeof e.text === 'string' ? e.text : item.a);
+      item.status = code === 'cancelled' ? 'stopped' : 'error';
+      item.note = ERR[code] || 'The answer was interrupted. Ask again.';
+      if (FATAL.includes(code)) ask.off = ERR[code];
+      if (code === 'tools_unavailable') ask.tools = false;
+    } finally {
+      ask.busy = false;
+      ask.ctl = null;
+      updateItem(item);
+      renderAskButtons();
+      renderAskMode();
+    }
+  }
+
+  // ask panel rendering
+  function renderAskMode() {
+    const m = $('#ask-mode');
+    let st = 'checking';
+    let txt = 'Checking…';
+    if (!ask.sample || ask.off) { st = 'off'; txt = 'Unavailable here'; }
+    else if (ask.web === 'on' && ask.tools) { st = 'on'; txt = 'Web search on'; }
+    else if (ask.web === 'off' || !ask.tools) { st = 'off'; txt = 'No web search in this view'; }
+    m.dataset.state = st;
+    m.textContent = txt;
+    m.title = st === 'on' ? 'Searches run in the Claude app\'s browser pane.' : st === 'off' && ask.sample ? 'Open this page in the Claude desktop app to let Claude search the web.' : '';
+    const off = $('#ask-off');
+    const form = $('#ask-form');
+    const none = ask.sample === null && ask.ready;
+    if (none) {
+      off.hidden = false;
+      off.textContent = 'Open this page on claude.ai, signed in, to ask Claude about a stock. In the Claude desktop app it can also search the web.';
+      form.hidden = true;
+    } else if (ask.off) {
+      off.hidden = false;
+      off.textContent = ask.off;
+      form.hidden = true;
+    } else {
+      off.hidden = true;
+      form.hidden = false;
+    }
+    $('#ask-log').hidden = none && !thread().length;
+  }
+
+  function renderAskCtx() {
+    const box = $('#ask-ctx');
+    box.replaceChildren();
+    const r = sel();
+    const D = cur();
+    if (!r || !D) return;
+    box.append(el('span', 'chip', `${r.ticker} · ${D.key} ${state.list === 'leaders' ? 'leaders' : 'new issues'}`));
+    if (state.pin) {
+      const c = el('span', 'chip pin', `Pinned ${day(state.pin)}`);
+      const x = el('button', 'chip-x', '×');
+      x.type = 'button';
+      x.setAttribute('aria-label', 'Clear the pinned date');
+      x.addEventListener('click', () => { state.pin = null; renderChart(); renderAskCtx(); });
+      c.append(x);
+      box.append(c);
+    } else {
+      box.append(el('span', null, 'Click the chart to pin a date.'));
+    }
+    renderSugg();
+  }
+
+  function renderSugg() {
+    const box = $('#ask-sugg');
+    box.replaceChildren();
+    const r = sel();
+    if (!r || !ask.sample || ask.off) return;
+    const L = state.list === 'leaders';
+    const s = L ? [
+      `What kicked off ${r.ticker}'s run? Catalysts and dates.`,
+      `How were earnings and sales growing around ${day(r.hi_date, fMon) !== '—' ? 'its first new 52-week high' : 'its low'}?`,
+      `What was the market doing when ${r.ticker} bottomed?`,
+      `Which other stocks led with the "${r.theme}" theme?`,
+    ] : [
+      `What was ${r.ticker}'s IPO story, and how was the deal priced?`,
+      `What drove the breakout from ${r.ticker}'s first base?`,
+      `How fast were sales and earnings growing in ${r.ticker}'s first year public?`,
+    ];
+    if (state.pin) s.unshift(`What happened with ${r.ticker} around ${day(state.pin)}?`);
+    if (thread().length) s.splice(2);
+    s.forEach((t) => {
+      const b = el('button', 'sg', t);
+      b.type = 'button';
+      b.addEventListener('click', () => send(t));
+      box.append(b);
+    });
+  }
+
+  function itemNode(it) {
+    const wrap = el('div', 'qa');
+    wrap.dataset.id = it.id;
+    wrap.append(el('div', 'q', it.q));
+    if (it.pin) wrap.append(el('div', 'q-meta', `Pinned ${day(it.pin)}`));
+    const steps = el('div', 'steps');
+    it.steps.forEach((s) => { const d = el('div', 'step', s.text); d.dataset.state = s.state; steps.append(d); });
+    if (it.steps.length) wrap.append(steps);
+    if (it.a) {
+      const a = el('div', 'a');
+      a.innerHTML = md(it.a);
+      wrap.append(a);
+    } else if (it.status === 'thinking' || it.status === 'streaming') {
+      wrap.append(el('div', 'thinking', it.steps.length ? 'Working' : 'Thinking'));
+    }
+    const foot = el('div', 'a-foot');
+    if (it.note) foot.append(el('span', it.status === 'stopped' ? null : 'a-note', it.note));
+    if (it.sources.length) foot.append(el('span', null, 'Read: ' + it.sources.map((s) => s.host).join(', ')));
+    if (it.status === 'done' && ask.notesOK) {
+      const b = el('button', 'linkbtn', it.saved ? 'Saved to notes' : 'Save to notes');
+      b.type = 'button';
+      b.disabled = it.saved;
+      b.addEventListener('click', () => saveNote(it, b));
+      foot.append(b);
+    }
+    if (foot.children.length) wrap.append(foot);
+    return wrap;
+  }
+
+  function renderLog() {
+    const log = $('#ask-log');
+    const items = thread();
+    log.replaceChildren();
+    if (!items.length) {
+      const r = sel();
+      const e = el('div', 'empty');
+      e.append(el('div', null, r ? `Ask about ${r.ticker}, its run, or what the market was doing. Claude gets this stock's stats, the cycle's dates and any date you pin on the chart.` : 'Pick a stock to ask about it.'));
+      log.append(e);
+    } else {
+      items.forEach((it) => log.append(itemNode(it)));
+      log.scrollTop = log.scrollHeight;
+    }
+    renderSugg();
+  }
+
+  function updateItem(it) {
+    if (it.key !== threadKey()) return;
+    const log = $('#ask-log');
+    const old = log.querySelector(`.qa[data-id="${it.id}"]`);
+    if (!old) { renderLog(); return; }
+    const nearBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 80;
+    old.replaceWith(itemNode(it));
+    if (nearBottom) log.scrollTop = log.scrollHeight;
+  }
+
+  function renderAskButtons() {
+    $('#ask-send').disabled = ask.busy || !ask.sample || !!ask.off;
+    $('#ask-stop').hidden = !ask.busy;
+    $('#ask-clear').disabled = ask.busy;
+  }
+
+  function renderAsk() {
+    renderAskMode();
+    renderAskCtx();
+    renderLog();
+    renderAskButtons();
+    renderNotes();
+    const r = sel();
+    $('#ask-input').placeholder = r ? `Ask about ${r.ticker}, its run, or the market` : 'Ask a question';
+  }
+
+  $('#ask-form').addEventListener('submit', (e) => { e.preventDefault(); send($('#ask-input').value); });
+  $('#ask-input').addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send($('#ask-input').value); } });
+  $('#ask-stop').addEventListener('click', () => { if (ask.ctl) ask.ctl.abort(); });
+  $('#ask-clear').addEventListener('click', () => { if (!ask.busy) { ask.threads.delete(threadKey()); renderLog(); } });
+
+  // notes (private to each viewer)
+  function renderNotes() {
+    const box = $('#notes');
+    if (!ask.notesOK) { box.hidden = true; return; }
+    box.hidden = false;
+    const r = sel();
+    const D = cur();
+    if (!r || !D) return;
+    const mine = ask.notes.filter((n) => n.cycle === D.key && n.ticker === r.ticker).sort((a, b) => String(b.at).localeCompare(String(a.at)));
+    $('#notes-sum').textContent = `Your notes on ${r.ticker} (${mine.length})`;
+    const ul = $('#notes-list');
+    ul.replaceChildren();
+    if (ask.notesErr) ul.append(el('li', 'nt', ask.notesErr));
+    if (!mine.length && !ask.notesErr) ul.append(el('li', 'ss', 'Save an answer or add your own note. Notes are private to you.'));
+    mine.forEach((n) => {
+      const li = el('li', 'nt');
+      if (n.q) li.append(el('div', 'nt-q', n.q));
+      const body = el('div', 'a');
+      body.innerHTML = md(n.a || n.text || '');
+      li.append(body);
+      const meta = el('div', 'nt-m');
+      meta.append(el('span', null, `${n.kind === 'note' ? 'Your note' : 'Answer'} · ${new Date(n.at).toLocaleDateString()}`));
+      const del = el('button', 'linkbtn', 'Delete');
+      del.type = 'button';
+      let armed = false;
+      del.addEventListener('click', () => {
+        if (!armed) { armed = true; del.textContent = 'Click again to delete'; setTimeout(() => { armed = false; del.textContent = 'Delete'; }, 3000); return; }
+        del.disabled = true;
+        ask.notesCol.doc(n.id).delete().catch(() => { del.disabled = false; del.textContent = 'Could not delete'; });
+      });
+      meta.append(del);
+      li.append(meta);
+      ul.append(li);
+    });
+  }
+  function saveNote(it, btn) {
+    if (!ask.notesCol) return;
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+    ask.notesCol.add({ kind: 'qa', cycle: it.cycle, list: it.list, ticker: it.ticker, pin: it.pin || null, q: it.q, a: it.a, sources: it.sources.map((s) => s.url), at: new Date().toISOString() })
+      .then(() => { it.saved = true; btn.textContent = 'Saved to notes'; $('#notes').open = true; })
+      .catch((e) => { btn.disabled = false; btn.textContent = e && e.code === 'quota_exceeded' ? 'Notes are full' : 'Could not save. Try again'; });
+  }
+  $('#note-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const inp = $('#note-input');
+    const text = inp.value.trim();
+    const r = sel();
+    const D = cur();
+    if (!text || !ask.notesCol || !r || !D) return;
+    inp.disabled = true;
+    ask.notesCol.add({ kind: 'note', cycle: D.key, list: state.list, ticker: r.ticker, pin: state.pin || null, text, at: new Date().toISOString() })
+      .then(() => { inp.value = ''; })
+      .catch(() => { ask.notesErr = 'Could not save that note. Try again.'; renderNotes(); })
+      .finally(() => { inp.disabled = false; });
+  });
+
+  async function initAsk() {
+    const [sample, mcp, db, user] = await Promise.all([use('sample'), use('mcp'), use('db'), use('user')]);
+    ask.ready = true;
+    ask.sample = sample;
+    ask.mcp = mcp;
+    if (sample) {
+      const lim = await sample.limits().catch(() => null);
+      ask.tools = !!(lim && lim.tools);
+    }
+    if (sample && mcp && ask.tools) {
+      try {
+        const res = await mcp.listTools(HOST);
+        ask.web = (res.servers || []).some((s) => s.server === HOST) ? 'on' : 'off';
+      } catch (e) { ask.web = 'off'; }
+    } else {
+      ask.web = 'off';
+    }
+    if (db && user) {
+      const uid = await user.id().catch(() => null);
+      if (uid) {
+        try {
+          ask.notesCol = db.collection('data/users/' + uid);
+          ask.notesOK = true;
+          ask.notesCol.onSnapshot((snap) => {
+            ask.notes = snap.docs.map((d) => Object.assign({ id: d.id }, d.data()));
+            ask.notesErr = null;
+            renderNotes();
+          }, () => { ask.notesErr = 'Notes could not load in this view.'; renderNotes(); });
+        } catch (e) { ask.notesOK = false; }
+      }
+    }
+    renderAsk();
+  }
+
+  // ---------- start ----------
+  readHash();
+  if (!RANGES[state.list]) state.list = 'leaders';
+  renderAsk();
+  go({});
+  initAsk();
+})();
+</script>
