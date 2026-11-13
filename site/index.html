@@ -1291,7 +1291,7 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
   }).observe($('#chart'));
 
   // ---------- Ask Claude ----------
-  const HOST = 'host:claude_browser';
+  const SEARCH = 'Parallel Search';
   const ask = { sample: null, mcp: null, tools: false, web: 'checking', off: null, busy: false, ctl: null, threads: new Map(), seq: 0,
     notesCol: null, notes: [], notesOK: false, notesErr: null };
   const threadKey = () => `${state.cycle}:${state.list}:${state.ticker}`;
@@ -1328,18 +1328,20 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
   // what Claude is told about the page
   function rules() {
     const today = new Date().toISOString().slice(0, 10);
-    const web = ask.tools && ask.web !== 'off';
+    const web = ask.tools && ask.web === 'on';
     return [
       'You are a research assistant inside a dashboard for studying the growth stocks that led the US market out of bear markets (the 2018, 2020 and 2022 S&P 500 lows), in the style of a model book. The reader studies chart behaviour, earnings, catalysts and themes.',
       `Today is ${today}.`,
       'How to answer:',
       '- Answer the question first, in a sentence or two. Then give the supporting detail as short bullets, each with a date (month, day, year).',
       web
-        ? '- For news, earnings results, guidance, product launches, analyst days, IPO terms or market events, use web_search, then read_page on the best one or two results. Prefer company press releases, SEC filings and earnings-call transcripts, then reputable financial news. Search with the company name, the event and the month and year.'
-        : '- You cannot search the web in this view. Answer from your own knowledge, say clearly which facts you are unsure of, and suggest what the reader should verify.',
+        ? '- For news, earnings results, guidance, product launches, analyst days, IPO terms or market events, use web_search with one clear objective and 2-3 short keyword queries (company name, event, month and year). If the excerpts are not enough, use read_page on the best one or two results. Prefer company press releases, SEC filings and earnings-call transcripts, then reputable financial news.'
+        : '- You cannot search the web in this view. Answer from the page data below (prices, SEC results, and the research notes with their sources) and your own knowledge. Say clearly which facts you are unsure of, and suggest what the reader should verify.',
       '- Use get_price_history to show how the stock and SPY reacted around a date (for example the day of and the days after an earnings report).',
       '- For earnings, say whether figures are GAAP or adjusted, and give year-over-year growth and any acceleration. The page data includes GAAP results from SEC filings; companies often headline adjusted figures, which can differ.',
-      web ? '- Cite sources inline as Markdown links, [publisher](url), using only URLs you actually read or saw in results. Never invent a URL.' : '- Do not give URLs you have not seen.',
+      web
+        ? '- Cite sources inline as Markdown links, [publisher](url), using only URLs from search results, pages you read, or sources listed in the page data. Never invent a URL.'
+        : '- When a source listed in the page data supports a point, cite it inline as a Markdown link, [publisher](url). Never give any other URL.',
       '- Separate what the record shows from your own interpretation. If you could not verify something, say so.',
       '- Keep it under about 250 words unless the reader asks for more. Use plain paragraphs, "- " bullets and **bold** for key numbers. No tables.',
     ].join('\n');
@@ -1382,6 +1384,8 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
     if (r.story) {
       L.push(`Research notes already on the page about what fueled the run (from news and company sources; verify before repeating specifics): ${r.story.text}`);
       if (r.story.catalysts && r.story.catalysts.length) L.push(`Catalysts listed: ${r.story.catalysts.map((c) => `${c.date} ${c.text}`).join('; ')}.`);
+      const srcs = (r.story.sources || []).filter((x) => /^https?:\/\//i.test(x.url || ''));
+      if (srcs.length) L.push(`Sources for those notes: ${srcs.map((x) => `${x.title || 'source'} (${x.url})`).join('; ')}.`);
     }
     const E = D.earnings && D.earnings[r.ticker];
     if (E && E.mode !== 'none' && E.periods.length) {
@@ -1398,78 +1402,87 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
   }
 
   // page tools
+  // Web search goes through the viewer's Parallel Search connector, which runs on Parallel's servers (no browser pane).
   function resultText(res) {
     if (!res) return '';
     if (typeof res.payload === 'string') return res.payload;
-    const blocks = (res.content || []).filter((b) => b && b.type === 'text').map((b) => b.text);
-    if (blocks.length) return blocks.join('\n');
-    return res.payload ? JSON.stringify(res.payload) : '';
+    if (res.payload != null) return JSON.stringify(res.payload);
+    return (res.content || []).filter((b) => b && b.type === 'text').map((b) => b.text).join('\n');
   }
-  function cleanPage(txt) {
-    let s = String(txt || '');
-    const tab = s.lastIndexOf('\nTab Context:');
-    if (tab >= 0) s = s.slice(0, tab);
-    return s.replace(/^Source element:.*$/m, '').replace(/\n---\n/, '\n').trim();
-  }
-  function cleanSearch(txt) {
-    let s = cleanPage(txt);
-    const i = s.indexOf('\nPast Year\n');
-    if (i >= 0) s = s.slice(i + 11);
-    const f = s.lastIndexOf('\nFeedback');
-    if (f >= 0) s = s.slice(0, f);
-    return s.trim();
-  }
-  async function browse(url, maxChars, signal) {
+  const WEB_OFF = ['server_not_connected', 'not_in_manifest', 'not_granted', 'capability_disabled', 'capability_removed', 'blocked_by_policy', 'needs_reauth', 'server_not_found', 'selection_required'];
+  async function searchCall(tool, input, signal) {
     try {
-      await ask.mcp.callTool(HOST, 'navigate', { url }, { signal });
-      return resultText(await ask.mcp.callTool(HOST, 'get_page_text', { max_chars: maxChars }, { signal }));
+      const res = await ask.mcp.callTool(SEARCH, tool, input, { signal, cache: { staleTime: 3600000, gcTime: 3600000 } });
+      return resultText(res);
     } catch (e) {
       const code = e && e.code;
-      if (['server_not_connected', 'not_in_manifest', 'not_granted', 'capability_disabled', 'capability_removed', 'blocked_by_policy', 'approval_required', 'needs_reauth', 'server_not_found', 'selection_required'].includes(code)) {
+      if (WEB_OFF.includes(code)) {
         ask.web = 'off';
         renderAskMode();
         throw new Error('Web search is not available in this view. Answer from your own knowledge and the page data, and tell the reader you could not search.');
       }
-      if (code === 'cancelled') throw new Error(signal && signal.aborted ? 'Stopped by the reader.' : 'The reader declined to let the browser open this page.');
-      if (code === 'tool_error') throw new Error('The browser could not load that page: ' + (e.message || 'unknown error'));
-      throw new Error(`The browser did not respond (${code || 'error'}). Try once more or answer without it.`);
+      if (code === 'approval_required') throw new Error('The reader did not approve web search. Answer without it.');
+      if (code === 'cancelled') throw new Error('Stopped by the reader.');
+      if (code === 'tool_error') throw new Error('The search service returned an error: ' + (e.message || 'unknown error'));
+      throw new Error(`The search service did not respond (${code || 'error'}). Try once more or answer without it.`);
     }
   }
+  const words = (a, n) => (Array.isArray(a) ? a : [a]).map((x) => String(x || '').trim()).filter(Boolean).slice(0, n);
   function makeTools(item) {
     const stepStart = (kind, text) => { const s = { kind, text, state: 'running' }; item.steps.push(s); updateItem(item); return s; };
     const stepEnd = (s, okay) => { s.state = okay ? 'done' : 'failed'; updateItem(item); };
     const tools = [];
-    if (ask.mcp && ask.web !== 'off') {
+    if (ask.mcp && ask.web === 'on') {
       tools.push({
         name: 'web_search',
-        description: 'Search the web (DuckDuckGo) through the reader\'s browser. Returns result titles, URLs and snippets as plain text. Use specific queries with the company name, the event and the month and year, e.g. "Supermicro preliminary results August 2023".',
-        inputSchema: { type: 'object', properties: { query: { type: 'string', description: 'The search query' } }, required: ['query'] },
+        description: 'Search the web. Returns matching pages with their URLs, titles and relevant excerpts. Give one clear objective and 2-3 short keyword queries of 3-6 words, e.g. objective "Supermicro preliminary results and guidance, August 2023", queries ["Supermicro preliminary results August 2023", "SMCI raises guidance 2023"]. "site:example.com" works in a query.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            objective: { type: 'string', description: 'What you want to find, in one sentence' },
+            queries: { type: 'array', items: { type: 'string' }, description: '1-3 keyword queries of 3-6 words each' },
+          },
+          required: ['objective', 'queries'],
+        },
         execute: async (input, ctx) => {
-          const q = String(input.query || '').trim().slice(0, 200);
-          if (!q) throw new Error('Empty query.');
-          const s = stepStart('search', `Searched “${q}”`);
+          const qs = words(input.queries, 3).map((q) => q.slice(0, 120));
+          const objective = String(input.objective || qs.join('; ')).trim().slice(0, 400);
+          if (!qs.length) throw new Error('Give at least one query.');
+          const s = stepStart('search', `Searched “${qs.join('”, “')}”`);
           try {
-            const txt = cleanSearch(await browse('https://html.duckduckgo.com/html/?q=' + encodeURIComponent(q), 9000, ctx.signal));
+            const txt = await searchCall('web_search', { objective, search_queries: qs }, ctx.signal);
             stepEnd(s, true);
-            return txt.slice(0, 7000) || 'No results.';
+            return txt.slice(0, 12000) || 'No results.';
           } catch (e) { stepEnd(s, false); throw e; }
         },
       });
       tools.push({
         name: 'read_page',
-        description: 'Open a web page in the reader\'s browser and return its visible text (up to about 10,000 characters). Use it on the most relevant one or two search results.',
-        inputSchema: { type: 'object', properties: { url: { type: 'string', description: 'Full http(s) URL, or a URL from search results' } }, required: ['url'] },
+        description: 'Read one to three web pages and return the parts relevant to your objective. Use it on the best search results when their excerpts are not enough.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            urls: { type: 'array', items: { type: 'string' }, description: '1-3 full http(s) URLs' },
+            objective: { type: 'string', description: 'What you are looking for on these pages' },
+          },
+          required: ['urls'],
+        },
         execute: async (input, ctx) => {
-          let u = String(input.url || '').trim();
-          if (!/^https?:\/\//i.test(u)) u = 'https://' + u.replace(/^\/+/, '');
-          let host;
-          try { const p = new URL(u); if (!/^https?:$/.test(p.protocol)) throw new Error(); host = p.hostname.replace(/^www\./, ''); } catch (e) { throw new Error('Not a web address: ' + u); }
-          const s = stepStart('read', `Read ${host}`);
+          const urls = [];
+          words(input.urls, 3).forEach((raw) => {
+            const u = /^https?:\/\//i.test(raw) ? raw : 'https://' + raw.replace(/^\/+/, '');
+            try { const p = new URL(u); if (/^https?:$/.test(p.protocol)) urls.push({ url: p.href, host: p.hostname.replace(/^www\./, '') }); } catch (e) { /* skip */ }
+          });
+          if (!urls.length) throw new Error('Give at least one http(s) URL.');
+          const args = { urls: urls.map((x) => x.url) };
+          const objective = String(input.objective || '').trim().slice(0, 200);
+          if (objective) args.objective = objective;
+          const s = stepStart('read', `Read ${urls.map((x) => x.host).join(', ')}`);
           try {
-            const txt = cleanPage(await browse(u, 12000, ctx.signal));
+            const txt = await searchCall('web_fetch', args, ctx.signal);
             stepEnd(s, true);
-            if (!item.sources.some((x) => x.url === u)) item.sources.push({ url: u, host });
-            return txt.slice(0, 10000) || 'The page had no readable text.';
+            urls.forEach((x) => { if (!item.sources.some((y) => y.url === x.url)) item.sources.push(x); });
+            return txt.slice(0, 15000) || 'The pages had no readable text.';
           } catch (e) { stepEnd(s, false); throw e; }
         },
       });
@@ -1581,16 +1594,17 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
     let txt = 'Checking…';
     if (!ask.sample || ask.off) { st = 'off'; txt = 'Unavailable here'; }
     else if (ask.web === 'on' && ask.tools) { st = 'on'; txt = 'Web search on'; }
-    else if (ask.web === 'off' || !ask.tools) { st = 'off'; txt = 'No web search in this view'; }
+    else if (ask.ready && ask.web !== 'checking') { st = 'local'; txt = 'No web search'; }
     m.dataset.state = st;
     m.textContent = txt;
-    m.title = st === 'on' ? 'Searches run in the Claude app\'s browser pane.' : st === 'off' && ask.sample ? 'Open this page in the Claude desktop app to let Claude search the web.' : '';
+    m.title = st === 'on' ? 'Claude searches through the Parallel Search connector, in the background.'
+      : st === 'local' ? 'Answers come from this page\'s data and Claude\'s own knowledge. Connect Parallel Search in claude.ai Settings → Connectors to add web search.' : '';
     const off = $('#ask-off');
     const form = $('#ask-form');
     const none = ask.sample === null && ask.ready;
     if (none) {
       off.hidden = false;
-      off.textContent = 'Open this page on claude.ai, signed in, to ask Claude about a stock. In the Claude desktop app it can also search the web.';
+      off.textContent = 'Open this page on claude.ai, signed in, to ask Claude about a stock.';
       form.hidden = true;
     } else if (ask.off) {
       off.hidden = false;
@@ -1794,8 +1808,8 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
     }
     if (sample && mcp && ask.tools) {
       try {
-        const res = await mcp.listTools(HOST);
-        ask.web = (res.servers || []).some((s) => s.server === HOST) ? 'on' : 'off';
+        const res = await mcp.listTools(SEARCH);
+        ask.web = (res.servers || []).some((s) => s.server === SEARCH && (s.tools || []).length) ? 'on' : 'off';
       } catch (e) { ask.web = 'off'; }
     } else {
       ask.web = 'off';
