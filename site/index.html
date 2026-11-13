@@ -211,6 +211,13 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
 .tkb { border: 0; background: none; padding: 0; font: 500 13px var(--font-data); cursor: pointer; }
 @container (max-width: 780px) { .opt { display: none; } }
 @container (max-width: 520px) { td.theme, th.theme, .opt2 { display: none; } }
+.jump { justify-self: start; border: 0; background: none; padding: 0; color: var(--chip-ink); font-size: 13px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.traits { display: grid; gap: 18px 36px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+.traits h3 { margin: 0 0 8px; }
+.traits ul { margin: 0; padding-left: 18px; display: grid; gap: 7px; max-width: 72ch; }
+.traits li { text-wrap: pretty; }
+.traits li::marker { color: var(--faint); }
+.traits b { font-weight: 600; }
 .foot { font-size: 12px; color: var(--muted); display: grid; gap: 4px; max-width: 100ch; }
 .foot p { margin: 0; }
 
@@ -244,6 +251,7 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
       <p class="eyebrow">Model book · S&amp;P 500 bear-market lows</p>
       <h1>Bear Market Leaders</h1>
       <p class="lede" id="lede">Loading the cycle…</p>
+      <button type="button" class="jump" id="jump-traits">What the biggest winners had in common ↓</button>
     </div>
     <div class="cycles" role="group" aria-label="Bear-market cycle" id="cycles"></div>
   </header>
@@ -314,9 +322,38 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
     <div class="tw"><table id="table"><thead><tr></tr></thead><tbody></tbody></table></div>
   </section>
 
+  <section class="card" id="traits" aria-labelledby="traits-title">
+    <div class="ttl">
+      <h2 class="co" id="traits-title" style="color:var(--ink)">What the biggest winners had in common</h2>
+      <p class="sub">The 75 leaders across all three cycles, checked against all 6,225 stocks in the screen.</p>
+    </div>
+    <div class="traits">
+      <div>
+        <h3 class="eyebrow">Most leaders were</h3>
+        <ul>
+          <li><b>Young.</b> 51 of 75 had been public under 10 years, against about 20 years for the typical stock.</li>
+          <li><b>Crushed in the bear market.</b> 42 of 75 fell 50% or more.</li>
+          <li><b>Growing fast going in.</b> 6 in 10 had sales up 25%+ in their last report before the low.</li>
+          <li><b>Early off the bottom.</b> 56 of 75 made a new 52-week high before SPY did, typically about double their low by then.</li>
+          <li><b>Lifted by earnings.</b> For about half, the biggest one-day gain was an earnings reaction.</li>
+          <li><b>Part of the cycle’s theme.</b> Cloud software and internet (2018), stay-at-home and clean energy (2020), the AI build-out (2022).</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="eyebrow">What actually set them apart</h3>
+        <ul>
+          <li><b>The size of the move off the low.</b> Of the top 10% of movers on the day SPY made its first new high (up 60%+, 150%+ and 91%+ from their lows in the three cycles), 14% were top-5% performers over the next year, against about 4% of other stocks.</li>
+          <li><b>Also raised the odds:</b> being young, crushed at the low, or growing sales 25%+.</li>
+          <li><b>Common but little or no help:</b> bottoming with the market, a new high or RS-line high before SPY, holding up in the first pullback.</li>
+          <li><b>No sure thing.</b> Most stocks with these traits never became leaders, and young, money-losing high-flyers also crashed more often.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <footer class="foot">
     <p><b>Leaders:</b> US common stocks and ADRs priced at $5 or more, worth $500M or more, and trading $5M or more a day on the index-low date, ranked by gain over the next 12 months; the top 25 growth stocks, turnarounds and crypto proxies. <b>New issues:</b> growth companies that started trading in the 12 months after the low (IPOs, direct listings, SPAC mergers, spin-offs) worth $1B or more a year after the low, ranked by gain from their first close over their first year.</p>
-    <p>Daily split-adjusted bars from Massive. GAAP earnings are not on this page yet. For study, not investment advice. Code and data: github.com/vcable/bear-market-leaders.</p>
+    <p>Daily split-adjusted bars from Massive. Quarterly sales and EPS are GAAP figures from SEC filings. For study, not investment advice. Code and data: github.com/vcable/bear-market-leaders.</p>
   </footer>
 </div>
 
@@ -1238,6 +1275,10 @@ tbody tr.sel { background: color-mix(in srgb, var(--stock) 10%, transparent); }
     const c = COLS[state.list].find((x) => x.id === b.dataset.col);
     state.sort = state.sort.id === c.id ? { id: c.id, dir: -state.sort.dir } : { id: c.id, dir: c.first };
     renderTable(cur(), sel());
+  });
+  $('#jump-traits').addEventListener('click', () => {
+    const calm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    $('#traits').scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
   });
   window.addEventListener('hashchange', () => {
     const before = `${state.cycle}-${state.list}-${state.ticker}`;
